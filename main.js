@@ -1,4 +1,12 @@
 
+/*
+    KNOWN ISSUES
+    - MOBILE!!!!!
+    https://clabounty.github.io/golfStatsTracker/
+*/
+
+
+
 function login() {
     const email = document.getElementById('email-input').value;
     const password = document.getElementById('password-input').value;
