@@ -5,19 +5,23 @@
     https://clabounty.github.io/golfStatsTracker/
 */
 
-var webApp = document.getElementById("whole-page");
+function openFullscreen() {
+    // hide button
+    document.getElementById('fullscreen-option').style.display = 'none';
 
-if (elem.requestFullscreen) {
-    elem.requestFullscreen();
-} else if (elem.mozRequestFullScreen) { /* Firefox */
-    elem.mozRequestFullScreen();
-} else if (elem.webkitRequestFullscreen) { /* Chrome, Safari & Opera */
-    elem.webkitRequestFullscreen();
-} else if (elem.msRequestFullscreen) { /* IE/Edge */
-    elem.msRequestFullscreen();
+    var webApp = document.getElementById("whole-html");
+
+    // open in fullscreen
+    if (webApp.requestFullscreen) {
+        webApp.requestFullscreen();
+    } else if (elem.mozRequestFullScreen) { /* Firefox */
+        webApp.mozRequestFullScreen();
+    } else if (elem.webkitRequestFullscreen) { /* Chrome, Safari & Opera */
+        webApp.webkitRequestFullscreen();
+    } else if (elem.msRequestFullscreen) { /* IE/Edge */
+        webApp.msRequestFullscreen();
+    }
 }
-
-
 
 function login() {
     const email = document.getElementById('email-input').value;

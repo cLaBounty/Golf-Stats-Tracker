@@ -1,5 +1,5 @@
 <!DOCTYPE HTML>
-<html lang="en" id="whole-page">
+<html lang="en" id="whole-html">
 
 <head>
     <meta charset="UTF-8">
@@ -11,10 +11,14 @@
 </head>
 
 <body>
+    <div id="fullscreen-option">
+        <button onclick="openFullscreen()">Open in Fullscreen</button>
+    </div>
+
     <div id="login-page">
         <div id="login-box">
             <div class="input-box">
-                <input type="text" spellcheck="false" placeholder="Email - (fix 1)" id="email-input">
+                <input type="text" spellcheck="false" placeholder="Email - (fix fullscreen)" id="email-input">
             </div>
             <div class="input-box">
                 <input type="text" spellcheck="false" placeholder="Display Name (optional)" id="displayName-input">
