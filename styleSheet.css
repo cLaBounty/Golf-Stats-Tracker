@@ -1,0 +1,543 @@
+* {
+    margin: 0;
+    padding: 0;
+}
+body {
+    height: 100vh;
+    width: 100%;
+    background-position: 70% 0%;
+    background-image: url("assets/background.jpg");
+    background-repeat: no-repeat;
+    background-size: cover;
+    background-attachment: fixed;
+}
+
+/* login/signup page */
+#login-page {
+    height: 100vh;
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+#login-box {
+    margin: 15px;
+    width: 600px;
+    height: 300px;
+    background: rgba(0, 0, 0, 0.93);
+    box-shadow: 0 0 50px rgba(100, 100, 100, 7);
+}
+.input-box {
+    margin: 20px auto;
+    width: 80%;
+    border-bottom: 1px solid #fff;
+    padding-top: 20px;
+    margin-bottom: 0px;
+}
+.input-box input{
+    width: 90%;
+    border: none;
+    outline: none;
+    background: transparent;
+    color: white;
+}
+::placeholder {
+    color: #ccc;
+    font-size: 16px;
+}
+#login-btn:hover, #signup-btn:hover {
+    background-color: rgba(180,180,180, 0.5);
+    transition: 0.25s;
+}
+#login-btn, #signup-btn {
+    margin-left: 15px;
+    width: 90px;
+    outline: none;
+    padding: 10px 0;
+    border: 1px solid #fff;
+    cursor: pointer;
+    background: transparent;
+    color: white;
+    font-size: 20px;
+}
+#login-btn {
+    margin-left: 10%;
+}
+#error-message {
+    visibility: hidden;
+    margin-left: 8%;
+    margin-right: 8%;
+    padding: 2%;
+    color: red;
+    font-size: 18px;
+}
+
+/* nav bar */
+nav {
+    display: flex;
+    align-items: center;
+    background: rgb(50, 50, 50);
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 80px;
+    border-bottom: 4px solid #ffffff;
+    z-index: 10;
+}
+#page-label {
+    font-size: 50px;
+    color: #ffffff;
+    line-height: 80px;
+    padding: 0 25px;
+    font-weight: bold;
+}
+nav ul {
+    float: right;
+    text-decoration: none;
+    list-style: none;
+    box-sizing: border-box;
+}
+nav ul li {
+    display: inline-block;
+    line-height: 40px;
+    margin: 20px 25px;
+    color: #ccc;
+    font-size: 26px;
+}
+nav ul li:hover {
+    color: white;
+    text-decoration: underline;
+    cursor: pointer;
+}
+#logout-btn:hover {
+    color: red;
+}
+.nav-check-btn {
+    font-size: 38px;
+    color: white;
+    float: right;
+    line-height: 80px;
+    margin-right: 20px;
+    cursor: pointer;
+    display: none;
+}
+#nav-check {
+    display: none;
+}
+@media (max-width: 1024px) {
+    .nav-check-btn {
+        display: block;
+    }
+    nav ul {
+        position: fixed;
+        width: 100%;
+        height: 100vh;
+        background: rgba(0, 0, 0, 0.9);
+        top: 84px;
+        left: -100%;
+        text-align: center;
+        transition: all 0.5s;
+    }
+    nav ul li {
+        display: block;
+        border: 2px solid #ccc;
+        font-size: 28px;
+        line-height: 50px;
+        margin: 50px 25px;
+    }
+    nav ul li:hover {
+        background-color: rgba(150,150,150, 0.4);
+        color: white;
+    }
+    #logout-btn {
+        color: red;
+        border-color: red;
+    }
+    #logout-btn:hover {
+        background-color: rgba(255, 0, 0, 0.75);
+        color: white;
+    }
+    #nav-check:checked ~ ul {
+        left: 0;
+    }
+}
+
+/* home page */
+#home-page {
+    height: calc(100vh - 84px);
+    width: 100%;
+    position: relative;
+    top: 84px;
+    flex-wrap: wrap;
+    justify-content: center;
+    align-items: center;
+}
+.home-option-btn {
+    background-color: rgba(230, 230, 230, 0.925);
+    border-radius: 20%;
+    border: none;
+    outline: none;
+    margin: 0 50px;
+    padding: 10px;
+    width: 285px;
+    height: 170px;
+    font-size: 45px;
+}
+.home-option-btn:hover {
+    background-color: white;
+    transition: 0.25s;
+}
+
+/* friends page */
+
+/* settings page */
+#settings-page {
+    height: calc(100vh - 84px - 25px);
+    width: 100%;
+    position: relative;
+    top: calc(84px + 25px);
+}
+#displayName-setting {
+    margin: 0 0 25px 25px;
+    color: #ffffff;
+    font-size: 24px;
+    font-weight: bold;
+}
+#displayName-setting-input {
+    width: 350px;
+    color: #ccc;
+    font-size: 30px;
+    border: none;
+    outline: none;
+    background: transparent;
+}
+#displayName-setting-input:focus {
+    color: #ffffff;
+}
+#trackANDshare-settings {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: flex-start;
+}
+.setting-option {
+    width: 350px;
+    margin: 15px 0px 5px 25px;
+}
+.setting-option h4{
+    margin: 5px;
+    color: #ffffff;
+    font-size: 24px;
+}
+.setting-option input {
+    position: relative;
+    margin: 5px;
+    width: 80px;
+    height: 40px;
+    -webkit-appearance: none;
+    background: #ccc;
+    outline: none;
+    border-radius: 20px;
+    box-shadow: inset 0 0 5px rgba(0, 0, 0, 0.2);
+    transition: 0.5s;
+}
+.setting-option input:checked {
+    background: #03a9f4;
+}
+.setting-option input:before {
+    content: '';
+    position: absolute;
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    top: 0;
+    left: 0;
+    background: #fff;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+    transition: 0.5s;
+}
+.setting-option input:checked:before {
+    left: 40px;
+}
+#save-settings-btn {
+    background-color: rgba(230, 230, 230, 0.875);
+    border-radius: 20%;
+    border: none;
+    outline: none;
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    width: 100px;
+    height: 60px;
+    font-size: 26px;
+}
+#save-settings-btn:hover {
+    background-color: white;
+    transition: 0.25s;
+}
+
+/* newRound Page */
+#newRound-page {
+    height: calc(100vh - 84px);
+    width: 100%;
+    position: relative;
+    top: 84px;
+    flex-wrap: wrap;
+    justify-content: center;
+    align-items: center;
+}
+#Q1, #Q2, #Q3, #Q4, #Q5 {
+    flex-wrap: wrap;
+    justify-content: center;
+    align-items: center;
+}
+#newRound-page h1 {
+    width: 100%;
+    height: 65px;
+    margin: 0 0 0 25px;
+    color: white;
+    text-decoration: underline;
+    font-size: 48px;
+}
+.question {
+    height: calc(100% - 65px - 25px);
+    width: 100%;
+    display: none;
+}
+#newRound-page h2 {
+    width: 100%;
+    height: 74px;
+    margin: 0 25px 15px 25px;
+    text-align: center;
+    color: white;
+    font-size: 32px;
+    position: relative;
+    top: 2.5%;
+}
+#Q1 h3, #Q2 h3 {
+    width: 100%;
+    margin: 0 25px 10px 25px;
+    text-align: center;
+    color: white;
+    font-size: 32px;
+}
+#Q1 form {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-wrap: wrap;
+    position: relative;
+    top: -5%;
+}
+#Q1 input {
+    display: none;
+}
+#Q1 label {
+    height: 75px;
+    width: 75px;
+    letter-spacing: -3px;
+    color: white;
+    font-size: 42px;
+    background-color: rgb(190, 190, 190);
+    border: none;
+    border-radius: 20%;
+    outline: none;
+    margin: 10px 15px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+#Q1 input:checked + label {
+    color: rgb(190, 190, 190);
+    box-shadow: inset 0 0 12px rgba(0, 0, 0, 0.5);
+    background-color: white;
+}
+#par-question{
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-wrap: wrap;
+}
+#score-question {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-wrap: wrap;
+    position: relative;
+    top: -10%;
+}
+#submit-score-btn {
+    height: 60px;
+    width: 85px;
+    font-size: 30px;
+    background-color: rgb(190, 190, 190);
+    border-radius: 20%;
+    border: none;
+    outline: none;
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+}
+#submit-score-btn:hover {
+    background-color: white;
+    transition: 0.25s;
+}
+#Q2 {
+    position: relative;
+    top: -11%;
+}
+.putt-btn {
+    height: 75px;
+    width: 75px;
+    color: white;
+    font-size: 42px;
+    background-color: rgb(190, 190, 190);
+    border: none;
+    border-radius: 20%;
+    outline: none;
+    margin: 10px 15px;
+    position: relative;
+    top: -36%
+}
+.putt-btn:hover {
+    color: rgb(190, 190, 190);
+    box-shadow: inset 0 0 12px rgba(0, 0, 0, 0.5);
+    background-color: white;
+}
+.question-btns {
+    height: calc(100% - 74px - 15px);
+    width: 100%;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    align-items: center;
+}
+.check-btn, .X-btn {
+    margin: 0 60px;
+    height: 175px;
+    width: 175px;
+}
+#newRound-error-full {
+    display: none;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.85);
+    justify-content: center;
+    align-items: center;
+}
+#newRound-error {
+    text-align: center;
+    margin: 25px;
+    padding: 15px;
+    background-color: rgba(0, 0, 0, 0.85);
+    border: 4px solid white;
+    color: red;
+    font-size: 32px;
+}
+#nine-hole-message {
+    display: none;
+    height: 100%;
+    width: 100%;
+    background-color: rgba(0, 0, 0, 0.85);
+    justify-content: center;
+    align-items: center;
+}
+#nine-hole-message-content {
+    text-align: center;
+    margin: 25px;
+    padding: 15px 15px 0 15px;
+    background-color: rgb(50, 50, 50);
+    border: 4px solid yellow;
+    color: white;
+    font-size: 30px;
+}
+.nine-hole-message-btn {
+    height: 40px;
+    width: 60px;
+    margin: 15px 25px;
+    color: white;
+    font-size: 18px;
+    background: rgb(115, 115, 115);
+    border: 2px solid white;
+}
+.nine-hole-message-btn:hover {
+    color: rgb(115, 115, 115);
+    background-color: white;
+    font-weight: bold;
+    transition: 0.25s;
+}
+#round-end-message {
+    display: none;
+    height: 100%;
+    width: 100%;
+    background-color: rgba(0, 0, 0, 0.85);
+    justify-content: center;
+    align-items: center;
+}
+#round-end-message-content {
+    text-align: center;
+    margin: 25px;
+    padding: 15px;
+    background-color: rgb(50, 50, 50);
+    border: 4px solid green;
+    color: white;
+    font-size: 32px;
+}
+#round-end-message-content a {
+    color: rgb(48, 118, 223);
+    text-decoration: underline;
+}
+#round-end-message-content a:hover {
+    cursor: pointer;
+}
+
+/* Small device fixs */
+@media (max-height: 640px) {
+    #page-label {
+        font-size: 40px;
+    }
+    nav ul li {
+        line-height: 35px;
+        margin: 40px 25px;
+    }
+    .check-btn, .X-btn {
+        height: 120px;
+        width: 120px;
+        position: relative;
+        top: -25px;
+    }
+    #newRound-page h1 {
+        height: 40px;
+        font-size: 30px;
+    }
+    #newRound-page h2 {
+        height: 50px;
+        font-size: 22px;
+        position: relative;
+        top: -25px;
+    }
+    #Q1 h3 {
+        font-size: 24px;
+    }
+    #Q1 label {
+        height: 40px;
+        width: 40px;
+        font-size: 22px;
+    }
+    #submit-score-btn {
+        height: 45px;
+        width: 65px;
+        font-size: 24px;
+    }
+}
+
+/* stats page */
+
+/* Initially hide every page, except for login */
+#navbar, #home-page, #friends-page, #settings-page, #newRound-page, #stats-page {
+    display: none;
+}

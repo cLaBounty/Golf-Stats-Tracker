@@ -1,0 +1,236 @@
+<!DOCTYPE HTML>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+
+    <link rel="stylesheet" type="text/css" href="styleSheet.css">
+    <script src="https://kit.fontawesome.com/a076d05399.js"></script>
+    <title>Golf Stats Tracker</title>
+</head>
+
+<body>
+    <div id="login-page">
+        <div id="login-box">
+            <div class="input-box">
+                <input type="text" spellcheck="false" placeholder="Email" id="email-input">
+            </div>
+            <div class="input-box">
+                <input type="text" spellcheck="false" placeholder="Display Name (optional)" id="displayName-input">
+            </div>
+            <div class="input-box">
+                <input type="password" spellcheck="false" placeholder="Password" id="password-input">
+            </div>
+            <p id="error-message">this is hidden</p>
+            <button type="button" id="login-btn" onclick="login()">Login</button>
+            <button type="button" id="signup-btn" onclick="signup()">Signup</button>
+        </div>
+    </div>
+
+    <nav id="navbar">
+        <input type="checkbox" id="nav-check">
+        <label for="nav-check" class="nav-check-btn">
+            <i class="fas fa-bars"></i>
+        </label>
+        <label id="page-label"></label>
+        <ul>
+            <li onclick="toHomePage()">Home</li>
+            <li onclick="toFriendsPage()">Friends</li>
+            <li onclick="toSettingsPage()">Settings</li>
+            <li id="logout-btn" onclick="logout()">Logout</li>
+        </ul>
+    </nav>
+
+    <div id="home-page">
+        <button type="button" class="home-option-btn" onclick="toNewRoundPage()">Start a<br>New Round</button>
+        <button type="button" class="home-option-btn" onclick="toStatsPage()">View Stats</button>
+    </div>
+
+    <div id="friends-page">
+    </div>
+
+    <div id="settings-page">
+        <div id="displayName-setting">
+            <label for="displayName-setting-input">Display Name: </label>
+            <input type="text" spellcheck="false" id="displayName-setting-input">
+        </div>
+        <div id="trackANDshare-settings">
+            <div class="setting-option">
+                <h4>Track Scores</h4>
+                <input id="trackScores-toggle" type="checkbox" onclick="checkTrackScores()">
+            </div>
+            <div class="setting-option">
+                <h4>Share Birdies or lower</h4>
+                <input id="shareBirdiesMINUS-toggle" type="checkbox" onclick="checkTrackScores()">
+            </div>
+            <div class="setting-option">
+                <h4>Share Pars</h4>
+                <input id="sharePars-toggle" type="checkbox" onclick="checkTrackScores()">
+            </div>
+            <div class="setting-option">
+                <h4>Share Bogeys</h4>
+                <input id="shareBogeys-toggle" type="checkbox" onclick="checkTrackScores()">
+            </div>
+            <div class="setting-option">
+                <h4>Share Double Bogeys or higher</h4>
+                <input id="shareDoubleBogeysPLUS-toggle" type="checkbox" onclick="checkTrackScores()">
+            </div>
+            <div class="setting-option">
+                <h4>Track Putts</h4>
+                <input id="trackPutts-toggle" type="checkbox" onclick="checkTrackPutts()">
+            </div>
+            <div class="setting-option">
+                <h4>Share 1 Putts</h4>
+                <input id="shareOnePutts-toggle" type="checkbox" onclick="checkTrackPutts()">
+            </div>
+            <div class="setting-option">
+                <h4>Share 2 Putts</h4>
+                <input id="shareTwoPutts-toggle" type="checkbox" onclick="checkTrackPutts()">
+            </div>
+            <div class="setting-option">
+                <h4>Share 3 Putts or higher</h4>
+                <input id="shareThreePuttsPLUS-toggle" type="checkbox" onclick="checkTrackPutts()">
+            </div>
+            <div class="setting-option">
+                <h4>Track Fairways in Regulation</h4>
+                <input id="trackFairwaysInReg-toggle" type="checkbox" onclick="checkTrackFairwaysInReg()">
+            </div>
+            <div class="setting-option">
+                <h4>Share Fairways in Regulation</h4>
+                <input id="shareFairwaysInReg-toggle" type="checkbox" onclick="checkTrackFairwaysInReg()">
+            </div>
+            <div class="setting-option">
+                <h4>Track Greens in Regulation</h4>
+                <input id="trackGreensInReg-toggle" type="checkbox" onclick="checkTrackGreensInReg()">
+            </div>
+            <div class="setting-option">
+                <h4>Share Greens in Regulation</h4>
+                <input id="shareGreensInReg-toggle" type="checkbox" onclick="checkTrackGreensInReg()">
+            </div>
+            <div class="setting-option">
+                <h4>Track Holes with Hazards</h4>
+                <input id="trackHolesWithHazard-toggle" type="checkbox" onclick="checkTrackHolesWithHazard()">
+            </div>
+            <div class="setting-option">
+                <h4>Share Holes with Hazards</h4>
+                <input id="shareHolesWithHazard-toggle" type="checkbox" onclick="checkTrackHolesWithHazard()">
+            </div>
+            <div class="setting-option">
+                <h4>Share Total Holes Played</h4>
+                <input id="shareTotalHolesPlayed-toggle" type="checkbox">
+            </div>
+        </div>
+        <button type="button" id="save-settings-btn" onclick="saveSettings()">Save</button>
+    </div>
+
+    <div id="newRound-page">
+
+        <h1 id="hole-number-text">Hole #<span id="hole-number">1</span></h1>
+        <div id="newRound-error-full">
+            <p id="newRound-error"></p>
+        </div>
+        <div id="nine-hole-message">
+            <div id="nine-hole-message-content">
+                <p>You have successfully tracked 9 holes. Do you plan to play a full round of 18?</p>
+                <button type="button" class="nine-hole-message-btn" onclick="makeTheTurn()">Yes</button>
+                <button type="button" class="nine-hole-message-btn" onclick="finishRound()">No</button>
+            </div>
+        </div>
+        <div id="round-end-message">
+            <div id="round-end-message-content">
+                <p>You have successfully tracked your round. Click <a onclick="toPreviousRoundStats()">here</a> to view
+                    your stats.</p>
+            </div>
+        </div>
+        <div class="question" id="Q1">
+            <form>
+                <div id="par-question">
+                    <h3>Par</h3>
+                    <input type="radio" name="par-option" id="par-3" value="3">
+                    <label for="par-3" class="par-option-label">3</label>
+                    <input type="radio" name="par-option" id="par-4" value="4">
+                    <label for="par-4" class="par-option-label">4</label>
+                    <input type="radio" name="par-option" id="par-5" value="5">
+                    <label for="par-5" class="par-option-label">5</label>
+                </div>
+                <div id="score-question">
+                    <h3>Score</h3>
+                    <input type="radio" name="score-option" id="score-2" value="2">
+                    <label for="score-2" class="score-option-label">≤ 2</label>
+                    <input type="radio" name="score-option" id="score-3" value="3">
+                    <label for="score-3" class="score-option-label">3</label>
+                    <input type="radio" name="score-option" id="score-4" value="4">
+                    <label for="score-4" class="score-option-label">4</label>
+                    <input type="radio" name="score-option" id="score-5" value="5">
+                    <label for="score-5" class="score-option-label">5</label>
+                    <input type="radio" name="score-option" id="score-6" value="6">
+                    <label for="score-6" class="score-option-label">6</label>
+                    <input type="radio" name="score-option" id="score-7" value="7">
+                    <label for="score-7" class="score-option-label">≥ 7</label>
+                </div>
+            </form>
+            <button type="button" id="submit-score-btn" onclick="submitScore()">Ok</button>
+        </div>
+
+        <div class="question" id="Q2">
+            <h3 class="qustion-text">Putts</h3>
+            <button type="button" class="putt-btn" onclick="submitPutts(1)">1</button>
+            <button type="button" class="putt-btn" onclick="submitPutts(2)">2</button>
+            <button type="button" class="putt-btn" onclick="submitPutts(3)">3+</button>
+        </div>
+
+        <div class="question" id="Q3">
+            <h2 class="qustion-text">Did you hit the Fairway in Regulation?</h2>
+            <div class="question-btns">
+                <img src="assets/greenCheck.png" onclick="questionYes(3)" class="check-btn">
+                <img src="assets/redX.png" onclick="nextQuestion(3)" class="X-btn">
+            </div>
+        </div>
+        <div class="question" id="Q4">
+            <h2 class="qustion-text">Did you hit the Green in Regulation?</h2>
+            <div class="question-btns">
+                <img src="assets/greenCheck.png" onclick="questionYes(4)" class="check-btn">
+                <img src="assets/redX.png" onclick="nextQuestion(4)" class="X-btn">
+            </div>
+        </div>
+        <div class="question" id="Q5">
+            <h2 class="qustion-text">Did you lose strokes to a hazard?</h2>
+            <div class="question-btns">
+                <img src="assets/greenCheck.png" onclick="questionYes(5)" class="check-btn">
+                <img src="assets/redX.png" onclick="nextQuestion(5)" class="X-btn">
+            </div>
+        </div>
+    </div>
+
+    <div id="stats-page">
+    </div>
+
+    <!-- Firebase -->
+    <script src="https://www.gstatic.com/firebasejs/7.8.2/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/7.8.2/firebase-auth.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/7.8.2/firebase-firestore.js"></script>
+
+    <script>
+        // Your web app's Firebase configuration
+        var firebaseConfig = {
+            apiKey: "AIzaSyBVkMX1vz4q1YGxrfcnUQ6jdMdfdtBOhTo",
+            authDomain: "golf-stats-tracker-1a578.firebaseapp.com",
+            databaseURL: "https://golf-stats-tracker-1a578.firebaseio.com",
+            projectId: "golf-stats-tracker-1a578",
+            storageBucket: "golf-stats-tracker-1a578.appspot.com",
+            messagingSenderId: "112674476547",
+            appId: "1:112674476547:web:9441dd05b9342329dd3436",
+            measurementId: "G-X4RL3BGY2D"
+        };
+        // Initialize Firebase
+        firebase.initializeApp(firebaseConfig);
+        const auth = firebase.auth();
+        const database = firebase.firestore();
+    </script>
+
+    <script type="text/javascript" src="main.js"></script>
+</body>
+
+</html>
