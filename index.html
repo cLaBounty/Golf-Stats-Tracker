@@ -3,7 +3,10 @@
 
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="content=minimal-ui, initial-scale=1.0, user-scalable=no">
+    <meta name="viewport"
+        content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no">
+
+    <meta name="mobile-web-app-capable" content="yes">
 
     <link rel="stylesheet" type="text/css" href="styleSheet.css">
     <script src="https://kit.fontawesome.com/a076d05399.js"></script>
@@ -11,14 +14,10 @@
 </head>
 
 <body>
-    <div id="fullscreen-option">
-        <button onclick="openFullscreen()">Open in Fullscreen</button>
-    </div>
-
     <div id="login-page">
         <div id="login-box">
             <div class="input-box">
-                <input type="text" spellcheck="false" placeholder="Email - (fix fullscreen)" id="email-input">
+                <input type="text" spellcheck="false" placeholder="Email - (fix )" id="email-input">
             </div>
             <div class="input-box">
                 <input type="text" spellcheck="false" placeholder="Display Name (optional)" id="displayName-input">
