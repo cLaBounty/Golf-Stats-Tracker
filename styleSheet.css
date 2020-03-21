@@ -1,4 +1,4 @@
-* {
+* { 
     margin: 0;
     padding: 0;
 }
@@ -10,6 +10,30 @@ body {
     background-repeat: no-repeat;
     background-size: cover;
     background-attachment: fixed;
+}
+
+#fullscreen-option {
+    display: none;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.85);
+    justify-content: center;
+    align-items: center;
+}
+#fullscreen-option button {
+    background-color: rgba(230, 230, 230, 0.925);
+    border-radius: 20%;
+    border: none;
+    outline: none;
+    margin: 0 50px;
+    padding: 10px;
+    width: 285px;
+    height: 170px;
+    font-size: 45px;
+}
+#fullscreen-option button:hover {
+    background-color: white;
+    transition: 0.25s;
 }
 
 /* login/signup page */
@@ -124,43 +148,6 @@ nav ul li:hover {
 }
 #nav-check {
     display: none;
-}
-@media (max-width: 1024px) {
-    .nav-check-btn {
-        display: block;
-    }
-    nav ul {
-        position: fixed;
-        width: 100%;
-        height: 100vh;
-        background: rgba(0, 0, 0, 0.9);
-        top: 84px;
-        left: -100%;
-        text-align: center;
-        transition: all 0.5s;
-    }
-    nav ul li {
-        display: block;
-        border: 2px solid #ccc;
-        font-size: 28px;
-        line-height: 50px;
-        margin: 50px 25px;
-    }
-    nav ul li:hover {
-        background-color: rgba(150,150,150, 0.4);
-        color: white;
-    }
-    #logout-btn {
-        color: red;
-        border-color: red;
-    }
-    #logout-btn:hover {
-        background-color: rgba(255, 0, 0, 0.75);
-        color: white;
-    }
-    #nav-check:checked ~ ul {
-        left: 0;
-    }
 }
 
 /* home page */
@@ -493,6 +480,48 @@ nav ul li:hover {
 }
 #round-end-message-content a:hover {
     cursor: pointer;
+}
+
+/* Mobile Changes */
+@media (max-width: 1024px) {
+    #fullscreen-option {
+        display: flex;
+    }
+    .nav-check-btn {
+        display: block;
+    }
+    nav ul {
+        position: fixed;
+        width: 100%;
+        height: 100vh;
+        background: rgba(0, 0, 0, 0.9);
+        top: 84px;
+        left: -100%;
+        text-align: center;
+        transition: all 0.5s;
+    }
+    nav ul li {
+        display: block;
+        border: 2px solid #ccc;
+        font-size: 28px;
+        line-height: 50px;
+        margin: 50px 25px;
+    }
+    nav ul li:hover {
+        background-color: rgba(150,150,150, 0.4);
+        color: white;
+    }
+    #logout-btn {
+        color: red;
+        border-color: red;
+    }
+    #logout-btn:hover {
+        background-color: rgba(255, 0, 0, 0.75);
+        color: white;
+    }
+    #nav-check:checked ~ ul {
+        left: 0;
+    }
 }
 
 /* Small device fixs */
