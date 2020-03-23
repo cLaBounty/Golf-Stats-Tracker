@@ -3,10 +3,7 @@
 
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport"
-        content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no">
-
-    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
 
     <link rel="stylesheet" type="text/css" href="styleSheet.css">
     <script src="https://kit.fontawesome.com/a076d05399.js"></script>
@@ -16,18 +13,47 @@
 <body>
     <div id="login-page">
         <div id="login-box">
-            <div class="input-box">
-                <input type="text" spellcheck="false" placeholder="Email - (fix )" id="email-input">
+            <div id="login-form">
+                <div class="input-div">
+                    <div class="input-div-icon">
+                        <i class="fas fa-envelope"></i>
+                    </div>
+                    <input type="email" spellcheck="false" placeholder="Email" id="login-email-input">
+                </div>
+                <div class="input-div">
+                    <div class="input-div-icon">
+                        <i class="fas fa-lock"></i>
+                    </div>
+                    <input type="password" spellcheck="false" placeholder="Password" id="login-password-input">
+                </div>
+                <p id="login-error-message">this is hidden</p>
+                <button onclick="login()">Login</button>
+                <p class="switch-action">Don't have an account? <a onclick="switchToSignup()">Sign up</a></p>
             </div>
-            <div class="input-box">
-                <input type="text" spellcheck="false" placeholder="Display Name (optional)" id="displayName-input">
+            <div id="signup-form">
+                <div class="input-div">
+                    <div class="input-div-icon">
+                        <i class="fas fa-envelope"></i>
+                    </div>
+                    <input type="email" spellcheck="false" placeholder="Email" id="signup-email-input">
+                </div>
+                <div class="input-div">
+                    <div class="input-div-icon">
+                        <i class="fas fa-user"></i>
+                    </div>
+                    <input type="text" spellcheck="false" placeholder="Display Name (optional)"
+                        id="signup-displayName-input">
+                </div>
+                <div class="input-div">
+                    <div class="input-div-icon">
+                        <i class="fas fa-lock"></i>
+                    </div>
+                    <input type="password" spellcheck="false" placeholder="Password" id="signup-password-input">
+                </div>
+                <p id="signup-error-message">this is hidden</p>
+                <button onclick="signup()">Sign Up</button>
+                <p class="switch-action">Already have an account? <a onclick="switchToLogin()">Login</a></p>
             </div>
-            <div class="input-box">
-                <input type="password" spellcheck="false" placeholder="Password" id="password-input">
-            </div>
-            <p id="error-message">this is hidden</p>
-            <button type="button" id="login-btn" onclick="login()">Login</button>
-            <button type="button" id="signup-btn" onclick="signup()">Signup</button>
         </div>
     </div>
 
