@@ -8,7 +8,6 @@ body {
     background-image: url("assets/background.jpg");
     background-position: 70% 0%;
     background-repeat: no-repeat;
-    background-size: cover;
     background-attachment: fixed;
 }
 

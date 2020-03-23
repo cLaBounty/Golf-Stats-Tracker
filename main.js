@@ -1,10 +1,3 @@
-
-/*
-    KNOWN ISSUES
-    - MOBILE!!!!!
-    https://clabounty.github.io/golfStatsTracker/
-*/
-
 function switchToSignup() {
     // clear error and input
     document.getElementById('login-error-message').style.visibility = "hidden";
