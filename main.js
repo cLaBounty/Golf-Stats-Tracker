@@ -5,23 +5,46 @@
     https://clabounty.github.io/golfStatsTracker/
 */
 
+function switchToSignup() {
+    // clear error and input
+    document.getElementById('login-error-message').style.visibility = "hidden";
+    document.getElementById('login-email-input').value = "";
+    document.getElementById('login-password-input').value = "";
+
+    // switch forms
+    document.getElementById('login-form').style.display = 'none';
+    document.getElementById('signup-form').style.display = 'block';
+}
+
+function switchToLogin() {
+    // clear error and input
+    document.getElementById('signup-error-message').style.visibility = "hidden";
+    document.getElementById('signup-email-input').value = "";
+    document.getElementById('signup-password-input').value = "";
+    document.getElementById('signup-displayName-input').value = "";
+
+    // switch forms
+    document.getElementById('signup-form').style.display = 'none';
+    document.getElementById('login-form').style.display = 'block';
+}
+
 function login() {
-    const email = document.getElementById('email-input').value;
-    const password = document.getElementById('password-input').value;
+    const email = document.getElementById('login-email-input').value;
+    const password = document.getElementById('login-password-input').value;
 
     // check if user exists
     auth.signInWithEmailAndPassword(email, password).then(cred => {
         toHomePage();
     }).catch(err => {
-        document.getElementById('error-message').innerHTML = err.message;
-        document.getElementById('error-message').style.visibility = 'visible';
+        document.getElementById('login-error-message').innerHTML = err.message;
+        document.getElementById('login-error-message').style.visibility = 'visible';
     });
 }
 
 function signup() {
-    const email = document.getElementById('email-input').value;
-    const password = document.getElementById('password-input').value;
-    let displayName = document.getElementById('displayName-input').value;
+    const email = document.getElementById('signup-email-input').value;
+    const password = document.getElementById('signup-password-input').value;
+    let displayName = document.getElementById('signup-displayName-input').value;
 
     // if no display name, then set to email
     if (displayName == "") {
@@ -83,8 +106,8 @@ function signup() {
         });
         toHomePage();
     }).catch(err => { // if there is an error, then display message
-        document.getElementById('error-message').innerHTML = err.message;
-        document.getElementById('error-message').style.visibility = 'visible';
+        document.getElementById('signup-error-message').innerHTML = err.message;
+        document.getElementById('signup-error-message').style.visibility = 'visible';
     });
 }
 
@@ -289,7 +312,7 @@ function toNewRoundPage() {
             document.getElementById("newRound-error").innerHTML = 'It looks like you are not tracking any stats. Update your settings to start a new round.'
             sleep(3.5).then(() => {
                 document.getElementById("newRound-error-full").style.display = 'none';
-                toHomePage();
+                toSettingsPage();
             })
         }
     });
