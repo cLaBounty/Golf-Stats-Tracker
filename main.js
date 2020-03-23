@@ -474,9 +474,6 @@ function finishRound() {
     document.getElementById('nine-hole-message').style.display = 'none';
     document.getElementById('round-end-message').style.display = 'flex';
 }
-//----------------------------------------------------------------------- delete this line
-
-// do firebase stuff 
 
 function submitScore() {
     // get values from input
