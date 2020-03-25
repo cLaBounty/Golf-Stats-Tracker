@@ -177,6 +177,13 @@ function toSettingsPage() {
         document.getElementById('trackGreensInReg-toggle').checked = currentUser.trackGreensInReg;
         document.getElementById('shareGreensInReg-toggle').checked = currentUser.shareGreensInReg;
         document.getElementById('shareTotalHolesPlayed-toggle').checked = currentUser.shareTotalHolesPlayed;
+
+        // check if share labels or buttons should be changed
+        checkTrackScores();
+        checkTrackPutts();
+        checkTrackFairwaysInReg();
+        checkTrackGreensInReg();
+        checkTrackHolesWithHazard();
     });
 }
 
@@ -215,33 +222,93 @@ function saveSettings() {
 
 // checking track settings -> if tracking is of, then turn off sharing
 function checkTrackScores() {
+    const labelElements = document.getElementsByClassName('score-setting-label');
     if (!document.getElementById('trackScores-toggle').checked) {
-        document.getElementById('shareBirdiesMINUS-toggle').checked = false;
-        document.getElementById('sharePars-toggle').checked = false;
-        document.getElementById('shareBogeys-toggle').checked = false;
-        document.getElementById('shareDoubleBogeysPLUS-toggle').checked = false;
+        const toggleElements = document.getElementsByClassName('score-setting-toggle');
+
+        // setting all share score settings to false
+        for (let i = 0; i < toggleElements.length; i++) {
+            toggleElements[i].checked = false;
+        }
+
+        // setting all share score settings labels to gray and line through
+        for (let i = 0; i < labelElements.length; i++) {
+            labelElements[i].style.color = 'rgb(225, 225, 225)'
+            labelElements[i].style.textDecoration = 'line-through';
+        }
+    }
+    else {
+        // setting all share score settings labels to original style
+        for (let i = 0; i < labelElements.length; i++) {
+            labelElements[i].style.color = 'rgb(255, 255, 255)'
+            labelElements[i].style.textDecoration = 'none';
+        }
     }
 }
 function checkTrackPutts() {
+    const labelElements = document.getElementsByClassName('putt-setting-label');
     if (!document.getElementById('trackPutts-toggle').checked) {
-        document.getElementById('shareOnePutts-toggle').checked = false;
-        document.getElementById('shareTwoPutts-toggle').checked = false;
-        document.getElementById('shareThreePuttsPLUS-toggle').checked = false;
+        const toggleElements = document.getElementsByClassName('putt-setting-toggle');
+
+        // setting all share putt settings to false
+        for (let i = 0; i < toggleElements.length; i++) {
+            toggleElements[i].checked = false;
+        }
+
+        // setting all share putt settings labels to gray and line through
+        for (let i = 0; i < labelElements.length; i++) {
+            labelElements[i].style.color = 'rgb(225, 225, 225)'
+            labelElements[i].style.textDecoration = 'line-through';
+        }
     }
-}
-function checkTrackHolesWithHazard() {
-    if (!document.getElementById('trackHolesWithHazard-toggle').checked) {
-        document.getElementById('shareHolesWithHazard-toggle').checked = false;
+    else {
+        // setting all share putt settings labels to original style
+        for (let i = 0; i < labelElements.length; i++) {
+            labelElements[i].style.color = 'rgb(255, 255, 255)'
+            labelElements[i].style.textDecoration = 'none';
+        }
     }
 }
 function checkTrackFairwaysInReg() {
+    const labelElement = document.getElementById('shareFairwaysInReg-label');
     if (!document.getElementById('trackFairwaysInReg-toggle').checked) {
-        document.getElementById('shareFairwaysInReg-toggle').checked = false;
+        const toggleElement = document.getElementById('shareFairwaysInReg-toggle');
+        toggleElement.checked = false;
+
+        labelElement.style.color = 'rgb(225, 225, 225)'
+        labelElement.style.textDecoration = 'line-through';
+    }
+    else {
+        labelElement.style.color = 'rgb(255, 255, 255)'
+        labelElement.style.textDecoration = 'none';
     }
 }
 function checkTrackGreensInReg() {
+    const labelElement = document.getElementById('shareGreensinReg-label');
     if (!document.getElementById('trackGreensInReg-toggle').checked) {
-        document.getElementById('shareGreensInReg-toggle').checked = false;
+        const toggleElement = document.getElementById('shareGreensInReg-toggle');
+        toggleElement.checked = false;
+
+        labelElement.style.color = 'rgb(225, 225, 225)'
+        labelElement.style.textDecoration = 'line-through';
+    }
+    else {
+        labelElement.style.color = 'rgb(255, 255, 255)'
+        labelElement.style.textDecoration = 'none';
+    }
+}
+function checkTrackHolesWithHazard() {
+    const labelElement = document.getElementById('shareHolesWithHazard-label');
+    if (!document.getElementById('trackHolesWithHazard-toggle').checked) {
+        const toggleElement = document.getElementById('shareHolesWithHazard-toggle');
+        toggleElement.checked = false;
+
+        labelElement.style.color = 'rgb(225, 225, 225)'
+        labelElement.style.textDecoration = 'line-through';
+    }
+    else {
+        labelElement.style.color = 'rgb(255, 255, 255)'
+        labelElement.style.textDecoration = 'none';
     }
 }
 
@@ -618,17 +685,29 @@ function toFriendsPage() { // put all inside .then()
     // display new stuff
     document.getElementById('friends-page').style.display = 'block';
     document.getElementById('page-label').innerHTML = "Friends";
+
+    /*
+        ???
+    */
+
 }
 
-function toStatsPage() { // put all inside .then()
+function toStatsPage() {
     // only accessible from home page
     document.getElementById('home-page').style.display = 'none';
 
     // display new stuff
     document.getElementById('stats-page').style.display = 'block';
     document.getElementById('page-label').innerHTML = "Stats";
-}
 
+    /*
+        Area with 3 tabs...
+            - Previous Round
+            - Lifetime
+            - Friends Leaderboard
+    */
+
+}
 
 function toPreviousRoundStats() {
     toHomePage(); // for testing

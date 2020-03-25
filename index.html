@@ -73,8 +73,12 @@
     </nav>
 
     <div id="home-page">
-        <button type="button" class="home-option-btn" onclick="toNewRoundPage()">Start a<br>New Round</button>
-        <button type="button" class="home-option-btn" onclick="toStatsPage()">View Stats</button>
+        <div id="home-btns-container">
+            <button type="button" class="home-option-btn" id="newRound-btn" onclick="toNewRoundPage()">Start a<br>New
+                Round</button>
+            <button type="button" class="home-option-btn" id="view-stats-btn" onclick="toStatsPage()">View
+                Stats</button>
+        </div>
     </div>
 
     <div id="friends-page">
@@ -91,43 +95,49 @@
                 <input id="trackScores-toggle" type="checkbox" onclick="checkTrackScores()">
             </div>
             <div class="setting-option">
-                <h4>Share Birdies or lower</h4>
-                <input id="shareBirdiesMINUS-toggle" type="checkbox" onclick="checkTrackScores()">
+                <h4 class="score-setting-label">Share Birdies or lower</h4>
+                <input id="shareBirdiesMINUS-toggle" class="score-setting-toggle" type="checkbox"
+                    onclick="checkTrackScores()">
             </div>
             <div class="setting-option">
-                <h4>Share Pars</h4>
-                <input id="sharePars-toggle" type="checkbox" onclick="checkTrackScores()">
+                <h4 class="score-setting-label">Share Pars</h4>
+                <input id="sharePars-toggle" class="score-setting-toggle" type="checkbox" onclick="checkTrackScores()">
             </div>
             <div class="setting-option">
-                <h4>Share Bogeys</h4>
-                <input id="shareBogeys-toggle" type="checkbox" onclick="checkTrackScores()">
+                <h4 class="score-setting-label">Share Bogeys</h4>
+                <input id="shareBogeys-toggle" class="score-setting-toggle" type="checkbox"
+                    onclick="checkTrackScores()">
             </div>
             <div class="setting-option">
-                <h4>Share Double Bogeys or higher</h4>
-                <input id="shareDoubleBogeysPLUS-toggle" type="checkbox" onclick="checkTrackScores()">
+                <h4 class="score-setting-label">Share Double Bogeys or higher</h4>
+                <input id="shareDoubleBogeysPLUS-toggle" class="score-setting-toggle" type="checkbox"
+                    onclick="checkTrackScores()">
             </div>
             <div class="setting-option">
                 <h4>Track Putts</h4>
                 <input id="trackPutts-toggle" type="checkbox" onclick="checkTrackPutts()">
             </div>
             <div class="setting-option">
-                <h4>Share 1 Putts</h4>
-                <input id="shareOnePutts-toggle" type="checkbox" onclick="checkTrackPutts()">
+                <h4 class="putt-setting-label">Share 1 Putts</h4>
+                <input id="shareOnePutts-toggle" class="putt-setting-toggle" type="checkbox"
+                    onclick="checkTrackPutts()">
             </div>
             <div class="setting-option">
-                <h4>Share 2 Putts</h4>
-                <input id="shareTwoPutts-toggle" type="checkbox" onclick="checkTrackPutts()">
+                <h4 class="putt-setting-label">Share 2 Putts</h4>
+                <input id="shareTwoPutts-toggle" class="putt-setting-toggle" type="checkbox"
+                    onclick="checkTrackPutts()">
             </div>
             <div class="setting-option">
-                <h4>Share 3 Putts or higher</h4>
-                <input id="shareThreePuttsPLUS-toggle" type="checkbox" onclick="checkTrackPutts()">
+                <h4 class="putt-setting-label">Share 3 Putts or higher</h4>
+                <input id="shareThreePuttsPLUS-toggle" class="putt-setting-toggle" type="checkbox"
+                    onclick="checkTrackPutts()">
             </div>
             <div class="setting-option">
                 <h4>Track Fairways in Regulation</h4>
                 <input id="trackFairwaysInReg-toggle" type="checkbox" onclick="checkTrackFairwaysInReg()">
             </div>
             <div class="setting-option">
-                <h4>Share Fairways in Regulation</h4>
+                <h4 id="shareFairwaysInReg-label">Share Fairways in Regulation</h4>
                 <input id="shareFairwaysInReg-toggle" type="checkbox" onclick="checkTrackFairwaysInReg()">
             </div>
             <div class="setting-option">
@@ -135,7 +145,7 @@
                 <input id="trackGreensInReg-toggle" type="checkbox" onclick="checkTrackGreensInReg()">
             </div>
             <div class="setting-option">
-                <h4>Share Greens in Regulation</h4>
+                <h4 id="shareGreensinReg-label">Share Greens in Regulation</h4>
                 <input id="shareGreensInReg-toggle" type="checkbox" onclick="checkTrackGreensInReg()">
             </div>
             <div class="setting-option">
@@ -143,7 +153,7 @@
                 <input id="trackHolesWithHazard-toggle" type="checkbox" onclick="checkTrackHolesWithHazard()">
             </div>
             <div class="setting-option">
-                <h4>Share Holes with Hazards</h4>
+                <h4 id="shareHolesWithHazard-label">Share Holes with Hazards</h4>
                 <input id="shareHolesWithHazard-toggle" type="checkbox" onclick="checkTrackHolesWithHazard()">
             </div>
             <div class="setting-option">
