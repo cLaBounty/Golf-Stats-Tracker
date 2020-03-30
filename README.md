@@ -1,2 +1,2 @@
 # golfStatsTracker
-Golf Stats Tracker using HTML, CSS, and JS.
+A Golf Stats Tracker made with HTML, CSS, JS, and Firebase
