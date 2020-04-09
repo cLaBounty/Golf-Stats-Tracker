@@ -49,7 +49,6 @@ function signup() {
         // creating all fields for user's data
         database.collection('users').doc(cred.user.uid).set({
             displayName: displayName,
-            currentPar: 0,
             onePutts: 0,
             currentOnePutts: 0,
             twoPutts: 0,
@@ -92,8 +91,6 @@ function signup() {
 
             trackGreensInReg: true,
             shareGreensInReg: true,
-
-            shareTotalHolesPlayed: true,
 
             friends: []
         });
@@ -176,7 +173,6 @@ function toSettingsPage() {
         document.getElementById('shareFairwaysInReg-toggle').checked = currentUser.shareFairwaysInReg;
         document.getElementById('trackGreensInReg-toggle').checked = currentUser.trackGreensInReg;
         document.getElementById('shareGreensInReg-toggle').checked = currentUser.shareGreensInReg;
-        document.getElementById('shareTotalHolesPlayed-toggle').checked = currentUser.shareTotalHolesPlayed;
 
         // check if share labels or buttons should be changed
         checkTrackScores();
@@ -215,7 +211,6 @@ function saveSettings() {
         shareFairwaysInReg: document.getElementById('shareFairwaysInReg-toggle').checked,
         trackGreensInReg: document.getElementById('trackGreensInReg-toggle').checked,
         shareGreensInReg: document.getElementById('shareGreensInReg-toggle').checked,
-        shareTotalHolesPlayed: document.getElementById('shareTotalHolesPlayed-toggle').checked
     });
     toHomePage();
 }
@@ -336,7 +331,6 @@ function toNewRoundPage() {
 
         // reset all current values
         database.collection('users').doc(currentUserId).update({
-            currentPar: 0,
             currentOnePutts: 0,
             currentTwoPutts: 0,
             currentThreePuttsPLUS: 0,
@@ -594,10 +588,6 @@ function submitScore() {
                     currentDoubleBogeysPLUS: currentUser.currentDoubleBogeysPLUS + 1
                 });
             }
-
-            database.collection('users').doc(currentUserId).update({
-                currentPar: currentUser.currentPar + parValue,
-            });
         }
     });
 
@@ -679,6 +669,226 @@ function questionYes(questionNum) {
 
 // ****************************************************************************************************************************** \\
 
+function toStatsPage() { // ONLY SHOW THE STATS THAT ARE TOGGLED
+    // only accessible from home page
+    document.getElementById('home-page').style.display = 'none';
+
+    hidePages();
+
+    // display new stuff
+    document.getElementById('stats-page').style.display = 'flex';
+    document.getElementById('page-label').innerHTML = "Stats";
+
+    // load first stat on both pages
+    changePercentCircle('current', 'pars');
+    changePercentCircle('lifetime', 'pars');
+}
+
+function newStatsTab(pageName, element) {
+    // hide all drop downs
+    document.getElementById("curScore-dropdown-content").classList.remove("show");
+    document.getElementById("curPutt-dropdown-content").classList.remove("show");
+    document.getElementById("score-dropdown-content").classList.remove("show");
+    document.getElementById("putt-dropdown-content").classList.remove("show");
+
+    // hide all tab content
+    const statsContents = document.getElementsByClassName('stats-content');
+    for (let i = 0; i < statsContents.length; i++) {
+        statsContents[i].style.display = 'none';
+    }
+
+    // reseting text and background color of all tabs
+    const statsTabs = document.getElementsByClassName('stats-tab');
+    for (let i = 0; i < statsTabs.length; i++) {
+        statsTabs[i].style.backgroundColor = 'rgba(0, 0, 0, 0.85)';
+        statsTabs[i].style.color = '#ffffff';
+    }
+
+    // displaying new tab
+    document.getElementById(pageName).style.display = 'flex';
+
+    // setting tab to active color
+    element.style.backgroundColor = '#ffffff';
+    element.style.color = '#000000';
+}
+
+function showCurrentScoreStatsOptions() {
+    // show/hide all drop downs
+    document.getElementById("curPutt-dropdown-content").classList.remove("show");
+    document.getElementById("curScore-dropdown-content").classList.toggle("show");
+}
+
+function showCurrentPuttStatsOptions() {
+    // show/hide all drop downs
+    document.getElementById("curScore-dropdown-content").classList.remove("show");
+    document.getElementById("curPutt-dropdown-content").classList.toggle("show");
+}
+
+function showScoreStatsOptions() {
+    // show/hide all drop downs
+    document.getElementById("putt-dropdown-content").classList.remove("show");
+    document.getElementById("score-dropdown-content").classList.toggle("show");
+}
+
+function showPuttStatsOptions() {
+    // show/hide all drop downs
+    document.getElementById("score-dropdown-content").classList.remove("show");
+    document.getElementById("putt-dropdown-content").classList.toggle("show");
+}
+
+function changePercentCircle(tab, stat) { // '.round'
+    // getting current users info
+    const currentUserId = auth.currentUser.uid;
+    database.collection('users').doc(currentUserId).get().then(snapshot => {
+        const currentUser = snapshot.data();
+
+        if (tab == 'current') {
+            // hide drop downs
+            document.getElementById("curScore-dropdown-content").classList.remove("show");
+            document.getElementById("curPutt-dropdown-content").classList.remove("show");
+
+            // reset to counting color
+            document.getElementById('currentPercentageWheel-text').style.color = 'rgb(150, 150, 150)';
+
+            var statName, percentage;
+
+            if (stat == 'birdies') {
+                statName = "Birdies or lower"
+                percentage = currentUser.currentBirdiesMINUS / currentUser.currentTotalHolesPlayed;
+            }
+            else if (stat == 'pars') {
+                statName = "Pars"
+                percentage = currentUser.currentPars / currentUser.currentTotalHolesPlayed;
+            }
+            else if (stat == 'bogeys') {
+                statName = "Bogeys"
+                percentage = currentUser.currentBogeys / currentUser.currentTotalHolesPlayed;
+            }
+            else if (stat == 'doubleBogeys') {
+                statName = "Double Bogeys or higher"
+                percentage = currentUser.currentDoubleBogeysPLUS / currentUser.currentTotalHolesPlayed;
+            }
+            else if (stat == 'onePutts') {
+                statName = "1 Putts"
+                percentage = currentUser.currentOnePutts / currentUser.currentTotalHolesPlayed;
+            }
+            else if (stat == 'twoPutts') {
+                statName = "2 Putts"
+                percentage = currentUser.currentTwoPutts / currentUser.currentTotalHolesPlayed;
+            }
+            else if (stat == 'threePutts') {
+                statName = "3 Putts or more"
+                percentage = currentUser.currentThreePuttsPLUS / currentUser.currentTotalHolesPlayed;
+            }
+            else if (stat == 'greensinReg') {
+                statName = "Greens in Regulation"
+                percentage = currentUser.currentGreensInReg / currentUser.currentTotalHolesPlayed;
+            }
+            else if (stat == 'fairwaysinReg') {
+                statName = "Fairways in Regulation"
+                percentage = currentUser.currentFairwaysInReg / currentUser.currentTotalHolesPlayed
+            }
+            else if (stat == 'holesWithHazards') {
+                statName = "Holes with Hazards"
+                percentage = currentUser.currentHolesWithHazard / currentUser.currentTotalHolesPlayed;
+            }
+
+            // setting stat name to new value
+            document.getElementById("current-stat-name").innerHTML = statName;
+
+            // wheel animation
+            const finalStatNum = (percentage * 100).toFixed(2);
+            $("#currentPercentageWheel").circleProgress({ fill: { color: '#3b8ad9' }, value: percentage })
+                .on('circle-animation-progress', function (event, progress, stepValue) {
+                    document.getElementById('currentPercentageWheel-text').innerHTML = String(stepValue.toFixed(5).substr(2, 2) + '.' + stepValue.toFixed(5).substr(4, 2) + '%');
+                }).on('circle-animation-end', function () {
+                    document.getElementById('currentPercentageWheel-text').innerHTML = String(finalStatNum + '%');
+                    document.getElementById('currentPercentageWheel-text').style.color = '#ffffff';
+                });
+        }
+        else if (tab == 'lifetime') {
+            // hide drop downs
+            document.getElementById("score-dropdown-content").classList.remove("show");
+            document.getElementById("putt-dropdown-content").classList.remove("show");
+
+            // reset to counting color
+            document.getElementById('lifetimePercentageWheel-text').style.color = 'rgb(150, 150, 150)';
+
+            var statName, percentage;
+
+            if (stat == 'birdies') {
+                statName = "Birdies or lower"
+                percentage = currentUser.birdiesMINUS / currentUser.totalHolesPlayed;
+            }
+            else if (stat == 'pars') {
+                statName = "Pars"
+                percentage = currentUser.pars / currentUser.totalHolesPlayed;
+            }
+            else if (stat == 'bogeys') {
+                statName = "Bogeys"
+                percentage = currentUser.bogeys / currentUser.totalHolesPlayed;
+            }
+            else if (stat == 'doubleBogeys') {
+                statName = "Double Bogeys or higher"
+                percentage = currentUser.doubleBogeysPLUS / currentUser.totalHolesPlayed;
+            }
+            else if (stat == 'onePutts') {
+                statName = "1 Putts"
+                percentage = currentUser.onePutts / currentUser.totalHolesPlayed;
+            }
+            else if (stat == 'twoPutts') {
+                statName = "2 Putts"
+                percentage = currentUser.twoPutts / currentUser.totalHolesPlayed;
+            }
+            else if (stat == 'threePutts') {
+                statName = "3 Putts or more"
+                percentage = currentUser.threePuttsPLUS / currentUser.totalHolesPlayed;
+            }
+            else if (stat == 'greensinReg') {
+                statName = "Greens in Regulation"
+                percentage = currentUser.greensInReg / currentUser.totalHolesPlayed;
+            }
+            else if (stat == 'fairwaysinReg') {
+                statName = "Fairways in Regulation"
+                percentage = currentUser.fairwaysInReg / currentUser.totalHolesPlayed;
+            }
+            else if (stat == 'holesWithHazards') {
+                statName = "Holes with Hazards"
+                percentage = currentUser.holesWithHazard / currentUser.totalHolesPlayed;
+            }
+
+            // setting stat name to new value
+            document.getElementById("lifetime-stat-name").innerHTML = statName;
+
+            // wheel animation
+            const finalStatNum = (percentage * 100).toFixed(2);
+            $("#lifetimePercentageWheel").circleProgress({ fill: { color: '#3b8ad9' }, value: percentage })
+                .on('circle-animation-progress', function (event, progress, stepValue) {
+                    document.getElementById('lifetimePercentageWheel-text').innerHTML = String(stepValue.toFixed(5).substr(2, 2) + '.' + stepValue.toFixed(5).substr(4, 2) + '%');
+                }).on('circle-animation-end', function () {
+                    document.getElementById('lifetimePercentageWheel-text').innerHTML = String(finalStatNum + '%');
+                    document.getElementById('lifetimePercentageWheel-text').style.color = '#ffffff';
+                });
+        }
+        else { // friends
+
+        }
+    });
+}
+
+
+
+
+
+
+
+
+
+
+
+
+// ****************************************************************************************************************************** \\
+
 function toFriendsPage() { // put all inside .then()
     hidePages();
 
@@ -690,25 +900,4 @@ function toFriendsPage() { // put all inside .then()
         ???
     */
 
-}
-
-function toStatsPage() {
-    // only accessible from home page
-    document.getElementById('home-page').style.display = 'none';
-
-    // display new stuff
-    document.getElementById('stats-page').style.display = 'block';
-    document.getElementById('page-label').innerHTML = "Stats";
-
-    /*
-        Area with 3 tabs...
-            - Previous Round
-            - Lifetime
-            - Friends Leaderboard
-    */
-
-}
-
-function toPreviousRoundStats() {
-    toHomePage(); // for testing
 }
