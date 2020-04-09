@@ -499,8 +499,149 @@ nav ul li:hover {
     cursor: pointer;
 }
 
+/* stats page */
+#stats-page {
+    height: 100vh;
+    width: 100vw;
+    justify-content: center;
+    align-items: center;
+}
+#stats-container {
+    width: 965px;
+    height: 400px;
+    margin: 25px;
+    border: 4px solid white;
+    background-color: rgba(0, 0, 0, 0.85);
+    box-shadow: 0 0 25px rgba(100, 100, 100);
+}
+#stats-tab-btns {
+    position: relative;
+    top: -48px;
+    left: -4px;
+}
+.stats-tab {
+    float: left;
+    margin-right: 7px;
+    color: white;
+    font-size: 18px;
+    padding: 10px;
+    background-color: rgba(0, 0, 0, 0.85);
+    border: 3px solid white;
+    border-radius: 12px 12px 0 0;
+    outline: none;
+    cursor: pointer;
+}
+#prev-rnd-tab {
+    background-color: white;
+    color: black;
+}
+.stats-content {
+    width: 100%;
+    height: 100%;
+    position: relative;
+    top: -48px;
+}
+#prev-rnd-content {
+    display: flex;
+}
+#lifetime-content {
+    display: none;
+}
+#friends-stats-content {
+    display: none;
+}
+.stats-btns-container {
+    width: 100%;
+    height: 0;
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+    flex-wrap: wrap;
+}
+.stat-btn {
+    background: transparent;
+    color: white;
+    font-size: 16px;
+    margin: 20px 10px 0;
+    padding: 10px;
+    border: 2px solid white;
+    border-radius: 12px;
+    outline: none;
+    cursor: pointer;
+}
+.stat-btn:hover, .stat-btn:focus {
+    background: rgb(150, 150, 150);
+    transition: 0.25s;
+}
+.stats-dropdown {
+    position: relative;
+    display: inline-block;
+}
+.stats-dropdown-content {
+    display: none;
+    position: absolute;
+    left: 10px;
+    width: 135px;
+    overflow: auto;
+    z-index: 2;
+}
+.stats-dropdown-content a {
+    display: block;
+    color: white;
+    font-size: 16px;
+    margin: 3px 0;
+    padding: 10px;
+    background-color: rgb(100, 100, 100);
+    border-radius: 12px;
+    border: 2px solid white;
+    outline: none;
+}
+.stats-dropdown-content a:hover {
+    cursor: pointer;
+    background: rgb(150, 150, 150);
+    transition: 0.25s;
+}
+#stats-container .show {
+    display: block;
+}
+.stat-info {
+    width: 100%;
+    position: absolute;
+    top: 33%;
+    display: flex;
+    justify-content: center;
+}
+.stat-info h1 {
+    color: white;
+    font-size: 26px;
+    text-align: center;
+}
+.percentageWheel {
+    width: 100%;
+    height: 250px;
+    text-align: center;
+    position: absolute;
+    top: 40%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1;
+}
+.percentageWheel .round {
+    position: relative;
+    border-radius: 50%;
+}
+.percentageWheel-text {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    font-size: 32px;
+    color: #ccc;
+}
+
 /* Mobile Changes */
-@media (max-width: 680px) {
+@media (max-width: 850px) {
     /* Credit: https://stackoverflow.com/questions/26372127/background-fixed-no-repeat-not-working-on-mobile */
     body:before {
         content: "";
@@ -559,6 +700,23 @@ nav ul li:hover {
         position: relative;
         top: -21%;
     }
+    #stats-container {
+        height: 60%;
+        position: relative;
+        top: 5%;
+    }
+    .stat-btn {
+        font-size: 13.5px;
+        margin: 20px 5px 0 5px;
+        padding: 8px;
+    }
+    .stats-dropdown-content {
+        left: 5px;
+    }
+    .stats-dropdown-content a {
+        font-size: 13.5px;
+        width: 95px
+    }
 }
 
 /* Small device fixs */
@@ -610,9 +768,30 @@ nav ul li:hover {
         width: 65px;
         font-size: 24px;
     }
+    #stats-container {
+        height: 55%;
+        position: relative;
+        top: 5%;
+    }
+    .stats-tab {
+        font-size: 13px;
+    }
+    #stats-tab-btns {   
+        top: -41px;
+    }
+    .stat-btn {
+        font-size: 11px;
+        margin: 15px 2px 0 2px;
+        padding: 5px;
+    }
+    .stats-dropdown-content {
+        left: 2px;
+    }
+    .stats-dropdown-content a {
+        font-size: 11px;
+        width: 80px;
+    }
 }
-
-/* stats page */
 
 /* Initially hide every page, except for login */
 #navbar, #home-page, #friends-page, #settings-page, #newRound-page, #stats-page {
