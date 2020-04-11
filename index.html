@@ -237,6 +237,9 @@
     </div>
 
     <div id="stats-page">
+        <div id="track-error-full">
+            <p id="track-error"></p>
+        </div>
         <div id="stats-container">
             <div id="stats-tab-btns">
                 <button id="prev-rnd-tab" class="stats-tab"
@@ -246,125 +249,158 @@
             </div>
             <div id="prev-rnd-content" class="stats-content">
                 <div class="stats-btns-container">
-                    <div class="stats-dropdown">
-                        <button class="stat-btn" onclick="showCurrentScoreStatsOptions()">Scores <i
-                                class="fa fa-caret-down"></i></button>
-                        <div id="curScore-dropdown-content" class="stats-dropdown-content">
-                            <a class="stat-dropdown-btn" onclick="changePercentCircle('current', 'birdies')">Birdies or
-                                lower</a>
-                            <a class="stat-dropdown-btn" onclick="changePercentCircle('current', 'pars')">Pars</a>
-                            <a class="stat-dropdown-btn" onclick="changePercentCircle('current', 'bogeys')">Bogeys</a>
-                            <a class="stat-dropdown-btn" onclick="changePercentCircle('current', 'doubleBogeys')">Double
-                                Bogeys
-                                or higher</a>
+                    <div class="scores-stat-btn">
+                        <div class="stats-dropdown">
+                            <button class="stat-btn" onclick="showCurrentScoreStatsOptions()">Scores <i
+                                    class="fa fa-caret-down"></i></button>
+                            <div id="curScore-dropdown-content" class="stats-dropdown-content">
+                                <a class="stat-dropdown-btn" onclick="changePercentCircle('current', 'birdies')">Birdies
+                                    or
+                                    lower</a>
+                                <a class="stat-dropdown-btn" onclick="changePercentCircle('current', 'pars')">Pars</a>
+                                <a class="stat-dropdown-btn"
+                                    onclick="changePercentCircle('current', 'bogeys')">Bogeys</a>
+                                <a class="stat-dropdown-btn"
+                                    onclick="changePercentCircle('current', 'doubleBogeys')">Double
+                                    Bogeys
+                                    or higher</a>
+                            </div>
                         </div>
                     </div>
-                    <div class="stats-dropdown">
-                        <button class="stat-btn" onclick="showCurrentPuttStatsOptions()">Putts <i
-                                class="fa fa-caret-down"></i></button>
-                        <div id="curPutt-dropdown-content" class="stats-dropdown-content">
-                            <a class="stat-dropdown-btn" onclick="changePercentCircle('current', 'onePutts')">1
-                                Putts</a>
-                            <a class="stat-dropdown-btn" onclick="changePercentCircle('current', 'twoPutts')">2
-                                Putts</a>
-                            <a class="stat-dropdown-btn" onclick="changePercentCircle('current', 'threePutts')">3 Putts
-                                or
-                                more</a>
+                    <div class="putts-stat-btn">
+                        <div class="stats-dropdown">
+                            <button class="stat-btn" onclick="showCurrentPuttStatsOptions()">Putts <i
+                                    class="fa fa-caret-down"></i></button>
+                            <div id="curPutt-dropdown-content" class="stats-dropdown-content">
+                                <a class="stat-dropdown-btn" onclick="changePercentCircle('current', 'onePutts')">1
+                                    Putts</a>
+                                <a class="stat-dropdown-btn" onclick="changePercentCircle('current', 'twoPutts')">2
+                                    Putts</a>
+                                <a class="stat-dropdown-btn" onclick="changePercentCircle('current', 'threePutts')">3
+                                    Putts or more</a>
+                            </div>
                         </div>
                     </div>
-                    <button class="stat-btn" onclick="changePercentCircle('current', 'greensinReg')">Greens in
-                        Regulation</button>
-                    <button class="stat-btn" onclick="changePercentCircle('current', 'fairwaysinReg')">Fairways in
-                        Regulation</button>
-                    <button class="stat-btn" onclick="changePercentCircle('current', 'holesWithHazards')">Holes with
-                        Hazards</button>
+                    <div class="greensInReg-stat-btn">
+                        <button class="stat-btn" onclick="changePercentCircle('current', 'greensinReg')">Greens in
+                            Regulation</button>
+                    </div>
+                    <div class="fairwaysInReg-stat-btn">
+                        <button class="stat-btn" onclick="changePercentCircle('current', 'fairwaysinReg')">Fairways in
+                            Regulation</button>
+                    </div>
+                    <div class="holesWithHazards-stat-btn">
+                        <button class="stat-btn" onclick="changePercentCircle('current', 'holesWithHazards')">Holes with
+                            Hazards</button>
+                    </div>
                 </div>
                 <div class="stat-info">
                     <h1 id="current-stat-name"></h1>
                 </div>
                 <div class="percentageWheel">
-                    <div id="currentPercentageWheel" class="round" data-size="200" data-thickness="35"
-                        data-start-angle="-1.57" data-empty-fill="rgba(255, 255, 255, 0.2)">
-                        <strong id="currentPercentageWheel-text" class="percentageWheel-text"></strong>
+                    <div id="currentPercentageWheel" class="round" data-thickness="30" data-start-angle="-1.57"
+                        data-empty-fill="rgba(255, 255, 255, 0.2)">
+                        <div class="percentageWheel-text">
+                            <strong id="currentPercentageWheel-percent"></strong>
+                            <br>
+                            <strong id="currentPercentageWheel-text"><br></strong>
+                        </div>
                     </div>
                 </div>
             </div>
             <div id="lifetime-content" class="stats-content">
                 <div class="stats-btns-container">
-                    <div class="stats-dropdown">
-                        <button class="stat-btn" onclick="showScoreStatsOptions()">Scores <i
-                                class="fa fa-caret-down"></i></button>
-                        <div id="score-dropdown-content" class="stats-dropdown-content">
-                            <a class="stat-dropdown-btn" onclick="changePercentCircle('lifetime', 'birdies')">Birdies or
-                                lower</a>
-                            <a class="stat-dropdown-btn" onclick="changePercentCircle('lifetime', 'pars')">Pars</a>
-                            <a class="stat-dropdown-btn" onclick="changePercentCircle('lifetime', 'bogeys')">Bogeys</a>
-                            <a class="stat-dropdown-btn"
-                                onclick="changePercentCircle('lifetime', 'doubleBogeys')">Double Bogeys
-                                or higher</a>
+                    <div class="scores-stat-btn">
+                        <div class="stats-dropdown">
+                            <button class="stat-btn" onclick="showScoreStatsOptions()">Scores <i
+                                    class="fa fa-caret-down"></i></button>
+                            <div id="score-dropdown-content" class="stats-dropdown-content">
+                                <a class="stat-dropdown-btn"
+                                    onclick="changePercentCircle('lifetime', 'birdies')">Birdies or
+                                    lower</a>
+                                <a class="stat-dropdown-btn" onclick="changePercentCircle('lifetime', 'pars')">Pars</a>
+                                <a class="stat-dropdown-btn"
+                                    onclick="changePercentCircle('lifetime', 'bogeys')">Bogeys</a>
+                                <a class="stat-dropdown-btn"
+                                    onclick="changePercentCircle('lifetime', 'doubleBogeys')">Double Bogeys
+                                    or higher</a>
+                            </div>
                         </div>
                     </div>
-                    <div class="stats-dropdown">
-                        <button class="stat-btn" onclick="showPuttStatsOptions()">Putts <i
-                                class="fa fa-caret-down"></i></button>
-                        <div id="putt-dropdown-content" class="stats-dropdown-content">
-                            <a class="stat-dropdown-btn" onclick="changePercentCircle('lifetime', 'onePutts')">1
-                                Putts</a>
-                            <a class="stat-dropdown-btn" onclick="changePercentCircle('lifetime', 'twoPutts')">2
-                                Putts</a>
-                            <a class="stat-dropdown-btn" onclick="changePercentCircle('lifetime', 'threePutts')">3 Putts
-                                or
-                                more</a>
+                    <div class="putts-stat-btn">
+                        <div class="stats-dropdown">
+                            <button class="stat-btn" onclick="showPuttStatsOptions()">Putts <i
+                                    class="fa fa-caret-down"></i></button>
+                            <div id="putt-dropdown-content" class="stats-dropdown-content">
+                                <a class="stat-dropdown-btn" onclick="changePercentCircle('lifetime', 'onePutts')">1
+                                    Putts</a>
+                                <a class="stat-dropdown-btn" onclick="changePercentCircle('lifetime', 'twoPutts')">2
+                                    Putts</a>
+                                <a class="stat-dropdown-btn" onclick="changePercentCircle('lifetime', 'threePutts')">3
+                                    Putts or more</a>
+                            </div>
                         </div>
                     </div>
-                    <button class="stat-btn" onclick="changePercentCircle('lifetime', 'greensinReg')">Greens in
-                        Regulation</button>
-                    <button class="stat-btn" onclick="changePercentCircle('lifetime', 'fairwaysinReg')">Fairways in
-                        Regulation</button>
-                    <button class="stat-btn" onclick="changePercentCircle('lifetime', 'holesWithHazards')">Holes with
-                        Hazards</button>
+                    <div class="greensInReg-stat-btn">
+                        <button class="stat-btn" onclick="changePercentCircle('lifetime', 'greensinReg')">Greens in
+                            Regulation</button>
+                    </div>
+                    <div class="fairwaysInReg-stat-btn">
+                        <button class="stat-btn" onclick="changePercentCircle('lifetime', 'fairwaysinReg')">Fairways
+                            in
+                            Regulation</button>
+                    </div>
+                    <div class="holesWithHazards-stat-btn">
+                        <button class="stat-btn" onclick="changePercentCircle('lifetime', 'holesWithHazards')">Holes
+                            with
+                            Hazards</button>
+                    </div>
                 </div>
                 <div class="stat-info">
                     <h1 id="lifetime-stat-name"></h1>
                 </div>
                 <div class="percentageWheel">
-                    <div id="lifetimePercentageWheel" class="round" data-size="200" data-thickness="35"
-                        data-start-angle="-1.57" data-empty-fill="rgba(255, 255, 255, 0.2)">
-                        <strong id="lifetimePercentageWheel-text" class="percentageWheel-text"></strong>
+                    <div id="lifetimePercentageWheel" class="round" data-thickness="30" data-start-angle="-1.57"
+                        data-empty-fill="rgba(255, 255, 255, 0.2)">
+                        <div class="percentageWheel-text">
+                            <strong id="lifetimePercentageWheel-percent"></strong>
+                            <br>
+                            <strong id="lifetimePercentageWheel-text"><br></strong>
+                        </div>
                     </div>
                 </div>
             </div>
             <div id="friends-stats-content" class="stats-content">
             </div>
         </div>
-    </div>
 
-    <!-- Firebase -->
-    <script src="https://www.gstatic.com/firebasejs/7.8.2/firebase-app.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/7.8.2/firebase-auth.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/7.8.2/firebase-firestore.js"></script>
+        <!-- Firebase -->
+        <script src="https://www.gstatic.com/firebasejs/7.8.2/firebase-app.js"></script>
+        <script src="https://www.gstatic.com/firebasejs/7.8.2/firebase-auth.js"></script>
+        <script src="https://www.gstatic.com/firebasejs/7.8.2/firebase-firestore.js"></script>
 
-    <script>
-        // Your web app's Firebase configuration
-        var firebaseConfig = {
-            apiKey: "AIzaSyBVkMX1vz4q1YGxrfcnUQ6jdMdfdtBOhTo",
-            authDomain: "golf-stats-tracker-1a578.firebaseapp.com",
-            databaseURL: "https://golf-stats-tracker-1a578.firebaseio.com",
-            projectId: "golf-stats-tracker-1a578",
-            storageBucket: "golf-stats-tracker-1a578.appspot.com",
-            messagingSenderId: "112674476547",
-            appId: "1:112674476547:web:9441dd05b9342329dd3436",
-            measurementId: "G-X4RL3BGY2D"
-        };
-        // Initialize Firebase
-        firebase.initializeApp(firebaseConfig);
-        const auth = firebase.auth();
-        const database = firebase.firestore();
-    </script>
+        <script>
+            // Your web app's Firebase configuration
+            var firebaseConfig = {
+                apiKey: "AIzaSyBVkMX1vz4q1YGxrfcnUQ6jdMdfdtBOhTo",
+                authDomain: "golf-stats-tracker-1a578.firebaseapp.com",
+                databaseURL: "https://golf-stats-tracker-1a578.firebaseio.com",
+                projectId: "golf-stats-tracker-1a578",
+                storageBucket: "golf-stats-tracker-1a578.appspot.com",
+                messagingSenderId: "112674476547",
+                appId: "1:112674476547:web:9441dd05b9342329dd3436",
+                measurementId: "G-X4RL3BGY2D"
+            };
+            // Initialize Firebase
+            firebase.initializeApp(firebaseConfig);
+            const auth = firebase.auth();
+            const database = firebase.firestore();
+        </script>
 
-    <script src="https://code.jquery.com/jquery-3.4.1.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-circle-progress/1.2.0/circle-progress.min.js"></script>
-    <script type="text/javascript" src="main.js"></script>
+        <script src="https://code.jquery.com/jquery-3.4.1.js"></script>
+        <script
+            src="https://cdnjs.cloudflare.com/ajax/libs/jquery-circle-progress/1.2.0/circle-progress.min.js"></script>
+        <script type="text/javascript" src="main.js"></script>
 </body>
 
 </html>
