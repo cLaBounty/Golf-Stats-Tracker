@@ -46,9 +46,7 @@ function signup() {
 
     // create new user 
     auth.createUserWithEmailAndPassword(email, password).then(cred => {
-        // creating all fields for user's data
-        database.collection('users').doc(cred.user.uid).set({
-            displayName: displayName,
+        database.collection('userData').doc(cred.user.uid).set({
             onePutts: 0,
             currentOnePutts: 0,
             twoPutts: 0,
@@ -69,7 +67,11 @@ function signup() {
             currentFairwaysInReg: 0,
             greensInReg: 0,
             currentGreensInReg: 0,
-            totalHolesPlayed: 0,
+            totalHolesPlayed_scores: 0,
+            totalHolesPlayed_putts: 0,
+            totalHolesPlayed_greensInReg: 0,
+            totalHolesPlayed_fairwaysInReg: 0,
+            totalHolesPlayed_holesWithHazard: 0,
             currentTotalHolesPlayed: 0,
 
             trackScores: true,
@@ -93,6 +95,10 @@ function signup() {
             shareGreensInReg: true,
 
             friends: []
+        });
+        database.collection('users').doc(cred.user.uid).set({
+            displayName: displayName,
+            uid: cred.user.uid
         });
         toHomePage();
     }).catch(err => { // if there is an error, then display message
@@ -149,6 +155,10 @@ function toSettingsPage() {
     const currentUserId = auth.currentUser.uid;
     database.collection('users').doc(currentUserId).get().then(snapshot => {
         const currentUser = snapshot.data();
+        document.getElementById('displayName-setting-input').value = currentUser.displayName;
+    });
+    database.collection('userData').doc(currentUserId).get().then(snapshot => {
+        const currentUser = snapshot.data();
 
         hidePages();
 
@@ -157,7 +167,6 @@ function toSettingsPage() {
         document.getElementById('page-label').innerHTML = "Settings";
 
         // setting values to data from firebase
-        document.getElementById('displayName-setting-input').value = currentUser.displayName;
         document.getElementById('trackScores-toggle').checked = currentUser.trackScores;
         document.getElementById('shareBirdiesMINUS-toggle').checked = currentUser.shareBirdiesMINUS;
         document.getElementById('sharePars-toggle').checked = currentUser.sharePars;
@@ -195,7 +204,7 @@ function saveSettings() {
         });
     }
 
-    database.collection('users').doc(currentUserId).update({
+    database.collection('userData').doc(currentUserId).update({
         trackScores: document.getElementById('trackScores-toggle').checked,
         shareBirdiesMINUS: document.getElementById('shareBirdiesMINUS-toggle').checked,
         sharePars: document.getElementById('sharePars-toggle').checked,
@@ -312,7 +321,7 @@ function checkTrackHolesWithHazard() {
 function toNewRoundPage() {
     // getting current users info
     const currentUserId = auth.currentUser.uid;
-    database.collection('users').doc(currentUserId).get().then(snapshot => {
+    database.collection('userData').doc(currentUserId).get().then(snapshot => {
         const currentUser = snapshot.data();
 
         // hide home-page - (only accessible from home page)
@@ -330,7 +339,7 @@ function toNewRoundPage() {
         document.getElementById('page-label').innerHTML = "New Round";
 
         // reset all current values
-        database.collection('users').doc(currentUserId).update({
+        database.collection('userData').doc(currentUserId).update({
             currentOnePutts: 0,
             currentTwoPutts: 0,
             currentThreePuttsPLUS: 0,
@@ -364,7 +373,7 @@ function toNewRoundPage() {
             document.getElementById("hole-number-text").style.display = 'none';
             document.getElementById("newRound-error-full").style.display = 'flex';
             document.getElementById("newRound-error").innerHTML = 'It looks like you are not tracking any stats. Update your settings to start a new round.'
-            sleep(3.5).then(() => {
+            sleep(4).then(() => {
                 document.getElementById("newRound-error-full").style.display = 'none';
                 toSettingsPage();
             })
@@ -375,7 +384,7 @@ function toNewRoundPage() {
 function nextQuestion(prevQuestion) {
     // getting current users info
     const currentUserId = auth.currentUser.uid;
-    database.collection('users').doc(currentUserId).get().then(snapshot => {
+    database.collection('userData').doc(currentUserId).get().then(snapshot => {
         const currentUser = snapshot.data();
 
         // getting last question
@@ -413,6 +422,11 @@ function nextQuestion(prevQuestion) {
                 else if (currentUser.trackHolesWithHazard) {
                     document.getElementById('Q5').style.display = 'flex';
                 }
+
+                // increase total holes played with tracking scores
+                database.collection('userData').doc(currentUserId).update({
+                    totalHolesPlayed_scores: currentUser.totalHolesPlayed_scores + 1
+                });
             }
             else if (prevQuestion == 2) {
                 document.getElementById('Q2').style.display = 'none';
@@ -426,6 +440,11 @@ function nextQuestion(prevQuestion) {
                 else if (currentUser.trackHolesWithHazard) {
                     document.getElementById('Q5').style.display = 'flex';
                 }
+
+                // increase total holes played with tracking putts
+                database.collection('userData').doc(currentUserId).update({
+                    totalHolesPlayed_putts: currentUser.totalHolesPlayed_putts + 1
+                });
             }
             else if (prevQuestion == 3) {
                 document.getElementById('Q3').style.display = 'none';
@@ -436,6 +455,11 @@ function nextQuestion(prevQuestion) {
                 else if (currentUser.trackHolesWithHazard) {
                     document.getElementById('Q5').style.display = 'flex';
                 }
+
+                // increase total holes played with tracking scores
+                database.collection('userData').doc(currentUserId).update({
+                    totalHolesPlayed_fairwaysInReg: currentUser.totalHolesPlayed_fairwaysInReg + 1
+                });
             }
             else if (prevQuestion == 4) {
                 document.getElementById('Q4').style.display = 'none';
@@ -443,6 +467,11 @@ function nextQuestion(prevQuestion) {
                 if (currentUser.trackHolesWithHazard) {
                     document.getElementById('Q5').style.display = 'flex';
                 }
+
+                // increase total holes played with tracking greens in regulation
+                database.collection('userData').doc(currentUserId).update({
+                    totalHolesPlayed_greensInReg: currentUser.totalHolesPlayed_greensInReg + 1
+                });
             }
         }
         else { // if it is the last question
@@ -452,16 +481,37 @@ function nextQuestion(prevQuestion) {
             switch (lastQuestion) {
                 case 5:
                     document.getElementById('Q5').style.display = 'none';
+                    // increase total holes played with tracking holes with hazards
+                    database.collection('userData').doc(currentUserId).update({
+                        totalHolesPlayed_holesWithHazard: currentUser.totalHolesPlayed_holesWithHazard + 1
+                    });
                     break;
                 case 4:
                     document.getElementById('Q4').style.display = 'none';
+                    // increase total holes played with tracking greens in regulation
+                    database.collection('userData').doc(currentUserId).update({
+                        totalHolesPlayed_greensInReg: currentUser.totalHolesPlayed_greensInReg + 1
+                    });
                     break;
                 case 3:
                     document.getElementById('Q3').style.display = 'none';
+                    // increase total holes played with tracking scores
+                    database.collection('userData').doc(currentUserId).update({
+                        totalHolesPlayed_fairwaysInReg: currentUser.totalHolesPlayed_fairwaysInReg + 1
+                    });
                     break;
                 case 2:
                     document.getElementById('Q2').style.display = 'none';
+                    // increase total holes played with tracking putts
+                    database.collection('userData').doc(currentUserId).update({
+                        totalHolesPlayed_putts: currentUser.totalHolesPlayed_putts + 1
+                    });
                     break;
+                case 1:
+                    // increase total holes played with tracking scores
+                    database.collection('userData').doc(currentUserId).update({
+                        totalHolesPlayed_scores: currentUser.totalHolesPlayed_scores + 1
+                    });
             }
 
             // display messages at 9 and 18 holes, instead of going to next hole
@@ -495,8 +545,7 @@ function nextQuestion(prevQuestion) {
             // increasing hole # by 1
             document.getElementById('hole-number').innerHTML++;
 
-            database.collection('users').doc(currentUserId).update({
-                totalHolesPlayed: currentUser.totalHolesPlayed + 1,
+            database.collection('userData').doc(currentUserId).update({
                 currentTotalHolesPlayed: currentUser.currentTotalHolesPlayed + 1
             });
         }
@@ -506,7 +555,7 @@ function nextQuestion(prevQuestion) {
 function makeTheTurn() {
     // getting current users info
     const currentUserId = auth.currentUser.uid;
-    database.collection('users').doc(currentUserId).get().then(snapshot => {
+    database.collection('userData').doc(currentUserId).get().then(snapshot => {
         const currentUser = snapshot.data();
 
         document.getElementById('nine-hole-message').style.display = 'none';
@@ -559,31 +608,31 @@ function submitScore() {
 
     // getting current users info
     const currentUserId = auth.currentUser.uid;
-    database.collection('users').doc(currentUserId).get().then(snapshot => {
+    database.collection('userData').doc(currentUserId).get().then(snapshot => {
         const currentUser = snapshot.data();
 
         if (parValue != null && scoreValue != null) {
             // update to new values
             if (scoreValue < parValue) { // birdie or less
-                database.collection('users').doc(currentUserId).update({
+                database.collection('userData').doc(currentUserId).update({
                     birdiesMINUS: currentUser.birdiesMINUS + 1,
                     currentBirdiesMINUS: currentUser.currentBirdiesMINUS + 1
                 });
             }
             else if (scoreValue == parValue) { // par
-                database.collection('users').doc(currentUserId).update({
+                database.collection('userData').doc(currentUserId).update({
                     pars: currentUser.pars + 1,
                     currentPars: currentUser.currentPars + 1
                 });
             }
             else if (scoreValue == (parValue + 1)) { // bogey
-                database.collection('users').doc(currentUserId).update({
+                database.collection('userData').doc(currentUserId).update({
                     bogeys: currentUser.bogeys + 1,
                     currentBogeys: currentUser.currentBogeys + 1
                 });
             }
             else { // double bogey or more
-                database.collection('users').doc(currentUserId).update({
+                database.collection('userData').doc(currentUserId).update({
                     doubleBogeysPLUS: currentUser.doubleBogeysPLUS + 1,
                     currentDoubleBogeysPLUS: currentUser.currentDoubleBogeysPLUS + 1
                 });
@@ -610,24 +659,24 @@ function submitScore() {
 function submitPutts(puttsNum) {
     // getting current users info
     const currentUserId = auth.currentUser.uid;
-    database.collection('users').doc(currentUserId).get().then(snapshot => {
+    database.collection('userData').doc(currentUserId).get().then(snapshot => {
         const currentUser = snapshot.data();
 
         // update to new values
         if (puttsNum == 1) {
-            database.collection('users').doc(currentUserId).update({
+            database.collection('userData').doc(currentUserId).update({
                 onePutts: currentUser.onePutts + 1,
                 currentOnePutts: currentUser.currentOnePutts + 1
             });
         }
         else if (puttsNum == 2) {
-            database.collection('users').doc(currentUserId).update({
+            database.collection('userData').doc(currentUserId).update({
                 twoPutts: currentUser.twoPutts + 1,
                 currentTwoPutts: currentUser.currentTwoPutts + 1
             });
         }
         else { // 3+
-            database.collection('users').doc(currentUserId).update({
+            database.collection('userData').doc(currentUserId).update({
                 threePuttsPLUS: currentUser.threePuttsPLUS + 1,
                 currentThreePuttsPLUS: currentUser.currentThreePuttsPLUS + 1
             });
@@ -640,24 +689,24 @@ function submitPutts(puttsNum) {
 function questionYes(questionNum) {
     // getting current users info
     const currentUserId = auth.currentUser.uid;
-    database.collection('users').doc(currentUserId).get().then(snapshot => {
+    database.collection('userData').doc(currentUserId).get().then(snapshot => {
         const currentUser = snapshot.data();
 
         // update to new values
         if (questionNum == 3) { // fairways in regulation
-            database.collection('users').doc(currentUserId).update({
+            database.collection('userData').doc(currentUserId).update({
                 fairwaysInReg: currentUser.fairwaysInReg + 1,
                 currentFairwaysInReg: currentUser.currentFairwaysInReg + 1
             });
         }
         else if (questionNum == 4) { // greens in regulation
-            database.collection('users').doc(currentUserId).update({
+            database.collection('userData').doc(currentUserId).update({
                 greensInReg: currentUser.greensInReg + 1,
                 currentGreensInReg: currentUser.currentGreensInReg + 1
             });
         }
         else { // hazards
-            database.collection('users').doc(currentUserId).update({
+            database.collection('userData').doc(currentUserId).update({
                 holesWithHazard: currentUser.holesWithHazard + 1,
                 currentHolesWithHazard: currentUser.currentHolesWithHazard + 1
             });
@@ -669,19 +718,73 @@ function questionYes(questionNum) {
 
 // ****************************************************************************************************************************** \\
 
-function toStatsPage() { // ONLY SHOW THE STATS THAT ARE TOGGLED
-    // only accessible from home page
-    document.getElementById('home-page').style.display = 'none';
+function toStatsPage() {
+    // getting current users info
+    const currentUserId = auth.currentUser.uid;
+    database.collection('userData').doc(currentUserId).get().then(snapshot => {
+        const currentUser = snapshot.data();
 
-    hidePages();
+        // only accessible from home page
+        document.getElementById('home-page').style.display = 'none';
 
-    // display new stuff
-    document.getElementById('stats-page').style.display = 'flex';
-    document.getElementById('page-label').innerHTML = "Stats";
+        hidePages();
 
-    // load first stat on both pages
-    changePercentCircle('current', 'pars');
-    changePercentCircle('lifetime', 'pars');
+        // display container
+        document.getElementById("stats-container").style.display = 'block';
+
+        // only show stats that are being tracked
+        checkStatTracking('scores-stat-btn', currentUser.trackScores);
+        checkStatTracking('putts-stat-btn', currentUser.trackPutts);
+        checkStatTracking('greensInReg-stat-btn', currentUser.trackGreensInReg);
+        checkStatTracking('fairwaysInReg-stat-btn', currentUser.trackFairwaysInReg);
+        checkStatTracking('holesWithHazards-stat-btn', currentUser.trackHolesWithHazard);
+
+        // display new stuff
+        document.getElementById('stats-page').style.display = 'flex';
+        document.getElementById('page-label').innerHTML = "Stats";
+
+        // load first stat
+        var firstStat;
+        if (currentUser.trackScores) {
+            firstStat = 'pars';
+        }
+        else if (currentUser.trackPutts) {
+            firstStat = 'twoPutts';
+        }
+        else if (currentUser.trackFairwaysInReg) {
+            firstStat = 'fairwaysinReg';
+        }
+        else if (currentUser.trackGreensInReg) {
+            firstStat = 'greensinReg';
+        }
+        else if (currentUser.trackHolesWithHazard) {
+            firstStat = 'holesWithHazards';
+        }
+        else { // not tracking anything
+            document.getElementById("stats-container").style.display = 'none';
+            document.getElementById("track-error-full").style.display = 'flex';
+            document.getElementById("track-error").innerHTML = 'It looks like you are not tracking any stats. Update your settings to track your stats.'
+            sleep(4).then(() => {
+                document.getElementById("track-error-full").style.display = 'none';
+                toSettingsPage();
+            });
+        }
+
+        changePercentCircle('current', firstStat);
+        changePercentCircle('lifetime', firstStat);
+    });
+}
+
+function checkStatTracking(elementsName, condition) {
+    const elements = document.getElementsByClassName(elementsName);
+    for (let i = 0; i < elements.length; i++) {
+        if (!condition) {
+            elements[i].style.display = 'none';
+        }
+        else {
+            elements[i].style.display = 'block';
+        }
+    }
 }
 
 function newStatsTab(pageName, element) {
@@ -736,10 +839,10 @@ function showPuttStatsOptions() {
     document.getElementById("putt-dropdown-content").classList.toggle("show");
 }
 
-function changePercentCircle(tab, stat) { // '.round'
+function changePercentCircle(tab, stat) {
     // getting current users info
     const currentUserId = auth.currentUser.uid;
-    database.collection('users').doc(currentUserId).get().then(snapshot => {
+    database.collection('userData').doc(currentUserId).get().then(snapshot => {
         const currentUser = snapshot.data();
 
         if (tab == 'current') {
@@ -750,61 +853,83 @@ function changePercentCircle(tab, stat) { // '.round'
             // reset to counting color
             document.getElementById('currentPercentageWheel-text').style.color = 'rgb(150, 150, 150)';
 
-            var statName, percentage;
+            var statName, numerator, percentage;
 
             if (stat == 'birdies') {
-                statName = "Birdies or lower"
-                percentage = currentUser.currentBirdiesMINUS / currentUser.currentTotalHolesPlayed;
+                statName = "Birdies or lower";
+                numerator = currentUser.currentBirdiesMINUS;
             }
             else if (stat == 'pars') {
-                statName = "Pars"
-                percentage = currentUser.currentPars / currentUser.currentTotalHolesPlayed;
+                statName = "Pars";
+                numerator = currentUser.currentPars;
             }
             else if (stat == 'bogeys') {
-                statName = "Bogeys"
-                percentage = currentUser.currentBogeys / currentUser.currentTotalHolesPlayed;
+                statName = "Bogeys";
+                numerator = currentUser.currentBogeys;
             }
             else if (stat == 'doubleBogeys') {
-                statName = "Double Bogeys or higher"
-                percentage = currentUser.currentDoubleBogeysPLUS / currentUser.currentTotalHolesPlayed;
+                statName = "Double Bogeys or higher";
+                numerator = currentUser.currentDoubleBogeysPLUS;
             }
             else if (stat == 'onePutts') {
-                statName = "1 Putts"
-                percentage = currentUser.currentOnePutts / currentUser.currentTotalHolesPlayed;
+                statName = "1 Putts";
+                numerator = currentUser.currentOnePutts;
             }
             else if (stat == 'twoPutts') {
-                statName = "2 Putts"
-                percentage = currentUser.currentTwoPutts / currentUser.currentTotalHolesPlayed;
+                statName = "2 Putts";
+                numerator = currentUser.currentTwoPutts;
             }
             else if (stat == 'threePutts') {
-                statName = "3 Putts or more"
-                percentage = currentUser.currentThreePuttsPLUS / currentUser.currentTotalHolesPlayed;
+                statName = "3 Putts or more";
+                numerator = currentUser.currentThreePuttsPLUS;
             }
             else if (stat == 'greensinReg') {
-                statName = "Greens in Regulation"
-                percentage = currentUser.currentGreensInReg / currentUser.currentTotalHolesPlayed;
+                statName = "Greens in Regulation";
+                numerator = currentUser.currentGreensInReg;
             }
             else if (stat == 'fairwaysinReg') {
-                statName = "Fairways in Regulation"
-                percentage = currentUser.currentFairwaysInReg / currentUser.currentTotalHolesPlayed
+                statName = "Fairways in Regulation";
+                numerator = currentUser.currentFairwaysInReg;
             }
             else if (stat == 'holesWithHazards') {
-                statName = "Holes with Hazards"
-                percentage = currentUser.currentHolesWithHazard / currentUser.currentTotalHolesPlayed;
+                statName = "Holes with Hazards";
+                numerator = currentUser.currentHolesWithHazard;
             }
+
+            // setting percentage
+            percentage = numerator / currentUser.currentTotalHolesPlayed;
+
+            const finalStatNum = (percentage * 100).toFixed(2);
+            document.getElementById('currentPercentageWheel-text').innerHTML = String(numerator + ' / ' + currentUser.currentTotalHolesPlayed);
+
+            // setting size of wheel to 70% of div height
+            const divHeight = $(".percentageWheel").height();
+            $('#currentPercentageWheel').attr('data-size', (0.70 * divHeight));
 
             // setting stat name to new value
             document.getElementById("current-stat-name").innerHTML = statName;
 
+            // hiding numbers
+            document.getElementById('currentPercentageWheel-text').style.visibility = 'hidden';
+
             // wheel animation
-            const finalStatNum = (percentage * 100).toFixed(2);
-            $("#currentPercentageWheel").circleProgress({ fill: { color: '#3b8ad9' }, value: percentage })
-                .on('circle-animation-progress', function (event, progress, stepValue) {
-                    document.getElementById('currentPercentageWheel-text').innerHTML = String(stepValue.toFixed(5).substr(2, 2) + '.' + stepValue.toFixed(5).substr(4, 2) + '%');
-                }).on('circle-animation-end', function () {
-                    document.getElementById('currentPercentageWheel-text').innerHTML = String(finalStatNum + '%');
-                    document.getElementById('currentPercentageWheel-text').style.color = '#ffffff';
+            if (!isNaN(percentage)) {
+                $("#currentPercentageWheel").circleProgress({ fill: { color: '#3b8ad9' }, value: percentage })
+                    .on('circle-animation-progress', function (event, progress, stepValue) {
+                        document.getElementById('currentPercentageWheel-percent').innerHTML = String(stepValue.toFixed(5).substr(2, 2) + '.' + stepValue.toFixed(5).substr(4, 2) + '%');
+                    }).on('circle-animation-end', function () {
+                        document.getElementById('currentPercentageWheel-percent').innerHTML = String(finalStatNum + '%');
+                        document.getElementById('currentPercentageWheel-percent').style.color = '#ffffff';
+                        document.getElementById('currentPercentageWheel-text').style.display = 'block';
+                        document.getElementById('currentPercentageWheel-text').style.visibility = 'visible';
+                    });
+            }
+            else {
+                $("#currentPercentageWheel").circleProgress({ value: 0 }).on('circle-animation-end', function () {
+                    document.getElementById('currentPercentageWheel-text').style.display = 'none';
+                    document.getElementById('currentPercentageWheel-percent').innerHTML = String('N/A');
                 });
+            }
         }
         else if (tab == 'lifetime') {
             // hide drop downs
@@ -814,64 +939,95 @@ function changePercentCircle(tab, stat) { // '.round'
             // reset to counting color
             document.getElementById('lifetimePercentageWheel-text').style.color = 'rgb(150, 150, 150)';
 
-            var statName, percentage;
+            var statName, numerator, denominator, percentage;
 
             if (stat == 'birdies') {
-                statName = "Birdies or lower"
-                percentage = currentUser.birdiesMINUS / currentUser.totalHolesPlayed;
+                statName = "Birdies or lower";
+                numerator = currentUser.birdiesMINUS;
+                denominator = currentUser.totalHolesPlayed_scores;
             }
             else if (stat == 'pars') {
-                statName = "Pars"
-                percentage = currentUser.pars / currentUser.totalHolesPlayed;
+                statName = "Pars";
+                numerator = currentUser.pars;
+                denominator = currentUser.totalHolesPlayed_scores;
             }
             else if (stat == 'bogeys') {
-                statName = "Bogeys"
-                percentage = currentUser.bogeys / currentUser.totalHolesPlayed;
+                statName = "Bogeys";
+                numerator = currentUser.bogeys;
+                denominator = currentUser.totalHolesPlayed_scores;
             }
             else if (stat == 'doubleBogeys') {
-                statName = "Double Bogeys or higher"
-                percentage = currentUser.doubleBogeysPLUS / currentUser.totalHolesPlayed;
+                statName = "Double Bogeys or higher";
+                numerator = currentUser.doubleBogeysPLUS;
+                denominator = currentUser.totalHolesPlayed_scores;
             }
             else if (stat == 'onePutts') {
-                statName = "1 Putts"
-                percentage = currentUser.onePutts / currentUser.totalHolesPlayed;
+                statName = "1 Putts";
+                numerator = currentUser.onePutts;
+                denominator = currentUser.totalHolesPlayed_putts;
             }
             else if (stat == 'twoPutts') {
-                statName = "2 Putts"
-                percentage = currentUser.twoPutts / currentUser.totalHolesPlayed;
+                statName = "2 Putts";
+                numerator = currentUser.twoPutts;
+                denominator = currentUser.totalHolesPlayed_putts;
             }
             else if (stat == 'threePutts') {
-                statName = "3 Putts or more"
-                percentage = currentUser.threePuttsPLUS / currentUser.totalHolesPlayed;
+                statName = "3 Putts or more";
+                numerator = currentUser.threePuttsPLUS;
+                denominator = currentUser.totalHolesPlayed_putts;
             }
             else if (stat == 'greensinReg') {
-                statName = "Greens in Regulation"
-                percentage = currentUser.greensInReg / currentUser.totalHolesPlayed;
+                statName = "Greens in Regulation";
+                numerator = currentUser.greensInReg;
+                denominator = currentUser.totalHolesPlayed_greensInReg;
             }
             else if (stat == 'fairwaysinReg') {
-                statName = "Fairways in Regulation"
-                percentage = currentUser.fairwaysInReg / currentUser.totalHolesPlayed;
+                statName = "Fairways in Regulation";
+                numerator = currentUser.fairwaysInReg;
+                denominator = currentUser.totalHolesPlayed_fairwaysInReg;
             }
             else if (stat == 'holesWithHazards') {
-                statName = "Holes with Hazards"
-                percentage = currentUser.holesWithHazard / currentUser.totalHolesPlayed;
+                statName = "Holes with Hazards";
+                numerator = currentUser.holesWithHazard;
+                denominator = currentUser.totalHolesPlayed_holesWithHazard;
             }
+
+            // setting percentage
+            percentage = numerator / denominator;
+
+            const finalStatNum = (percentage * 100).toFixed(2);
+            document.getElementById('lifetimePercentageWheel-text').innerHTML = String(numerator + ' / ' + denominator);
+
+            // setting size of wheel to 70% of div height
+            const divHeight = $(".percentageWheel").height();
+            $('#lifetimePercentageWheel').attr('data-size', (0.70 * divHeight));
 
             // setting stat name to new value
             document.getElementById("lifetime-stat-name").innerHTML = statName;
 
-            // wheel animation
-            const finalStatNum = (percentage * 100).toFixed(2);
-            $("#lifetimePercentageWheel").circleProgress({ fill: { color: '#3b8ad9' }, value: percentage })
-                .on('circle-animation-progress', function (event, progress, stepValue) {
-                    document.getElementById('lifetimePercentageWheel-text').innerHTML = String(stepValue.toFixed(5).substr(2, 2) + '.' + stepValue.toFixed(5).substr(4, 2) + '%');
-                }).on('circle-animation-end', function () {
-                    document.getElementById('lifetimePercentageWheel-text').innerHTML = String(finalStatNum + '%');
-                    document.getElementById('lifetimePercentageWheel-text').style.color = '#ffffff';
-                });
-        }
-        else { // friends
+            // hiding numbers
+            document.getElementById('lifetimePercentageWheel-text').style.visibility = 'hidden';
 
+            // wheel animation
+            if (!isNaN(percentage)) {
+                $("#lifetimePercentageWheel").circleProgress({ fill: { color: '#3b8ad9' }, value: percentage })
+                    .on('circle-animation-progress', function (event, progress, stepValue) {
+                        document.getElementById('lifetimePercentageWheel-percent').innerHTML = String(stepValue.toFixed(5).substr(2, 2) + '.' + stepValue.toFixed(5).substr(4, 2) + '%');
+                    }).on('circle-animation-end', function () {
+                        document.getElementById('lifetimePercentageWheel-percent').innerHTML = String(finalStatNum + '%');
+                        document.getElementById('lifetimePercentageWheel-percent').style.color = '#ffffff';
+                        document.getElementById('lifetimePercentageWheel-text').style.display = 'block';
+                        document.getElementById('lifetimePercentageWheel-text').style.visibility = 'visible';
+                    });
+            }
+            else {
+                $("#lifetimePercentageWheel").circleProgress({ value: 0 });
+
+                document.getElementById('lifetimePercentageWheel-text').style.display = 'none';
+                document.getElementById('lifetimePercentageWheel-percent').innerHTML = String('N/A');
+            }
+        }
+        else { // friends - MAYBE
         }
     });
 }
@@ -889,15 +1045,28 @@ function changePercentCircle(tab, stat) { // '.round'
 
 // ****************************************************************************************************************************** \\
 
-function toFriendsPage() { // put all inside .then()
-    hidePages();
+function toFriendsPage() {
+    database.collection('users').get().then(snapshot => {
+        // getting all users displayName and populating array
+        var allUsers = [];
+        snapshot.docs.forEach(doc => {
+            allUsers.push([doc.data().displayName, doc.data().uid]);
+        });
 
-    // display new stuff
-    document.getElementById('friends-page').style.display = 'block';
-    document.getElementById('page-label').innerHTML = "Friends";
+        // use this as like an API call
+        for (let i in allUsers) {
+            console.log(allUsers[i][0]);
+        }
 
-    /*
-        ???
-    */
 
+        // REACT STUFF
+
+
+
+        hidePages();
+
+        // display new stuff
+        document.getElementById('friends-page').style.display = 'block';
+        document.getElementById('page-label').innerHTML = "Friends";
+    });
 }
