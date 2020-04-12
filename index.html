@@ -82,6 +82,23 @@
     </div>
 
     <div id="friends-page">
+        <div id="search-container">
+            <div class="input-div">
+                <div class="input-div-icon">
+                    <i class="fas fa-user"></i>
+                </div>
+                <input type="text" spellcheck="false" placeholder="Display Name" id="displayName-input">
+                <div class="input-div-icon">
+                    <i class="fas fa-search" id="user-search-btn"></i>
+                </div>
+            </div>
+            <p id="no-results-message">No results found for <span id="no-results-message-value"></span></p>
+            <div id="search-results">
+                <!-- Created dynamically -->
+                <ul id="user-list">
+                </ul>
+            </div>
+        </div>
     </div>
 
     <div id="settings-page">
@@ -371,6 +388,12 @@
                 </div>
             </div>
             <div id="friends-stats-content" class="stats-content">
+                <!-- Created dynamically -->
+                <ul id="friends-list">
+                </ul>
+                <div id="compare-friend-page">
+                    <!-- Need a back button -->
+                </div>
             </div>
         </div>
 

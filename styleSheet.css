@@ -35,7 +35,7 @@ body {
 #signup-form {
     display: none;
 }
-#login-box .input-div {
+.input-div {
     width: 85%;
     margin: 10px auto 30px;
     display: grid;
@@ -193,6 +193,105 @@ nav ul li:hover {
 }
 
 /* friends page */
+#friends-page {
+    height: 100vh;
+    width: 100vw;
+    justify-content: center;
+    align-items: center;
+}
+#search-container {
+    display: block;
+    justify-content: center;
+    width: 965px;
+    height: 400px;
+    margin: 25px;
+    padding: 15px 0 0 0;
+    border: 4px solid white;
+    background-color: rgba(0, 0, 0, 0.85);
+    box-shadow: 0 0 25px rgba(100, 100, 100);
+}
+#search-container .input-div {
+    grid-template-columns: 20px calc(100% - 40px) 20px;
+    margin: 10px auto 15px;
+    padding: 12px;
+    border: 2px solid white;
+    border-radius: 25px;
+}
+#search-container input {
+    font-size: 22px;
+    color: white;
+    margin-left: 10px;
+    border: none;
+    outline: none;
+    background: transparent;
+}
+#search-container ::placeholder {
+    font-size: 22px;
+    color: rgb(190, 190, 190);
+}
+#user-search-btn:hover {
+    color: white;
+    cursor: pointer;
+}
+::-webkit-scrollbar {
+    width: 8px;
+}
+::-webkit-scrollbar-thumb {
+    border-radius: 10px;
+    background-color: white;
+    box-shadow: inset 0 0 3px black;
+}
+::-webkit-scrollbar-track {
+    border-radius: 10px;
+    background-color: white;
+    box-shadow: inset 0 0 8px rgba(0, 0, 0, 0.9);
+}
+#search-results {
+    width: 99%;
+    height: calc(100% - 94px);
+    overflow-y: auto;
+}
+#user-list {
+    list-style: none;
+    font-size: 22px;
+    box-sizing: border-box;
+}
+#no-results-message {
+    display: none;
+    color: white;
+    font-size: 22px;
+    margin: 0 10%;
+    word-wrap: break-word;
+}
+#no-results-message-value {
+    font-weight: bold;   
+}
+.userlist-div {
+    display: none;
+    grid-template-columns: 20px calc(100% - 40px) 20px;
+    font-size: 22px;
+    color: white;
+    margin: 10px 4.5% 10px calc(7.5% + 32px);
+    padding: 12px;
+    border: 2px solid white;
+    border-radius: 25px;
+}
+.userlist-li {
+    margin-left: 10px;
+}
+.userlist-minus {
+    display: none;
+}
+.userlist-plus:hover {
+    cursor: pointer;
+    color: rgb(138, 241, 152);
+    transition: 0.25s;
+}
+.userlist-minus:hover {
+    cursor: pointer;
+    color: rgb(229, 151, 151);
+    transition: 0.25s;
+}
 
 /* settings page */
 #settings-page {
@@ -631,6 +730,61 @@ nav ul li:hover {
 #currentPercentageWheel-text, #lifetimePercentageWheel-text {
     font-size: 22px;
 }
+#friends-list {
+    width: 99%;
+    height: 98%;
+    position: relative;
+    top: 1%;
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+    flex-wrap: wrap;
+    overflow-y: auto;
+}
+.friendsList-div {
+    height: 150px;
+    width: 150px;
+    margin: 20px 15px 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-wrap: wrap;
+}
+.friendList-icon-div {
+    width: 100%;
+    font-size: 72px;
+    color: rgb(150, 150, 150);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+.friendsList-h1 {
+    width: 100%;
+    word-wrap: break-word;
+    font-size: 30px;
+    text-align: center;
+    color: rgb(150, 150, 150);
+}
+.friendList-icon-div:hover, .friendsList-h1:hover {
+    cursor: pointer;
+    color: white;
+    transition: 0.25s;
+}
+
+
+
+
+
+#compare-friend-page {
+    display: none;
+}
+
+
+
+
+
+
+
 
 /* Mobile Changes */
 @media (max-width: 850px) {
@@ -692,10 +846,14 @@ nav ul li:hover {
         position: relative;
         top: -21%;
     }
-    #stats-container {
-        height: 60%;
+    #stats-container, #search-container {
+        width: calc(100% - 50px);
+        height: 65%;
         position: relative;
         top: 5%;
+    }
+    .input-div {
+        width: calc(100% - 50px);
     }
     .stat-btn {
         font-size: 13.5px;
@@ -760,7 +918,7 @@ nav ul li:hover {
         width: 65px;
         font-size: 24px;
     }
-    #stats-container {
+    #stats-container, #search-container {
         height: 55%;
         position: relative;
         top: 5%;
