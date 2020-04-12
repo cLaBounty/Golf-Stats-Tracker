@@ -150,6 +150,184 @@ function toHomePage() {
 
 // ****************************************************************************************************************************** \\
 
+function toFriendsPage() {
+    friendPageSetUp();
+
+    hidePages();
+
+    // display new stuff
+    document.getElementById('friends-page').style.display = 'flex';
+    document.getElementById('page-label').innerHTML = "Friends";
+}
+
+// live friend search
+$(document).ready(function () {
+    $("#displayName-input").keyup(function () {
+        const input = String($(this).val());
+        var count = 0;
+
+        if (input != "") {
+            // looping through the list
+            $(".userlist-div").each(function () {
+                // if they don't math
+                if ($(this).text().search(new RegExp(input, "i")) < 0) {
+                    $(this).fadeOut(600);
+                }
+                else { // if they do match
+                    $(this).css('display', 'grid')
+                    $(this).fadeIn(600);
+                    count++;
+                }
+            });
+            // if 0 results, display message
+            if (count == 0) {
+                $("#no-results-message-value").text("\"" + input + "\"");
+                document.getElementById('no-results-message').style.display = 'block';
+            }
+            else {
+                document.getElementById('no-results-message').style.display = 'none';
+            }
+        }
+        else { // if empty
+            document.getElementById('no-results-message').style.display = 'none';
+            $(".userlist-div").each(function () {
+                $(this).fadeOut(600);
+            });
+        }
+    });
+});
+
+var friendPageSetUp = (function () {
+    var executed = false;
+    return function () {
+        if (!executed) {
+            executed = true;
+
+            database.collection('users').get().then(snapshot => {
+                // getting all users displayName and uid and adding div
+                snapshot.docs.forEach(doc => {
+                    // not add current user
+                    if (auth.currentUser.uid != doc.data().uid) {
+                        addUser(doc.data().displayName, doc.data().uid);
+                    }
+                });
+            });
+
+            // getting current users info
+            const currentUserId = auth.currentUser.uid;
+            database.collection('userData').doc(currentUserId).get().then(snapshot => {
+                const currentUser = snapshot.data();
+
+                let myArray = currentUser.friends;
+
+                // check for friends and setting + to -
+                for (let i in myArray) {
+                    var target, targetID;
+                    database.collection('users').doc(myArray[i]).get().then(snapshot => {
+                        const user = snapshot.data();
+                        target = user.displayName;
+                        targetID = user.uid;
+
+                        $(".userlist-div").each(function () {
+                            if ($(this).text() == target) {
+                                document.getElementById(targetID + '-add').style.display = 'none';
+                                document.getElementById(targetID + '-remove').style.display = 'block';
+                            }
+                        });
+                    });
+                }
+            });
+        }
+    };
+})();
+
+function addUser(displayName, uid) {
+    const ul = document.getElementById("user-list");
+
+    var div = document.createElement("div");
+    var userIcon = document.createElement("i");
+    var li = document.createElement("li");
+    var plusIconDiv = document.createElement("div");
+    var plusIcon = document.createElement("i");
+    var minusIconDiv = document.createElement("div");
+    var minusIcon = document.createElement("i");
+
+    div.setAttribute('class', 'userlist-div');
+    li.setAttribute('class', 'userlist-li');
+    userIcon.setAttribute('class', 'fas fa-user');
+    plusIcon.setAttribute('class', 'fas fa-plus');
+    minusIcon.setAttribute('class', 'fas fa-minus');
+
+    plusIconDiv.onclick = function () { addFriend(uid); }
+    minusIconDiv.onclick = function () { removeFriend(uid); }
+
+    plusIconDiv.setAttribute('id', uid + '-add');
+    minusIconDiv.setAttribute('id', uid + '-remove');
+    plusIconDiv.setAttribute('class', 'userlist-plus');
+    minusIconDiv.setAttribute('class', 'userlist-minus');
+
+    li.appendChild(document.createTextNode(displayName));
+
+    plusIconDiv.appendChild(plusIcon);
+    minusIconDiv.appendChild(minusIcon);
+
+    div.appendChild(userIcon);
+    div.appendChild(li);
+    div.appendChild(plusIconDiv);
+    div.appendChild(minusIconDiv);
+
+    ul.appendChild(div);
+}
+
+function addFriend(uid) {
+    document.getElementById(uid + '-add').style.display = 'none';
+    document.getElementById(uid + '-remove').style.display = 'block';
+
+    // getting current users info
+    const currentUserId = auth.currentUser.uid;
+    database.collection('userData').doc(currentUserId).get().then(snapshot => {
+        const currentUser = snapshot.data();
+
+        // copying array
+        let myArray = currentUser.friends;
+
+        // adding uid to array
+        myArray.push(uid);
+
+        // updating array in firebase
+        database.collection('userData').doc(currentUserId).update({
+            friends: myArray
+        });
+    });
+}
+
+function removeFriend(uid) {
+    document.getElementById(uid + '-remove').style.display = 'none';
+    document.getElementById(uid + '-add').style.display = 'block';
+
+    // getting current users info
+    const currentUserId = auth.currentUser.uid;
+    database.collection('userData').doc(currentUserId).get().then(snapshot => {
+        const currentUser = snapshot.data();
+
+        // copying array
+        let myArray = currentUser.friends;
+
+        // removing from array
+        const index = myArray.indexOf(uid);
+        if (index > -1) {
+            myArray.splice(index, 1);
+        }
+
+        // updating array in firebase
+        database.collection('userData').doc(currentUserId).update({
+            friends: myArray
+        });
+    });
+}
+
+// ****************************************************************************************************************************** \\
+
 function toSettingsPage() {
     // getting current users info
     const currentUserId = auth.currentUser.uid;
@@ -772,6 +950,7 @@ function toStatsPage() {
 
         changePercentCircle('current', firstStat);
         changePercentCircle('lifetime', firstStat);
+        loadFriendsTab();
     });
 }
 
@@ -1027,8 +1206,6 @@ function changePercentCircle(tab, stat) {
                 document.getElementById('lifetimePercentageWheel-percent').innerHTML = String('N/A');
             }
         }
-        else { // friends - MAYBE
-        }
     });
 }
 
@@ -1036,37 +1213,84 @@ function changePercentCircle(tab, stat) {
 
 
 
+function showFriend(displayName, uid) {
+    const ul = document.getElementById("friends-list");
 
+    var div = document.createElement("div");
+    var userIconDiv = document.createElement("div");
+    var userIcon = document.createElement("i");
+    var h1 = document.createElement("h1");
 
+    div.setAttribute('class', 'friendsList-div');
+    userIconDiv.setAttribute('class', 'friendList-icon-div');
+    userIcon.setAttribute('class', 'fas fa-user');
+    h1.setAttribute('class', 'friendsList-h1');
 
+    userIconDiv.onclick = function () { compareFriendsInfo(displayName, uid); }
+    h1.onclick = function () { compareFriendsInfo(displayName, uid); }
 
+    h1.appendChild(document.createTextNode(displayName));
 
+    userIconDiv.appendChild(userIcon);
 
+    div.appendChild(userIconDiv);
+    div.appendChild(h1);
 
-// ****************************************************************************************************************************** \\
+    ul.appendChild(div);
+}
 
-function toFriendsPage() {
-    database.collection('users').get().then(snapshot => {
-        // getting all users displayName and populating array
-        var allUsers = [];
-        snapshot.docs.forEach(doc => {
-            allUsers.push([doc.data().displayName, doc.data().uid]);
-        });
+function compareFriendsInfo(displayName, uid) {
+    // getting current users info
+    const currentUserId = auth.currentUser.uid;
 
-        // use this as like an API call
-        for (let i in allUsers) {
-            console.log(allUsers[i][0]);
+    // getting current users displayName
+    database.collection('users').doc(currentUserId).get().then(snapshot => {
+        const currentUser = snapshot.data();
+
+        // set some header to displayName
+
+        console.log("Getting " + currentUser.displayName + '\'s data...');
+
+    });
+    // getting all current user info
+    database.collection('userData').doc(currentUserId).get().then(snapshot => {
+        const currentUser = snapshot.data();
+
+    });
+
+    // set some header to friends displayName
+    console.log("Comparing to " + displayName + '\'s data...');
+
+    // getting friends info
+    database.collection('userData').doc(uid).get().then(snapshot => {
+        const user = snapshot.data();
+
+    });
+
+    // hide original page
+    document.getElementById('friends-list').style.display = 'none';
+
+    // display new page
+    document.getElementById('compare-friend-page').style.display = 'block';
+}
+
+function loadFriendsTab() {
+    // clear div
+    $('#friends-list').empty();
+
+    // getting current users info
+    const currentUserId = auth.currentUser.uid;
+    database.collection('userData').doc(currentUserId).get().then(snapshot => {
+        const currentUser = snapshot.data();
+
+        let myArray = currentUser.friends;
+
+        // getting friends info and displaying them
+        for (let i in myArray) {
+            database.collection('users').doc(myArray[i]).get().then(snapshot => {
+                const user = snapshot.data();
+                showFriend(user.displayName, myArray[i]);
+            });
         }
-
-
-        // REACT STUFF
-
-
-
-        hidePages();
-
-        // display new stuff
-        document.getElementById('friends-page').style.display = 'block';
-        document.getElementById('page-label').innerHTML = "Friends";
     });
 }
