@@ -89,6 +89,7 @@ body {
 }
 #login-box button:hover {
     background: rgb(150, 150, 150);
+    cursor: pointer;
     transition: 0.25s;
 }
 .switch-action {
@@ -148,9 +149,9 @@ nav ul li:hover {
 .nav-check-btn {
     font-size: 38px;
     color: white;
-    float: right;
+    float: left;
     line-height: 80px;
-    margin-right: 20px;
+    margin-left: 20px;
     cursor: pointer;
     display: none;
 }
@@ -177,7 +178,7 @@ nav ul li:hover {
     align-items: center;
 }
 .home-option-btn {
-    background-color: rgba(230, 230, 230, 0.925);
+    background-color: rgba(215, 215, 215, 0.925);
     border-radius: 30px;
     border: none;
     outline: none;
@@ -189,6 +190,7 @@ nav ul li:hover {
 }
 .home-option-btn:hover {
     background-color: white;
+    cursor: pointer;
     transition: 0.25s;
 }
 
@@ -232,6 +234,7 @@ nav ul li:hover {
 #user-search-btn:hover {
     color: white;
     cursor: pointer;
+    transition: 0.25s;
 }
 ::-webkit-scrollbar {
     width: 8px;
@@ -343,6 +346,9 @@ nav ul li:hover {
     box-shadow: inset 0 0 5px rgba(0, 0, 0, 0.2);
     transition: 0.5s;
 }
+.setting-option input:hover {
+    cursor: pointer;
+}
 .setting-option input:checked {
     background: #03a9f4;
 }
@@ -375,6 +381,7 @@ nav ul li:hover {
 }
 #save-settings-btn:hover {
     background-color: white;
+    cursor: pointer;
     transition: 0.25s;
 }
 
@@ -452,6 +459,10 @@ nav ul li:hover {
     align-items: center;
     justify-content: center;
 }
+#Q1 label:hover {
+    cursor: pointer;
+    transition: 0.25s;
+}
 #Q1 input:checked + label {
     color: rgb(190, 190, 190);
     box-shadow: inset 0 0 12px rgba(0, 0, 0, 0.5);
@@ -487,6 +498,7 @@ nav ul li:hover {
 }
 #submit-score-btn:hover {
     background-color: white;
+    cursor: pointer;
     transition: 0.25s;
 }
 #Q2 {
@@ -510,6 +522,8 @@ nav ul li:hover {
     color: rgb(190, 190, 190);
     box-shadow: inset 0 0 12px rgba(0, 0, 0, 0.5);
     background-color: white;
+    cursor: pointer;
+    transition: 0.25s;
 }
 .question-btns {
     height: calc(100% - 74px - 15px);
@@ -523,6 +537,10 @@ nav ul li:hover {
     margin: 0 60px;
     height: 175px;
     width: 175px;
+}
+.check-btn:hover, .X-btn:hover {
+    cursor: pointer;
+    transition: 0.25s;
 }
 #newRound-error-full, #track-error-full, #nine-hole-message, #round-end-message {
     display: none;
@@ -562,11 +580,13 @@ nav ul li:hover {
     font-size: 20px;
     background: rgb(115, 115, 115);
     border: 2px solid white;
+    border-radius: 10px;
 }
 .nine-hole-message-btn:hover {
     color: rgb(115, 115, 115);
     background-color: white;
     font-weight: bold;
+    cursor: pointer;
     transition: 0.25s;
 }
 #round-end-message-content {
@@ -584,6 +604,7 @@ nav ul li:hover {
 }
 #round-end-message-content a:hover {
     cursor: pointer;
+    transition: 0.25s;
 }
 
 /* stats page */
@@ -664,7 +685,7 @@ nav ul li:hover {
     position: relative;
     display: inline-block;
 }
-.stats-dropdown-content {
+.scores-dropdown-content, .putts-dropdown-content {
     display: none;
     position: absolute;
     left: 10px;
@@ -672,7 +693,7 @@ nav ul li:hover {
     overflow: auto;
     z-index: 2;
 }
-.stats-dropdown-content a {
+.scores-dropdown-content a, .putts-dropdown-content a {
     display: block;
     color: white;
     font-size: 16px;
@@ -683,7 +704,7 @@ nav ul li:hover {
     border: 2px solid white;
     outline: none;
 }
-.stats-dropdown-content a:hover {
+.scores-dropdown-content a:hover, .putts-dropdown-content a:hover {
     cursor: pointer;
     background: rgb(150, 150, 150);
     transition: 0.25s;
@@ -694,7 +715,7 @@ nav ul li:hover {
 .stat-info {
     width: 100%;
     position: absolute;
-    top: 30%;
+    top: 28%;
     display: flex;
     justify-content: center;
 }
@@ -708,7 +729,7 @@ nav ul li:hover {
     height: 70%;
     text-align: center;
     position: absolute;
-    top: 33%;
+    top: 30%;
     display: flex;
     justify-content: center;
     align-items: center;
@@ -727,7 +748,8 @@ nav ul li:hover {
     transform: translate(-50%, -50%);
     font-size: 32px;
 }
-#currentPercentageWheel-text, #lifetimePercentageWheel-text {
+.percentageWheel-nums {
+    color: rgb(150, 150, 150);
     font-size: 22px;
 }
 #friends-list {
@@ -744,13 +766,18 @@ nav ul li:hover {
 .friendsList-div {
     height: 150px;
     width: 150px;
-    margin: 20px 15px 0;
+    margin: 5px 10px 0;
     display: flex;
     justify-content: center;
     align-items: center;
     flex-wrap: wrap;
 }
-.friendList-icon-div {
+.friendsList-div:hover .friendsList-icon-div, .friendsList-div:hover .friendsList-h1 {
+    color: white;
+    cursor: pointer;
+    transition: 0.25s;
+}
+.friendsList-icon-div {
     width: 100%;
     font-size: 72px;
     color: rgb(150, 150, 150);
@@ -760,25 +787,95 @@ nav ul li:hover {
 }
 .friendsList-h1 {
     width: 100%;
-    word-wrap: break-word;
-    font-size: 30px;
+    font-size: 28px;
     text-align: center;
     color: rgb(150, 150, 150);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
 }
-.friendList-icon-div:hover, .friendsList-h1:hover {
-    cursor: pointer;
+#compare-friend-tab {
+    display: none;
+    width: 100%;
+    height: 100%;
+}
+#innerFriendsPercentageWheel {
+    position: absolute;
+}
+#friends-wheel-text {
+    font-size: 28px;
+}
+#innerFriendsPercentageWheel-percent {
+    position: relative;
+}
+#outerFriendsPercentageWheel-text, #innerFriendsPercentageWheel-text {
+    font-size: 20px;
+}
+#friends-wheel-text #seperation {
+    visibility: hidden;
+    font-size: 30%;
+}
+
+
+
+
+
+
+
+#friends-key {
+    width: calc(100% - 15px);
+    margin: 0 10px 0 5px;
+    display: grid;
+    grid-template-columns: 18% 28% 50%;
+    font-size: 18px;
     color: white;
+    position: absolute;
+    top: 95%;
+}
+
+#friends-key section {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+#your-color-box, #friend-color-box{
+    width: 17px;
+    height: 17px;
+    margin: 0 10px 0 15px;
+    background-color: #3b8ad9;
+    border: 1px solid white;
+    position: relative;
+    top: -2px;
+}
+
+#friend-color-box {
+    background-color: #c4a427;
+}
+
+#friends-key p {
+    width: calc(100% - 25px - 19px);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+#back-btn-div {
+    position: absolute;
+    top: -31px;
+    z-index: 10;
+}
+
+#back-btn {
+    font-size: 52px;
+    color: rgba(255, 255, 255, 0.2);
+}
+
+#back-btn:hover {
+    color: white;
+    cursor: pointer;
     transition: 0.25s;
 }
-
-
-
-
-
-#compare-friend-page {
-    display: none;
-}
-
 
 
 
@@ -860,10 +957,10 @@ nav ul li:hover {
         margin: 20px 5px 0 5px;
         padding: 8px;
     }
-    .stats-dropdown-content {
+    .scores-dropdown-content, .putts-dropdown-content {
         left: 5px;
     }
-    .stats-dropdown-content a {
+    .scores-dropdown-content a, .putts-dropdown-content a {
         font-size: 13.5px;
         width: 95px
     }
@@ -934,10 +1031,10 @@ nav ul li:hover {
         margin: 15px 2px 0 2px;
         padding: 5px;
     }
-    .stats-dropdown-content {
+    .scores-dropdown-content, .putts-dropdown-content {
         left: 2px;
     }
-    .stats-dropdown-content a {
+    .scores-dropdown-content a, .putts-dropdown-content a {
         font-size: 11px;
         width: 80px;
     }

@@ -93,12 +93,11 @@ function signup() {
 
             trackGreensInReg: true,
             shareGreensInReg: true,
-
-            friends: []
         });
         database.collection('users').doc(cred.user.uid).set({
             displayName: displayName,
-            uid: cred.user.uid
+            uid: cred.user.uid,
+            friends: []
         });
         toHomePage();
     }).catch(err => { // if there is an error, then display message
@@ -208,25 +207,25 @@ var friendPageSetUp = (function () {
                 snapshot.docs.forEach(doc => {
                     // not add current user
                     if (auth.currentUser.uid != doc.data().uid) {
-                        addUser(doc.data().displayName, doc.data().uid);
+                        addUser(doc.data().uid, doc.data().displayName);
                     }
                 });
             });
 
             // getting current users info
             const currentUserId = auth.currentUser.uid;
-            database.collection('userData').doc(currentUserId).get().then(snapshot => {
+            database.collection('users').doc(currentUserId).get().then(snapshot => {
                 const currentUser = snapshot.data();
 
-                let myArray = currentUser.friends;
+                // copying array
+                const myArray = currentUser.friends;
 
                 // check for friends and setting + to -
                 for (let i in myArray) {
-                    var target, targetID;
                     database.collection('users').doc(myArray[i]).get().then(snapshot => {
-                        const user = snapshot.data();
-                        target = user.displayName;
-                        targetID = user.uid;
+                        const friend = snapshot.data();
+                        const targetID = myArray[i];
+                        const target = friend.displayName;
 
                         $(".userlist-div").each(function () {
                             if ($(this).text() == target) {
@@ -241,7 +240,7 @@ var friendPageSetUp = (function () {
     };
 })();
 
-function addUser(displayName, uid) {
+function addUser(uid, displayName) {
     const ul = document.getElementById("user-list");
 
     var div = document.createElement("div");
@@ -285,17 +284,17 @@ function addFriend(uid) {
 
     // getting current users info
     const currentUserId = auth.currentUser.uid;
-    database.collection('userData').doc(currentUserId).get().then(snapshot => {
+    database.collection('users').doc(currentUserId).get().then(snapshot => {
         const currentUser = snapshot.data();
 
         // copying array
         let myArray = currentUser.friends;
 
-        // adding uid to array
+        // adding uid and displayName to arrays
         myArray.push(uid);
 
         // updating array in firebase
-        database.collection('userData').doc(currentUserId).update({
+        database.collection('users').doc(currentUserId).update({
             friends: myArray
         });
     });
@@ -307,20 +306,20 @@ function removeFriend(uid) {
 
     // getting current users info
     const currentUserId = auth.currentUser.uid;
-    database.collection('userData').doc(currentUserId).get().then(snapshot => {
+    database.collection('users').doc(currentUserId).get().then(snapshot => {
         const currentUser = snapshot.data();
 
         // copying array
         let myArray = currentUser.friends;
 
         // removing from array
-        const index = myArray.indexOf(uid);
+        let index = myArray.indexOf(uid);
         if (index > -1) {
             myArray.splice(index, 1);
         }
 
         // updating array in firebase
-        database.collection('userData').doc(currentUserId).update({
+        database.collection('users').doc(currentUserId).update({
             friends: myArray
         });
     });
@@ -554,7 +553,7 @@ function toNewRoundPage() {
             sleep(4).then(() => {
                 document.getElementById("newRound-error-full").style.display = 'none';
                 toSettingsPage();
-            })
+            });
         }
     });
 }
@@ -948,6 +947,13 @@ function toStatsPage() {
             });
         }
 
+        // setting size of wheels to 75% of div height
+        const divHeight = $(".stats-content").height() * 0.70;
+        $('#currentPercentageWheel').attr('data-size', (0.75 * divHeight));
+        $('#lifetimePercentageWheel').attr('data-size', (0.75 * divHeight));
+        $('#outerFriendsPercentageWheel').attr('data-size', (0.75 * divHeight));
+        $('#innerFriendsPercentageWheel').attr('data-size', ((0.75 * divHeight) - 30));
+
         changePercentCircle('current', firstStat);
         changePercentCircle('lifetime', firstStat);
         loadFriendsTab();
@@ -968,10 +974,7 @@ function checkStatTracking(elementsName, condition) {
 
 function newStatsTab(pageName, element) {
     // hide all drop downs
-    document.getElementById("curScore-dropdown-content").classList.remove("show");
-    document.getElementById("curPutt-dropdown-content").classList.remove("show");
-    document.getElementById("score-dropdown-content").classList.remove("show");
-    document.getElementById("putt-dropdown-content").classList.remove("show");
+    hideDropdowns();
 
     // hide all tab content
     const statsContents = document.getElementsByClassName('stats-content');
@@ -994,28 +997,34 @@ function newStatsTab(pageName, element) {
     element.style.color = '#000000';
 }
 
-function showCurrentScoreStatsOptions() {
-    // show/hide all drop downs
-    document.getElementById("curPutt-dropdown-content").classList.remove("show");
-    document.getElementById("curScore-dropdown-content").classList.toggle("show");
-}
+function hideDropdowns() {
+    $(".putts-dropdown-content").each(function () {
+        $(this).removeClass("show");
+    });
 
-function showCurrentPuttStatsOptions() {
-    // show/hide all drop downs
-    document.getElementById("curScore-dropdown-content").classList.remove("show");
-    document.getElementById("curPutt-dropdown-content").classList.toggle("show");
+    $(".scores-dropdown-content").each(function () {
+        $(this).removeClass("show");
+    });
 }
 
 function showScoreStatsOptions() {
-    // show/hide all drop downs
-    document.getElementById("putt-dropdown-content").classList.remove("show");
-    document.getElementById("score-dropdown-content").classList.toggle("show");
+    $(".putts-dropdown-content").each(function () {
+        $(this).removeClass("show");
+    });
+
+    $(".scores-dropdown-content").each(function () {
+        $(this).toggleClass("show");
+    });
 }
 
 function showPuttStatsOptions() {
-    // show/hide all drop downs
-    document.getElementById("score-dropdown-content").classList.remove("show");
-    document.getElementById("putt-dropdown-content").classList.toggle("show");
+    $(".scores-dropdown-content").each(function () {
+        $(this).removeClass("show");
+    });
+
+    $(".putts-dropdown-content").each(function () {
+        $(this).toggleClass("show");
+    });
 }
 
 function changePercentCircle(tab, stat) {
@@ -1024,14 +1033,10 @@ function changePercentCircle(tab, stat) {
     database.collection('userData').doc(currentUserId).get().then(snapshot => {
         const currentUser = snapshot.data();
 
+        // hide drop downs
+        hideDropdowns();
+
         if (tab == 'current') {
-            // hide drop downs
-            document.getElementById("curScore-dropdown-content").classList.remove("show");
-            document.getElementById("curPutt-dropdown-content").classList.remove("show");
-
-            // reset to counting color
-            document.getElementById('currentPercentageWheel-text').style.color = 'rgb(150, 150, 150)';
-
             var statName, numerator, percentage;
 
             if (stat == 'birdies') {
@@ -1078,12 +1083,7 @@ function changePercentCircle(tab, stat) {
             // setting percentage
             percentage = numerator / currentUser.currentTotalHolesPlayed;
 
-            const finalStatNum = (percentage * 100).toFixed(2);
             document.getElementById('currentPercentageWheel-text').innerHTML = String(numerator + ' / ' + currentUser.currentTotalHolesPlayed);
-
-            // setting size of wheel to 70% of div height
-            const divHeight = $(".percentageWheel").height();
-            $('#currentPercentageWheel').attr('data-size', (0.70 * divHeight));
 
             // setting stat name to new value
             document.getElementById("current-stat-name").innerHTML = statName;
@@ -1091,33 +1091,36 @@ function changePercentCircle(tab, stat) {
             // hiding numbers
             document.getElementById('currentPercentageWheel-text').style.visibility = 'hidden';
 
-            // wheel animation
-            if (!isNaN(percentage)) {
-                $("#currentPercentageWheel").circleProgress({ fill: { color: '#3b8ad9' }, value: percentage })
-                    .on('circle-animation-progress', function (event, progress, stepValue) {
-                        document.getElementById('currentPercentageWheel-percent').innerHTML = String(stepValue.toFixed(5).substr(2, 2) + '.' + stepValue.toFixed(5).substr(4, 2) + '%');
-                    }).on('circle-animation-end', function () {
-                        document.getElementById('currentPercentageWheel-percent').innerHTML = String(finalStatNum + '%');
-                        document.getElementById('currentPercentageWheel-percent').style.color = '#ffffff';
-                        document.getElementById('currentPercentageWheel-text').style.display = 'block';
-                        document.getElementById('currentPercentageWheel-text').style.visibility = 'visible';
-                    });
+            // initially set to wheel to 0
+            $("#currentPercentageWheel").circleProgress({ value: 0, animation: { duration: 0 } });
+
+            if (currentUser.currentTotalHolesPlayed == 0) { // NaN
+                document.getElementById('currentPercentageWheel-percent').innerHTML = String('N/A');
+            }
+            else if (numerator == 0) { // 0%
+                document.getElementById('currentPercentageWheel-percent').innerHTML = String('0%');
+                document.getElementById('currentPercentageWheel-text').style.visibility = 'visible';
             }
             else {
-                $("#currentPercentageWheel").circleProgress({ value: 0 }).on('circle-animation-end', function () {
-                    document.getElementById('currentPercentageWheel-text').style.display = 'none';
-                    document.getElementById('currentPercentageWheel-percent').innerHTML = String('N/A');
+                // wheel animation
+                $("#currentPercentageWheel").circleProgress({ animation: { duration: 975 }, fill: { color: '#3b8ad9' }, value: percentage })
+                    .on('circle-animation-progress', function (event, progress, stepValue) {
+                        document.getElementById('currentPercentageWheel-percent').innerHTML = String(stepValue.toFixed(5).substr(2, 2) + '.' + stepValue.toFixed(5).substr(4, 2) + '%');
+                    });
+                sleep(1).then(() => { // when animation ends
+                    // override conditions
+                    if (percentage == 1) { // 100%
+                        document.getElementById('currentPercentageWheel-percent').innerHTML = String('100.00%');
+                    }
+                    else { // normal
+                        document.getElementById('currentPercentageWheel-percent').innerHTML = String((percentage * 100).toFixed(2) + '%');
+                    }
+
+                    document.getElementById('currentPercentageWheel-text').style.visibility = 'visible';
                 });
             }
         }
         else if (tab == 'lifetime') {
-            // hide drop downs
-            document.getElementById("score-dropdown-content").classList.remove("show");
-            document.getElementById("putt-dropdown-content").classList.remove("show");
-
-            // reset to counting color
-            document.getElementById('lifetimePercentageWheel-text').style.color = 'rgb(150, 150, 150)';
-
             var statName, numerator, denominator, percentage;
 
             if (stat == 'birdies') {
@@ -1174,12 +1177,7 @@ function changePercentCircle(tab, stat) {
             // setting percentage
             percentage = numerator / denominator;
 
-            const finalStatNum = (percentage * 100).toFixed(2);
             document.getElementById('lifetimePercentageWheel-text').innerHTML = String(numerator + ' / ' + denominator);
-
-            // setting size of wheel to 70% of div height
-            const divHeight = $(".percentageWheel").height();
-            $('#lifetimePercentageWheel').attr('data-size', (0.70 * divHeight));
 
             // setting stat name to new value
             document.getElementById("lifetime-stat-name").innerHTML = statName;
@@ -1187,33 +1185,39 @@ function changePercentCircle(tab, stat) {
             // hiding numbers
             document.getElementById('lifetimePercentageWheel-text').style.visibility = 'hidden';
 
-            // wheel animation
-            if (!isNaN(percentage)) {
-                $("#lifetimePercentageWheel").circleProgress({ fill: { color: '#3b8ad9' }, value: percentage })
-                    .on('circle-animation-progress', function (event, progress, stepValue) {
-                        document.getElementById('lifetimePercentageWheel-percent').innerHTML = String(stepValue.toFixed(5).substr(2, 2) + '.' + stepValue.toFixed(5).substr(4, 2) + '%');
-                    }).on('circle-animation-end', function () {
-                        document.getElementById('lifetimePercentageWheel-percent').innerHTML = String(finalStatNum + '%');
-                        document.getElementById('lifetimePercentageWheel-percent').style.color = '#ffffff';
-                        document.getElementById('lifetimePercentageWheel-text').style.display = 'block';
-                        document.getElementById('lifetimePercentageWheel-text').style.visibility = 'visible';
-                    });
+            // initially set to wheel to 0
+            $("#lifetimePercentageWheel").circleProgress({ value: 0, animation: { duration: 0 } });
+
+            if (denominator == 0) { // NaN
+                document.getElementById('lifetimePercentageWheel-percent').innerHTML = String('N/A');
+            }
+            else if (numerator == 0) { // 0%
+                document.getElementById('lifetimePercentageWheel-percent').innerHTML = String('0%');
+                document.getElementById('lifetimePercentageWheel-text').style.visibility = 'visible';
             }
             else {
-                $("#lifetimePercentageWheel").circleProgress({ value: 0 });
+                // wheel animation
+                $("#lifetimePercentageWheel").circleProgress({ animation: { duration: 975 }, fill: { color: '#3b8ad9' }, value: percentage })
+                    .on('circle-animation-progress', function (event, progress, stepValue) {
+                        document.getElementById('lifetimePercentageWheel-percent').innerHTML = String(stepValue.toFixed(5).substr(2, 2) + '.' + stepValue.toFixed(5).substr(4, 2) + '%');
+                    });
+                sleep(1).then(() => { // when animation ends
+                    // override conditions
+                    if (percentage == 1) { // 100%
+                        document.getElementById('lifetimePercentageWheel-percent').innerHTML = String('100.00%');
+                    }
+                    else { // normal
+                        document.getElementById('lifetimePercentageWheel-percent').innerHTML = String((percentage * 100).toFixed(2) + '%');
+                    }
 
-                document.getElementById('lifetimePercentageWheel-text').style.display = 'none';
-                document.getElementById('lifetimePercentageWheel-percent').innerHTML = String('N/A');
+                    document.getElementById('lifetimePercentageWheel-text').style.visibility = 'visible';
+                });
             }
         }
     });
 }
 
-
-
-
-
-function showFriend(displayName, uid) {
+function showFriend(uid, displayName) {
     const ul = document.getElementById("friends-list");
 
     var div = document.createElement("div");
@@ -1222,12 +1226,12 @@ function showFriend(displayName, uid) {
     var h1 = document.createElement("h1");
 
     div.setAttribute('class', 'friendsList-div');
-    userIconDiv.setAttribute('class', 'friendList-icon-div');
+    userIconDiv.setAttribute('class', 'friendsList-icon-div');
     userIcon.setAttribute('class', 'fas fa-user');
     h1.setAttribute('class', 'friendsList-h1');
 
-    userIconDiv.onclick = function () { compareFriendsInfo(displayName, uid); }
-    h1.onclick = function () { compareFriendsInfo(displayName, uid); }
+    userIconDiv.onclick = function () { compareFriendsInfo(uid, displayName); }
+    h1.onclick = function () { compareFriendsInfo(uid, displayName); }
 
     h1.appendChild(document.createTextNode(displayName));
 
@@ -1239,39 +1243,9 @@ function showFriend(displayName, uid) {
     ul.appendChild(div);
 }
 
-function compareFriendsInfo(displayName, uid) {
-    // getting current users info
-    const currentUserId = auth.currentUser.uid;
-
-    // getting current users displayName
-    database.collection('users').doc(currentUserId).get().then(snapshot => {
-        const currentUser = snapshot.data();
-
-        // set some header to displayName
-
-        console.log("Getting " + currentUser.displayName + '\'s data...');
-
-    });
-    // getting all current user info
-    database.collection('userData').doc(currentUserId).get().then(snapshot => {
-        const currentUser = snapshot.data();
-
-    });
-
-    // set some header to friends displayName
-    console.log("Comparing to " + displayName + '\'s data...');
-
-    // getting friends info
-    database.collection('userData').doc(uid).get().then(snapshot => {
-        const user = snapshot.data();
-
-    });
-
-    // hide original page
-    document.getElementById('friends-list').style.display = 'none';
-
-    // display new page
-    document.getElementById('compare-friend-page').style.display = 'block';
+function backToFriends() {
+    document.getElementById('friends-list').style.display = 'flex';
+    document.getElementById('compare-friend-tab').style.display = 'none';
 }
 
 function loadFriendsTab() {
@@ -1280,17 +1254,278 @@ function loadFriendsTab() {
 
     // getting current users info
     const currentUserId = auth.currentUser.uid;
-    database.collection('userData').doc(currentUserId).get().then(snapshot => {
+    database.collection('users').doc(currentUserId).get().then(snapshot => {
         const currentUser = snapshot.data();
 
-        let myArray = currentUser.friends;
+        const myArray = currentUser.friends;
 
         // getting friends info and displaying them
         for (let i in myArray) {
             database.collection('users').doc(myArray[i]).get().then(snapshot => {
-                const user = snapshot.data();
-                showFriend(user.displayName, myArray[i]);
+                const friend = snapshot.data();
+                showFriend(myArray[i], friend.displayName);
             });
         }
+    });
+}
+
+function compareFriendsInfo(uid, displayName) {
+    // "setting" static variables in other function 
+    staticFriendUid(uid);
+
+    // setting key to friends displayName
+    document.getElementById('friend-displayName-text').innerHTML = displayName;
+
+    // load first stat
+    changeFriendPercentCircle('pars');
+
+    // hide original tab/page
+    document.getElementById('friends-list').style.display = 'none'
+
+    // display new tab/page
+    document.getElementById('compare-friend-tab').style.display = 'block';
+}
+
+function staticFriendUid(uid) {
+    if (uid != null) {
+        // static variable. Unchanged unless user icon is clicked
+        staticFriendUid.retVal = uid;
+    }
+    else {
+        return staticFriendUid.retVal;
+    }
+}
+
+function changeFriendPercentCircle(stat) {
+    const friendUid = staticFriendUid(null);
+
+    // hide all drop downs
+    hideDropdowns();
+
+    //hide friend percent and numbers
+    document.getElementById('outerFriendsPercentageWheel-text').style.visibility = 'hidden';
+    document.getElementById('innerFriendsPercentageWheel-percent').style.visibility = 'hidden';
+    document.getElementById('innerFriendsPercentageWheel-text').style.visibility = 'hidden';
+
+    // getting all info
+    const currentUserId = auth.currentUser.uid;
+    database.collection('userData').doc(currentUserId).get().then(snapshot => {
+        const currentUser = snapshot.data();
+
+        // friends info
+        database.collection('userData').doc(friendUid).get().then(snapshot => {
+            const friend = snapshot.data();
+
+            var statName, numerator, denominator, percentage, friendNumerator, friendDenominator, friendPercentage;
+
+            if (stat == 'birdies') {
+                statName = "Birdies or lower";
+
+                numerator = currentUser.birdiesMINUS;
+                denominator = currentUser.totalHolesPlayed_scores;
+
+                if (friend.shareBirdiesMINUS) {
+                    friendNumerator = friend.birdiesMINUS;
+                    friendDenominator = friend.totalHolesPlayed_scores;
+                } else { // if not sharing, set to N/A
+                    friendNumerator = 0;
+                    friendDenominator = 0;
+                }
+            }
+            else if (stat == 'pars') {
+                statName = "Pars";
+
+                numerator = currentUser.pars;
+                denominator = currentUser.totalHolesPlayed_scores;
+
+                if (friend.sharePars) {
+                    friendNumerator = friend.pars;
+                    friendDenominator = friend.totalHolesPlayed_scores;
+                } else { // if not sharing, set to N/A
+                    friendNumerator = 0;
+                    friendDenominator = 0;
+                }
+            }
+            else if (stat == 'bogeys') {
+                statName = "Bogeys";
+
+                numerator = currentUser.bogeys;
+                denominator = currentUser.totalHolesPlayed_scores;
+
+                if (friend.shareBogeys) {
+                    friendNumerator = friend.bogeys;
+                    friendDenominator = friend.totalHolesPlayed_scores;
+                } else { // if not sharing, set to N/A
+                    friendNumerator = 0;
+                    friendDenominator = 0;
+                }
+            }
+            else if (stat == 'doubleBogeys') {
+                statName = "Double Bogeys or higher";
+
+                numerator = currentUser.doubleBogeysPLUS;
+                denominator = currentUser.totalHolesPlayed_scores;
+
+                if (friend.shareDoubleBogeysPLUS) {
+                    friendNumerator = friend.doubleBogeysPLUS;
+                    friendDenominator = friend.totalHolesPlayed_scores;
+                } else { // if not sharing, set to N/A
+                    friendNumerator = 0;
+                    friendDenominator = 0;
+                }
+            }
+            else if (stat == 'onePutts') {
+                statName = "1 Putts";
+
+                numerator = currentUser.onePutts;
+                denominator = currentUser.totalHolesPlayed_putts;
+
+                if (friend.shareOnePutts) {
+                    friendNumerator = friend.onePutts;
+                    friendDenominator = friend.totalHolesPlayed_putts;
+                } else { // if not sharing, set to N/A
+                    friendNumerator = 0;
+                    friendDenominator = 0;
+                }
+            }
+            else if (stat == 'twoPutts') {
+                statName = "2 Putts";
+
+                numerator = currentUser.twoPutts;
+                denominator = currentUser.totalHolesPlayed_putts;
+
+                if (friend.shareTwoPutts) {
+                    friendNumerator = friend.twoPutts;
+                    friendDenominator = friend.totalHolesPlayed_putts;
+                } else { // if not sharing, set to N/A
+                    friendNumerator = 0;
+                    friendDenominator = 0;
+                }
+            }
+            else if (stat == 'threePutts') {
+                statName = "3 Putts or more";
+
+                numerator = currentUser.threePuttsPLUS;
+                denominator = currentUser.totalHolesPlayed_putts;
+
+                if (friend.shareThreePuttsPLUS) {
+                    friendNumerator = friend.threePuttsPLUS;
+                    friendDenominator = friend.totalHolesPlayed_putts;
+                } else { // if not sharing, set to N/A
+                    friendNumerator = 0;
+                    friendDenominator = 0;
+                }
+            }
+            else if (stat == 'greensinReg') {
+                statName = "Greens in Regulation";
+
+                numerator = currentUser.greensInReg;
+                denominator = currentUser.totalHolesPlayed_greensInReg;
+
+                if (friend.shareGreensInReg) {
+                    friendNumerator = friend.greensInReg;
+                    friendDenominator = friend.totalHolesPlayed_greensInReg;
+                } else { // if not sharing, set to N/A
+                    friendNumerator = 0;
+                    friendDenominator = 0;
+                }
+            }
+            else if (stat == 'fairwaysinReg') {
+                statName = "Fairways in Regulation";
+
+                numerator = currentUser.fairwaysInReg;
+                denominator = currentUser.totalHolesPlayed_fairwaysInReg;
+
+                if (friend.shareFairwaysInReg) {
+                    friendNumerator = friend.fairwaysInReg;
+                    friendDenominator = friend.totalHolesPlayed_fairwaysInReg;
+                } else { // if not sharing, set to N/A
+                    friendNumerator = 0;
+                    friendDenominator = 0;
+                }
+            }
+            else if (stat == 'holesWithHazards') {
+                statName = "Holes with Hazards";
+
+                numerator = currentUser.holesWithHazard;
+                denominator = currentUser.totalHolesPlayed_holesWithHazard;
+
+                if (friend.shareHolesWithHazard) {
+                    friendNumerator = friend.holesWithHazard;
+                    friendDenominator = friend.totalHolesPlayed_holesWithHazard;
+                } else { // if not sharing, set to N/A
+                    friendNumerator = 0;
+                    friendDenominator = 0;
+                }
+            }
+
+            // set percentages
+            percentage = numerator / denominator;
+            friendPercentage = friendNumerator / friendDenominator;
+
+            document.getElementById('outerFriendsPercentageWheel-text').innerHTML = String(numerator + ' / ' + denominator);
+            document.getElementById('innerFriendsPercentageWheel-text').innerHTML = String(friendNumerator + ' / ' + friendDenominator);
+
+            // setting stat name to new value
+            document.getElementById("friends-stat-name").innerHTML = statName;
+
+            // initially set to wheels to 0
+            $("#outerFriendsPercentageWheel").circleProgress({ value: 0, animation: { duration: 0 } });
+            $("#innerFriendsPercentageWheel").circleProgress({ value: 0, animation: { duration: 0 } });
+
+            if (denominator == 0) { // NaN
+                document.getElementById('outerFriendsPercentageWheel-percent').innerHTML = String('N/A');
+            }
+            else if (numerator == 0) { // 0%
+                document.getElementById('outerFriendsPercentageWheel-percent').innerHTML = String('0%');
+                document.getElementById('outerFriendsPercentageWheel-text').style.visibility = 'visible';
+            }
+            else { // normal animation
+                // wheel animations
+                $("#outerFriendsPercentageWheel").circleProgress({ animation: { duration: 975 }, fill: { color: '#3b8ad9' }, value: percentage })
+                    .on('circle-animation-progress', function (event, progress, stepValue) {
+                        document.getElementById('outerFriendsPercentageWheel-percent').innerHTML = String(stepValue.toFixed(5).substr(2, 2) + '.' + stepValue.toFixed(5).substr(4, 2) + '%');
+                    });
+                sleep(1).then(() => { // when animation ends
+                    // override conditions
+                    if (percentage == 1) { // 100%
+                        document.getElementById('outerFriendsPercentageWheel-percent').innerHTML = String('100.00%');
+                    }
+                    else { // normal
+                        document.getElementById('outerFriendsPercentageWheel-percent').innerHTML = String((percentage * 100).toFixed(2) + '%');
+                    }
+
+                    document.getElementById('outerFriendsPercentageWheel-text').style.visibility = 'visible';
+                });
+            }
+            sleep(1).then(() => {
+                document.getElementById('innerFriendsPercentageWheel-percent').style.visibility = 'visible';
+
+                if (friendDenominator == 0) { // NaN
+                    document.getElementById('innerFriendsPercentageWheel-percent').innerHTML = String('N/A');
+                }
+                else if (friendNumerator == 0) { // 0%
+                    document.getElementById('innerFriendsPercentageWheel-percent').innerHTML = String('0%');
+                    document.getElementById('innerFriendsPercentageWheel-text').style.visibility = 'visible';
+                }
+                else { // normal animation
+                    $("#innerFriendsPercentageWheel").circleProgress({ animation: { duration: 975 }, fill: { color: '#c4a427' }, value: friendPercentage })
+                        .on('circle-animation-progress', function (event, progress, stepValue) {
+                            document.getElementById('innerFriendsPercentageWheel-percent').innerHTML = String(stepValue.toFixed(5).substr(2, 2) + '.' + stepValue.toFixed(5).substr(4, 2) + '%');
+                        });
+                    sleep(1).then(() => { // when animation ends
+                        // override conditions
+                        if (friendPercentage == 1) { // 100%
+                            document.getElementById('innerFriendsPercentageWheel-percent').innerHTML = String('100.00%');
+                        }
+                        else { // normal
+                            document.getElementById('innerFriendsPercentageWheel-percent').innerHTML = String((friendPercentage * 100).toFixed(2) + '%');
+                        }
+
+                        document.getElementById('innerFriendsPercentageWheel-text').style.visibility = 'visible';
+                    });
+                }
+            });
+        });
     });
 }

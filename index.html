@@ -268,9 +268,9 @@
                 <div class="stats-btns-container">
                     <div class="scores-stat-btn">
                         <div class="stats-dropdown">
-                            <button class="stat-btn" onclick="showCurrentScoreStatsOptions()">Scores <i
+                            <button class="stat-btn" onclick="showScoreStatsOptions()">Scores <i
                                     class="fa fa-caret-down"></i></button>
-                            <div id="curScore-dropdown-content" class="stats-dropdown-content">
+                            <div class="scores-dropdown-content">
                                 <a class="stat-dropdown-btn" onclick="changePercentCircle('current', 'birdies')">Birdies
                                     or
                                     lower</a>
@@ -286,9 +286,9 @@
                     </div>
                     <div class="putts-stat-btn">
                         <div class="stats-dropdown">
-                            <button class="stat-btn" onclick="showCurrentPuttStatsOptions()">Putts <i
+                            <button class="stat-btn" onclick="showPuttStatsOptions()">Putts <i
                                     class="fa fa-caret-down"></i></button>
-                            <div id="curPutt-dropdown-content" class="stats-dropdown-content">
+                            <div class="putts-dropdown-content">
                                 <a class="stat-dropdown-btn" onclick="changePercentCircle('current', 'onePutts')">1
                                     Putts</a>
                                 <a class="stat-dropdown-btn" onclick="changePercentCircle('current', 'twoPutts')">2
@@ -320,7 +320,7 @@
                         <div class="percentageWheel-text">
                             <strong id="currentPercentageWheel-percent"></strong>
                             <br>
-                            <strong id="currentPercentageWheel-text"><br></strong>
+                            <strong id="currentPercentageWheel-text" class="percentageWheel-nums"><br></strong>
                         </div>
                     </div>
                 </div>
@@ -331,7 +331,7 @@
                         <div class="stats-dropdown">
                             <button class="stat-btn" onclick="showScoreStatsOptions()">Scores <i
                                     class="fa fa-caret-down"></i></button>
-                            <div id="score-dropdown-content" class="stats-dropdown-content">
+                            <div class="scores-dropdown-content">
                                 <a class="stat-dropdown-btn"
                                     onclick="changePercentCircle('lifetime', 'birdies')">Birdies or
                                     lower</a>
@@ -348,7 +348,7 @@
                         <div class="stats-dropdown">
                             <button class="stat-btn" onclick="showPuttStatsOptions()">Putts <i
                                     class="fa fa-caret-down"></i></button>
-                            <div id="putt-dropdown-content" class="stats-dropdown-content">
+                            <div class="putts-dropdown-content">
                                 <a class="stat-dropdown-btn" onclick="changePercentCircle('lifetime', 'onePutts')">1
                                     Putts</a>
                                 <a class="stat-dropdown-btn" onclick="changePercentCircle('lifetime', 'twoPutts')">2
@@ -382,7 +382,7 @@
                         <div class="percentageWheel-text">
                             <strong id="lifetimePercentageWheel-percent"></strong>
                             <br>
-                            <strong id="lifetimePercentageWheel-text"><br></strong>
+                            <strong id="lifetimePercentageWheel-text" class="percentageWheel-nums"><br></strong>
                         </div>
                     </div>
                 </div>
@@ -391,39 +391,131 @@
                 <!-- Created dynamically -->
                 <ul id="friends-list">
                 </ul>
-                <div id="compare-friend-page">
-                    <!-- Need a back button -->
+                <div id="compare-friend-tab">
+
+                    <div class="stats-btns-container">
+                        <div>
+                            <div class="stats-dropdown">
+                                <button class="stat-btn" onclick="showScoreStatsOptions()">Scores <i
+                                        class="fa fa-caret-down"></i></button>
+                                <div class="scores-dropdown-content">
+                                    <a class="stat-dropdown-btn" onclick="changeFriendPercentCircle('birdies')">Birdies
+                                        or
+                                        lower</a>
+                                    <a class="stat-dropdown-btn" onclick="changeFriendPercentCircle('pars')">Pars</a>
+                                    <a class="stat-dropdown-btn"
+                                        onclick="changeFriendPercentCircle('bogeys')">Bogeys</a>
+                                    <a class="stat-dropdown-btn"
+                                        onclick="changeFriendPercentCircle('doubleBogeys')">Double Bogeys
+                                        or higher</a>
+                                </div>
+                            </div>
+                        </div>
+                        <div>
+                            <div class="stats-dropdown">
+                                <button class="stat-btn" onclick="showPuttStatsOptions()">Putts <i
+                                        class="fa fa-caret-down"></i></button>
+                                <div class="putts-dropdown-content">
+                                    <a class="stat-dropdown-btn" onclick="changeFriendPercentCircle('onePutts')">1
+                                        Putts</a>
+                                    <a class="stat-dropdown-btn" onclick="changeFriendPercentCircle('twoPutts')">2
+                                        Putts</a>
+                                    <a class="stat-dropdown-btn" onclick="changeFriendPercentCircle('threePutts')">3
+                                        Putts or more</a>
+                                </div>
+                            </div>
+                        </div>
+                        <div>
+                            <button class="stat-btn" onclick="changeFriendPercentCircle('greensinReg')">Greens in
+                                Regulation</button>
+                        </div>
+                        <div>
+                            <button class="stat-btn" onclick="changeFriendPercentCircle('fairwaysinReg')">Fairways
+                                in
+                                Regulation</button>
+                        </div>
+                        <div>
+                            <button class="stat-btn" onclick="changeFriendPercentCircle('holesWithHazards')">Holes
+                                with
+                                Hazards</button>
+                        </div>
+                    </div>
+
+
+                    <div class="stat-info">
+                        <h1 id="friends-stat-name"></h1>
+                    </div>
+
+
+                    <div class="percentageWheel">
+                        <div id="outerFriendsPercentageWheel" class="round" data-thickness="15" data-start-angle="-1.57"
+                            data-empty-fill="rgba(255, 255, 255, 0.2)">
+
+                            <div id="friends-wheel-text" class="percentageWheel-text">
+                                <strong id="outerFriendsPercentageWheel-percent"></strong>
+                                <br>
+                                <strong id="outerFriendsPercentageWheel-text" class="percentageWheel-nums"><br></strong>
+                                <span id="seperation">
+                                    <p>hidden</p>
+                                </span>
+                                <strong id="innerFriendsPercentageWheel-percent"></strong>
+                                <br>
+                                <strong id="innerFriendsPercentageWheel-text" class="percentageWheel-nums"><br></strong>
+                            </div>
+                        </div>
+                        <div id="innerFriendsPercentageWheel" class="round" data-thickness="15" data-start-angle="-1.57"
+                            data-empty-fill="rgba(255, 255, 255, 0.2)">
+                        </div>
+                    </div>
+
+                    <div id="friends-key">
+                        <section>
+                            <div id="back-btn-div">
+                                <i id="back-btn" class="fas fa-arrow-circle-left" onclick="backToFriends()"></i>
+                            </div>
+                        </section>
+                        <section>
+                            <div id="your-color-box"></div>
+                            <p>You</p>
+                        </section>
+                        <section>
+                            <div id="friend-color-box"></div>
+                            <p><span id="friend-displayName-text"></span></p>
+                        </section>
+                    </div>
+
+
+
+
                 </div>
-            </div>
-        </div>
 
-        <!-- Firebase -->
-        <script src="https://www.gstatic.com/firebasejs/7.8.2/firebase-app.js"></script>
-        <script src="https://www.gstatic.com/firebasejs/7.8.2/firebase-auth.js"></script>
-        <script src="https://www.gstatic.com/firebasejs/7.8.2/firebase-firestore.js"></script>
+                <!-- Firebase -->
+                <script src="https://www.gstatic.com/firebasejs/7.8.2/firebase-app.js"></script>
+                <script src="https://www.gstatic.com/firebasejs/7.8.2/firebase-auth.js"></script>
+                <script src="https://www.gstatic.com/firebasejs/7.8.2/firebase-firestore.js"></script>
 
-        <script>
-            // Your web app's Firebase configuration
-            var firebaseConfig = {
-                apiKey: "AIzaSyBVkMX1vz4q1YGxrfcnUQ6jdMdfdtBOhTo",
-                authDomain: "golf-stats-tracker-1a578.firebaseapp.com",
-                databaseURL: "https://golf-stats-tracker-1a578.firebaseio.com",
-                projectId: "golf-stats-tracker-1a578",
-                storageBucket: "golf-stats-tracker-1a578.appspot.com",
-                messagingSenderId: "112674476547",
-                appId: "1:112674476547:web:9441dd05b9342329dd3436",
-                measurementId: "G-X4RL3BGY2D"
-            };
-            // Initialize Firebase
-            firebase.initializeApp(firebaseConfig);
-            const auth = firebase.auth();
-            const database = firebase.firestore();
-        </script>
+                <script>
+                    // Your web app's Firebase configuration
+                    var firebaseConfig = {
+                        apiKey: "AIzaSyBVkMX1vz4q1YGxrfcnUQ6jdMdfdtBOhTo",
+                        authDomain: "golf-stats-tracker-1a578.firebaseapp.com",
+                        databaseURL: "https://golf-stats-tracker-1a578.firebaseio.com",
+                        projectId: "golf-stats-tracker-1a578",
+                        storageBucket: "golf-stats-tracker-1a578.appspot.com",
+                        messagingSenderId: "112674476547",
+                        appId: "1:112674476547:web:9441dd05b9342329dd3436",
+                        measurementId: "G-X4RL3BGY2D"
+                    };
+                    // Initialize Firebase
+                    firebase.initializeApp(firebaseConfig);
+                    const auth = firebase.auth();
+                    const database = firebase.firestore();
+                </script>
 
-        <script src="https://code.jquery.com/jquery-3.4.1.js"></script>
-        <script
-            src="https://cdnjs.cloudflare.com/ajax/libs/jquery-circle-progress/1.2.0/circle-progress.min.js"></script>
-        <script type="text/javascript" src="main.js"></script>
+                <script src="https://code.jquery.com/jquery-3.4.1.js"></script>
+                <script
+                    src="https://cdnjs.cloudflare.com/ajax/libs/jquery-circle-progress/1.2.0/circle-progress.min.js"></script>
+                <script type="text/javascript" src="main.js"></script>
 </body>
 
 </html>
