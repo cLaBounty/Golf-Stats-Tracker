@@ -25,7 +25,7 @@ body {
 #login-box {
     width: 600px;
     background-color: rgba(0, 0, 0, 0.85);
-    box-shadow: 0 0 25px rgba(100, 100, 100);
+    box-shadow: 0 0 50px rgba(150, 150, 150);
     margin: 25px;
     padding: 10px 0;
 }
@@ -214,7 +214,6 @@ nav ul li:hover {
 }
 #search-container .input-div {
     grid-template-columns: 20px calc(100% - 40px) 20px;
-    margin: 10px auto 15px;
     padding: 12px;
     border: 2px solid white;
     border-radius: 25px;
@@ -250,7 +249,8 @@ nav ul li:hover {
     box-shadow: inset 0 0 8px rgba(0, 0, 0, 0.9);
 }
 #search-results {
-    width: 99%;
+    position: relative;
+    right: 15px;
     height: calc(100% - 94px);
     overflow-y: auto;
 }
@@ -263,7 +263,7 @@ nav ul li:hover {
     display: none;
     color: white;
     font-size: 22px;
-    margin: 0 10%;
+    margin: 0 calc(7.5% + 32px);
     word-wrap: break-word;
 }
 #no-results-message-value {
@@ -271,16 +271,20 @@ nav ul li:hover {
 }
 .userlist-div {
     display: none;
+    width: calc(85% - 42px);
     grid-template-columns: 20px calc(100% - 40px) 20px;
     font-size: 22px;
     color: white;
-    margin: 10px 4.5% 10px calc(7.5% + 32px);
+    margin: 10px 0 10px calc(7.5% + 42px);
     padding: 12px;
     border: 2px solid white;
     border-radius: 25px;
 }
 .userlist-li {
     margin-left: 10px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
 }
 .userlist-minus {
     display: none;
@@ -403,7 +407,7 @@ nav ul li:hover {
 #newRound-page h1 {
     width: 100%;
     height: 65px;
-    margin: 0 0 0 25px;
+    margin: 0 0 0 20px;
     color: white;
     text-decoration: underline;
     font-size: 43px;
@@ -419,7 +423,7 @@ nav ul li:hover {
     margin: 0 25px 15px 25px;
     text-align: center;
     color: white;
-    font-size: 29px;
+    font-size: 28px;
     position: relative;
     top: 2.5%;
     line-height: 140%;
@@ -823,14 +827,14 @@ nav ul li:hover {
 
 
 #friends-key {
-    width: calc(100% - 15px);
-    margin: 0 10px 0 5px;
+    width: calc(100% - 9px);
+    margin: 0 3px 0 6px;
     display: grid;
-    grid-template-columns: 18% 28% 50%;
+    grid-template-columns: 52px calc((100% - 52px) * 0.33) calc((100% - 52px) * 0.66);
     font-size: 18px;
     color: white;
     position: absolute;
-    top: 95%;
+    bottom: 6px;
 }
 
 #friends-key section {
@@ -842,7 +846,7 @@ nav ul li:hover {
 #your-color-box, #friend-color-box{
     width: 17px;
     height: 17px;
-    margin: 0 10px 0 15px;
+    margin: 0 10px;
     background-color: #3b8ad9;
     border: 1px solid white;
     position: relative;
@@ -950,10 +954,17 @@ nav ul li:hover {
         top: 5%;
     }
     .input-div {
-        width: calc(100% - 50px);
+        width: calc(100% - 60px);
+    }
+    #no-results-message {
+        margin: 0 calc(30px + 32px);
+    }
+    .userlist-div {
+        width: calc(100% - 60px - 42px);
+        margin: 10px 0 10px calc(30px + 42px);
     }
     .stat-btn {
-        font-size: 13.5px;
+        font-size: 13px;
         margin: 20px 5px 0 5px;
         padding: 8px;
     }
@@ -961,7 +972,7 @@ nav ul li:hover {
         left: 5px;
     }
     .scores-dropdown-content a, .putts-dropdown-content a {
-        font-size: 13.5px;
+        font-size: 13px;
         width: 95px
     }
 }
