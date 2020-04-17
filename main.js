@@ -154,6 +154,10 @@ function toFriendsPage() {
 
     hidePages();
 
+    // reseting search input
+    document.getElementById('displayName-input').value = "";
+    $("#displayName-input").keyup();
+
     // display new stuff
     document.getElementById('friends-page').style.display = 'flex';
     document.getElementById('page-label').innerHTML = "Friends";
@@ -957,6 +961,7 @@ function toStatsPage() {
         changePercentCircle('current', firstStat);
         changePercentCircle('lifetime', firstStat);
         loadFriendsTab();
+        backToFriends();
     });
 }
 
