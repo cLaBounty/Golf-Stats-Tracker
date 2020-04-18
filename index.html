@@ -10,8 +10,19 @@
     <title>Golf Stats Tracker</title>
 </head>
 
-<body>
+<body onload="checkMobile()">
     <div id="background-img"></div>
+    <div id="hide-toolbar-message">
+        <div id="hide-toolbar-message-content">
+            <h1>Welcome to Golf Stats Tracker!</h1>
+            <br>
+            <p>Make sure to hide the toolbar by clicking the "<span id="small-A">A</span>A" in the top left corner of
+                your screen.</p>
+            <br>
+            <br>
+            <button type="button" onclick="hideToolbarContinue()">Continue</button>
+        </div>
+    </div>
     <div id="login-page">
         <div id="login-box">
             <div id="login-form">
@@ -92,7 +103,7 @@
                     <i class="fas fa-search" id="user-search-btn"></i>
                 </div>
             </div>
-            <p id="no-results-message">No results found for <span id="no-results-message-value"></span></p>
+            <p id="no-results-message">No results found for... <span id="no-results-message-value"></span></p>
             <div id="search-results">
                 <!-- Created dynamically -->
                 <ul id="user-list">
@@ -255,7 +266,8 @@
 
     <div id="stats-page">
         <div id="track-error-full">
-            <p id="track-error"></p>
+            <p id="track-error">It looks like you are not tracking any stats. Update your settings to start a new round.
+            </p>
         </div>
         <div id="stats-container">
             <div id="stats-tab-btns">
@@ -388,11 +400,12 @@
                 </div>
             </div>
             <div id="friends-stats-content" class="stats-content">
+                <p id="no-friends-message">It looks like you haven't added any friends yet. Click <a
+                        onclick="toFriendsPage()">here</a> to add your 1st friend!</p>
                 <!-- Created dynamically -->
                 <ul id="friends-list">
                 </ul>
                 <div id="compare-friend-tab">
-
                     <div class="stats-btns-container">
                         <div>
                             <div class="stats-dropdown">
@@ -440,13 +453,9 @@
                                 Hazards</button>
                         </div>
                     </div>
-
-
                     <div class="stat-info">
                         <h1 id="friends-stat-name"></h1>
                     </div>
-
-
                     <div class="percentageWheel">
                         <div id="outerFriendsPercentageWheel" class="round" data-thickness="15" data-start-angle="-1.57"
                             data-empty-fill="rgba(255, 255, 255, 0.2)">
@@ -467,7 +476,6 @@
                             data-empty-fill="rgba(255, 255, 255, 0.2)">
                         </div>
                     </div>
-
                     <div id="friends-key">
                         <section>
                             <div id="back-btn-div">
@@ -483,39 +491,37 @@
                             <p><span id="friend-displayName-text"></span></p>
                         </section>
                     </div>
-
-
-
-
                 </div>
+            </div>
+        </div>
+    </div>
 
-                <!-- Firebase -->
-                <script src="https://www.gstatic.com/firebasejs/7.8.2/firebase-app.js"></script>
-                <script src="https://www.gstatic.com/firebasejs/7.8.2/firebase-auth.js"></script>
-                <script src="https://www.gstatic.com/firebasejs/7.8.2/firebase-firestore.js"></script>
+    <!-- Firebase -->
+    <script src="https://www.gstatic.com/firebasejs/7.8.2/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/7.8.2/firebase-auth.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/7.8.2/firebase-firestore.js"></script>
 
-                <script>
-                    // Your web app's Firebase configuration
-                    var firebaseConfig = {
-                        apiKey: "AIzaSyBVkMX1vz4q1YGxrfcnUQ6jdMdfdtBOhTo",
-                        authDomain: "golf-stats-tracker-1a578.firebaseapp.com",
-                        databaseURL: "https://golf-stats-tracker-1a578.firebaseio.com",
-                        projectId: "golf-stats-tracker-1a578",
-                        storageBucket: "golf-stats-tracker-1a578.appspot.com",
-                        messagingSenderId: "112674476547",
-                        appId: "1:112674476547:web:9441dd05b9342329dd3436",
-                        measurementId: "G-X4RL3BGY2D"
-                    };
-                    // Initialize Firebase
-                    firebase.initializeApp(firebaseConfig);
-                    const auth = firebase.auth();
-                    const database = firebase.firestore();
-                </script>
+    <script>
+        // Your web app's Firebase configuration
+        var firebaseConfig = {
+            apiKey: "AIzaSyBVkMX1vz4q1YGxrfcnUQ6jdMdfdtBOhTo",
+            authDomain: "golf-stats-tracker-1a578.firebaseapp.com",
+            databaseURL: "https://golf-stats-tracker-1a578.firebaseio.com",
+            projectId: "golf-stats-tracker-1a578",
+            storageBucket: "golf-stats-tracker-1a578.appspot.com",
+            messagingSenderId: "112674476547",
+            appId: "1:112674476547:web:9441dd05b9342329dd3436",
+            measurementId: "G-X4RL3BGY2D"
+        };
+        // Initialize Firebase
+        firebase.initializeApp(firebaseConfig);
+        const auth = firebase.auth();
+        const database = firebase.firestore();
+    </script>
 
-                <script src="https://code.jquery.com/jquery-3.4.1.js"></script>
-                <script
-                    src="https://cdnjs.cloudflare.com/ajax/libs/jquery-circle-progress/1.2.0/circle-progress.min.js"></script>
-                <script type="text/javascript" src="main.js"></script>
+    <script src="https://code.jquery.com/jquery-3.4.1.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-circle-progress/1.2.0/circle-progress.min.js"></script>
+    <script type="text/javascript" src="main.js"></script>
 </body>
 
 </html>

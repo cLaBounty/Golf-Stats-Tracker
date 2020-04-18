@@ -10,8 +10,49 @@ body {
     background-position: 70% 0%;
     background-repeat: no-repeat;
     background-size: cover;
-    background-attachment: fixed; /* doesn't work on mobile */
+    background-attachment: fixed;
     z-index: -5;
+}
+
+/* full screen messages */
+#newRound-error-full, #track-error-full, #nine-hole-message, #round-end-message, #hide-toolbar-message {
+    display: none;
+    width: 100%;
+    height: 100%;
+    position: fixed;
+    top: 0;
+    left: 0;
+    background-color: rgba(0, 0, 0, 0.85);
+    justify-content: center;
+    align-items: center;
+    z-index: 10;
+}
+
+/* hide tool bar message */
+#hide-toolbar-message-content {
+    color: white;
+    font-size: 24px;
+    text-align: center;
+    margin: 25px;
+    padding: 20px 15px;
+    background-color: rgb(50, 50, 50);
+    border: 4px solid green;
+}
+#hide-toolbar-message-content h1 {
+    font-size: 36px;
+}
+#small-A {
+    font-size: 18px;
+}
+#hide-toolbar-message-content button {
+    float: right;
+    color: white;
+    font-size: 18px;
+    margin-right: 5px;
+    padding: 10px;
+    background: rgb(115, 115, 115);
+    border: 2px solid white;
+    border-radius: 10px;
 }
 
 /* login/signup page */
@@ -24,10 +65,10 @@ body {
 }
 #login-box {
     width: 600px;
-    background-color: rgba(0, 0, 0, 0.85);
-    box-shadow: 0 0 50px rgba(150, 150, 150);
     margin: 25px;
     padding: 10px 0;
+    background-color: rgba(0, 0, 0, 0.85);
+    box-shadow: 0 0 50px rgba(150, 150, 150);
 }
 #login-form {
     display: block;
@@ -36,10 +77,10 @@ body {
     display: none;
 }
 .input-div {
-    width: 85%;
-    margin: 10px auto 30px;
     display: grid;
     grid-template-columns: 7% 93%;
+    width: 85%;
+    margin: 10px auto 30px;
     padding: 5px 0;
     border-bottom: 2px solid white;
 }
@@ -53,12 +94,12 @@ body {
     color: rgb(190, 190, 190);
 }
 #login-box input {
-    font-size: 18px;
     color: white;
+    font-size: 18px;
+    margin-left: 7px;
     border: none;
     outline: none;
     background: transparent;
-    margin-left: 7px;
 }
 #login-box ::placeholder {
     font-size: 18px;
@@ -66,26 +107,26 @@ body {
 }
 #login-error-message, #signup-error-message {
     visibility: hidden;
+    position: relative;
+    top: -20px;
     color: red;
     font-size: 16px;
     width: 85%;
     margin: 0 auto;
     padding: 5px 0;
-    position: relative;
-    top: -20px;
 }
 #login-box button {
+    position: relative;
+    top: -10px;
+    color: white;
+    font-size: 18px;
     width: 85%;
     margin: 0 7.5%;
     padding: 12px 0;
     border: 2px solid white;
     border-radius: 15px;
-    font-size: 18px;
-    color: white;
     outline: none;
     background: transparent;
-    position: relative;
-    top: -10px;
 }
 #login-box button:hover {
     background: rgb(150, 150, 150);
@@ -93,9 +134,9 @@ body {
     transition: 0.25s;
 }
 .switch-action {
-    width: 100%;
     color: white;
     font-size: 16px;
+    width: 100%;
     text-align: right;
     margin: 3px -7.5%;
 }
@@ -107,20 +148,19 @@ body {
 
 /* nav bar */
 nav {
-    display: flex;
-    align-items: center;
-    background: rgb(50, 50, 50);
     position: fixed;
     top: 0;
     left: 0;
     width: 100%;
     height: 80px;
+    background-color: rgb(50, 50, 50); /* For browsers that do not support gradients */
+    background-image: linear-gradient(to bottom right, rgb(20, 20, 20), rgb(90, 90, 90));
     border-bottom: 4px solid #ffffff;
     z-index: 10;
 }
 #page-label {
-    font-size: 38px;
     color: #ffffff;
+    font-size: 38px;
     line-height: 80px;
     padding: 0 25px;
     font-weight: bold;
@@ -133,10 +173,10 @@ nav ul {
 }
 nav ul li {
     display: inline-block;
-    line-height: 40px;
-    margin: 20px 25px;
     color: #ccc;
     font-size: 24px;
+    line-height: 40px;
+    margin: 20px 25px;
 }
 nav ul li:hover {
     color: white;
@@ -147,13 +187,13 @@ nav ul li:hover {
     color: red;
 }
 .nav-check-btn {
-    font-size: 38px;
-    color: white;
+    display: none;
     float: left;
+    color: white;
+    font-size: 38px;   
     line-height: 80px;
     margin-left: 20px;
     cursor: pointer;
-    display: none;
 }
 #nav-check {
     display: none;
@@ -170,23 +210,23 @@ nav ul li:hover {
     align-items: center;
 }
 #home-btns-container {
-    width: 100%;
-    height: 55%;
     display: flex;
     flex-wrap: wrap;
     justify-content: center;
     align-items: center;
+    width: 100%;
+    height: 55%;
 }
 .home-option-btn {
-    background-color: rgba(215, 215, 215, 0.925);
+    width: 270px;
+    height: 150px;
+    font-size: 30px;
+    margin: 10px 50px;
+    line-height: 40px;
+    background-color: rgba(220, 220, 220, 0.925);
     border-radius: 30px;
     border: none;
     outline: none;
-    margin: 10px 50px;
-    width: 248px;
-    height: 112px;
-    font-size: 30px;
-    line-height: 40px;
 }
 .home-option-btn:hover {
     background-color: white;
@@ -202,14 +242,12 @@ nav ul li:hover {
     align-items: center;
 }
 #search-container {
-    display: block;
-    justify-content: center;
     width: 965px;
     height: 400px;
     margin: 25px;
     padding: 15px 0 0 0;
-    border: 4px solid white;
     background-color: rgba(0, 0, 0, 0.85);
+    border: 4px solid white;
     box-shadow: 0 0 25px rgba(100, 100, 100);
 }
 #search-container .input-div {
@@ -219,16 +257,16 @@ nav ul li:hover {
     border-radius: 25px;
 }
 #search-container input {
-    font-size: 22px;
     color: white;
+    font-size: 22px;
     margin-left: 10px;
     border: none;
     outline: none;
     background: transparent;
 }
 #search-container ::placeholder {
-    font-size: 22px;
     color: rgb(190, 190, 190);
+    font-size: 22px;
 }
 #user-search-btn:hover {
     color: white;
@@ -239,31 +277,35 @@ nav ul li:hover {
     width: 8px;
 }
 ::-webkit-scrollbar-thumb {
-    border-radius: 10px;
     background-color: white;
+    border-radius: 10px;
     box-shadow: inset 0 0 3px black;
 }
 ::-webkit-scrollbar-track {
-    border-radius: 10px;
     background-color: white;
+    border-radius: 10px;
     box-shadow: inset 0 0 8px rgba(0, 0, 0, 0.9);
 }
 #search-results {
     position: relative;
-    right: 15px;
+    right: 7px;
+    bottom: 7px;
     height: calc(100% - 94px);
     overflow-y: auto;
 }
 #user-list {
-    list-style: none;
+    position: relative;
+    right: 8px;
     font-size: 22px;
+    list-style: none;
     box-sizing: border-box;
 }
 #no-results-message {
     display: none;
     color: white;
     font-size: 22px;
-    margin: 0 calc(7.5% + 32px);
+    margin-left: calc(7.5% + 32px);
+    margin-right: calc(7.5% - 12px);
     word-wrap: break-word;
 }
 #no-results-message-value {
@@ -271,10 +313,10 @@ nav ul li:hover {
 }
 .userlist-div {
     display: none;
-    width: calc(85% - 42px);
     grid-template-columns: 20px calc(100% - 40px) 20px;
-    font-size: 22px;
     color: white;
+    font-size: 22px;
+    width: calc(85% - 42px);
     margin: 10px 0 10px calc(7.5% + 42px);
     padding: 12px;
     border: 2px solid white;
@@ -290,33 +332,33 @@ nav ul li:hover {
     display: none;
 }
 .userlist-plus:hover {
+    color: rgb(120, 231, 135);
     cursor: pointer;
-    color: rgb(138, 241, 152);
     transition: 0.25s;
 }
 .userlist-minus:hover {
+    color: rgb(236, 145, 145);
     cursor: pointer;
-    color: rgb(229, 151, 151);
     transition: 0.25s;
 }
 
 /* settings page */
 #settings-page {
-    height: calc(100vh - 84px - 25px);
-    width: 100%;
     position: relative;
     top: calc(84px + 25px);
+    height: calc(100vh - 84px - 25px);
+    width: 100%;
 }
 #displayName-setting {
-    margin: 0 0 25px 25px;
     color: #ffffff;
     font-size: 24px;
+    margin: 0 0 25px 25px;
     font-weight: bold;
 }
 #displayName-setting-input {
-    width: 350px;
     color: #ccc;
     font-size: 30px;
+    width: 350px;
     border: none;
     outline: none;
     background: transparent;
@@ -334,15 +376,15 @@ nav ul li:hover {
     margin: 15px 0px 5px 25px;
 }
 .setting-option h4{
-    margin: 5px;
     color: #ffffff;
     font-size: 22px;
+    margin: 5px;
 }
 .setting-option input {
     position: relative;
-    margin: 5px;
     width: 80px;
     height: 40px;
+    margin: 5px;
     -webkit-appearance: none;
     background: #ccc;
     outline: none;
@@ -359,12 +401,12 @@ nav ul li:hover {
 .setting-option input:before {
     content: '';
     position: absolute;
-    width: 40px;
-    height: 40px;
-    border-radius: 50%;
     top: 0;
     left: 0;
+    width: 40px;
+    height: 40px;
     background: #fff;
+    border-radius: 50%;    
     box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
     transition: 0.5s;
 }
@@ -372,16 +414,16 @@ nav ul li:hover {
     left: 40px;
 }
 #save-settings-btn {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    font-size: 26px;
+    width: 100px;
+    height: 60px;
     background-color: rgba(230, 230, 230, 0.875);
     border-radius: 20px;
     border: none;
     outline: none;
-    position: fixed;
-    bottom: 20px;
-    right: 20px;
-    width: 100px;
-    height: 60px;
-    font-size: 26px;
 }
 #save-settings-btn:hover {
     background-color: white;
@@ -391,13 +433,13 @@ nav ul li:hover {
 
 /* newRound Page */
 #newRound-page {
-    height: calc(100vh - 84px);
-    width: 100%;
     position: relative;
     top: 84px;
     flex-wrap: wrap;
     justify-content: center;
     align-items: center;
+    height: calc(100vh - 84px);
+    width: 100%;
 }
 #Q1, #Q2, #Q3, #Q4, #Q5 {
     flex-wrap: wrap;
@@ -405,63 +447,63 @@ nav ul li:hover {
     align-items: center;
 }
 #newRound-page h1 {
+    color: white;
+    font-size: 43px;
     width: 100%;
     height: 65px;
     margin: 0 0 0 20px;
-    color: white;
     text-decoration: underline;
-    font-size: 43px;
 }
 .question {
+    display: none;
     height: calc(100% - 65px - 25px);
     width: 100%;
-    display: none;
 }
 #newRound-page h2 {
+    position: relative;
+    top: 15%;
+    color: white;
+    font-size: 38px;
     width: 100%;
     height: 74px;
     margin: 0 25px 15px 25px;
     text-align: center;
-    color: white;
-    font-size: 28px;
-    position: relative;
-    top: 2.5%;
     line-height: 140%;
 }
 #Q1 h3, #Q2 h3 {
+    color: white;
+    font-size: 50px;
     width: 100%;
     margin: 0 25px 10px 25px;
-    text-align: center;
-    color: white;
-    font-size: 30px;
+    text-align: center;   
 }
 #Q1 form {
-    width: 100%;
-    height: 100%;
     display: flex;
     justify-content: center;
     align-items: center;
     flex-wrap: wrap;
     position: relative;
     top: -5%;
+    width: 100%;
+    height: 100%;
 }
 #Q1 input {
     display: none;
 }
 #Q1 label {
-    height: 70px;
-    width: 70px;
-    letter-spacing: -3px;
-    color: white;
-    font-size: 38px;
-    background-color: rgb(190, 190, 190);
-    border: none;
-    border-radius: 20%;
-    outline: none;
-    margin: 15px 20px;
     display: flex;
     align-items: center;
     justify-content: center;
+    color: white;
+    font-size: 38px;
+    margin: 15px 20px;
+    height: 70px;
+    width: 70px;
+    letter-spacing: -3px;
+    background-color: rgb(190, 190, 190);
+    border: none;
+    border-radius: 20%;
+    outline: none; 
 }
 #Q1 label:hover {
     cursor: pointer;
@@ -473,32 +515,32 @@ nav ul li:hover {
     background-color: white;
 }
 #par-question{
-    width: 100%;
     display: flex;
     justify-content: center;
     align-items: center;
     flex-wrap: wrap;
+    width: 100%;
 }
 #score-question {
-    width: 100%;
     display: flex;
     justify-content: center;
     align-items: center;
     flex-wrap: wrap;
     position: relative;
     top: -10%;
+    width: 100%;
 }
 #submit-score-btn {
-    height: 60px;
-    width: 85px;
-    font-size: 30px;
-    background-color: rgb(190, 190, 190);
-    border-radius: 20px;
-    border: none;
-    outline: none;
     position: fixed;
     bottom: 20px;
     right: 20px;
+    font-size: 30px;
+    height: 60px;
+    width: 85px;
+    background-color: rgb(190, 190, 190);
+    border: none;
+    border-radius: 20px;   
+    outline: none;
 }
 #submit-score-btn:hover {
     background-color: white;
@@ -510,17 +552,17 @@ nav ul li:hover {
     top: -11%;
 }
 .putt-btn {
-    height: 70px;
-    width: 70px;
+    position: relative;
+    top: -36%;
     color: white;
     font-size: 38px;
+    height: 70px;
+    width: 70px;
+    margin: 15px 20px;
     background-color: rgb(190, 190, 190);
     border: none;
     border-radius: 20%;
     outline: none;
-    margin: 15px 20px;
-    position: relative;
-    top: -36%;
 }
 .putt-btn:hover {
     color: rgb(190, 190, 190);
@@ -530,58 +572,46 @@ nav ul li:hover {
     transition: 0.25s;
 }
 .question-btns {
-    height: calc(100% - 74px - 15px);
-    width: 100%;
     display: flex;
     flex-wrap: wrap;
     justify-content: center;
     align-items: center;
+    height: calc(100% - 74px - 15px);
+    width: 100%;
 }
 .check-btn, .X-btn {
+    height: 250px;
+    width: 250px;
     margin: 0 60px;
-    height: 175px;
-    width: 175px;
 }
 .check-btn:hover, .X-btn:hover {
     cursor: pointer;
     transition: 0.25s;
 }
-#newRound-error-full, #track-error-full, #nine-hole-message, #round-end-message {
-    display: none;
-    width: 100%;
-    height: 100%;
-    position: fixed;
-    top: 0;
-    left: 0;
-    background-color: rgba(0, 0, 0, 0.85);
-    justify-content: center;
-    align-items: center;
-    z-index: 10;
-}
 #newRound-error, #track-error {
+    color: red;
+    font-size: 28px;
     text-align: center;
     margin: 25px;
     padding: 15px;
     background-color: rgba(0, 0, 0, 0.85);
     border: 4px solid white;
-    color: red;
-    font-size: 28px;
 }
 #nine-hole-message-content {
-    text-align: center;
-    margin: 25px;
-    padding: 15px 15px 0 15px;
-    background-color: rgb(50, 50, 50);
-    border: 4px solid yellow;
     color: white;
     font-size: 28px;
+    margin: 25px;
+    padding: 15px 15px 0 15px;
+    text-align: center;
+    background-color: rgb(50, 50, 50);
+    border: 4px solid yellow;
 }
 .nine-hole-message-btn {
+    color: white;
+    font-size: 20px;
     height: 40px;
     width: 60px;
     margin: 15px 25px;
-    color: white;
-    font-size: 20px;
     background: rgb(115, 115, 115);
     border: 2px solid white;
     border-radius: 10px;
@@ -594,13 +624,13 @@ nav ul li:hover {
     transition: 0.25s;
 }
 #round-end-message-content {
-    text-align: center;
-    margin: 25px;
-    padding: 15px;
-    background-color: rgb(50, 50, 50);
-    border: 4px solid green;
     color: white;
     font-size: 28px;
+    margin: 25px;
+    padding: 15px;
+    text-align: center;
+    background-color: rgb(50, 50, 50);
+    border: 4px solid green;
 }
 #round-end-message-content a {
     color: rgb(48, 118, 223);
@@ -633,9 +663,9 @@ nav ul li:hover {
 }
 .stats-tab {
     float: left;
-    margin-right: 7px;
     color: white;
     font-size: 18px;
+    margin-right: 7px;
     padding: 10px;
     background-color: rgba(0, 0, 0, 0.85);
     border: 3px solid white;
@@ -648,10 +678,10 @@ nav ul li:hover {
     color: black;
 }
 .stats-content {
-    width: 100%;
-    height: 100%;
     position: relative;
     top: -48px;
+    width: 100%;
+    height: 100%;
 }
 #prev-rnd-content {
     display: flex;
@@ -663,21 +693,21 @@ nav ul li:hover {
     display: none;
 }
 .stats-btns-container {
-    width: 100%;
-    height: 0;
     display: flex;
     justify-content: center;
     align-items: flex-start;
     flex-wrap: wrap;
+    width: 100%;
+    height: 0;
 }
 .stat-btn {
-    background: transparent;
     color: white;
     font-size: 16px;
     margin: 20px 10px 0;
     padding: 10px;
     border: 2px solid white;
     border-radius: 12px;
+    background: transparent;
     outline: none;
     cursor: pointer;
 }
@@ -709,34 +739,47 @@ nav ul li:hover {
     outline: none;
 }
 .scores-dropdown-content a:hover, .putts-dropdown-content a:hover {
-    cursor: pointer;
     background: rgb(150, 150, 150);
+    cursor: pointer;
     transition: 0.25s;
 }
 #stats-container .show {
     display: block;
 }
 .stat-info {
-    width: 100%;
-    position: absolute;
-    top: 28%;
     display: flex;
     justify-content: center;
+    position: absolute;
+    top: 22%;
+    width: 100%;
 }
 .stat-info h1 {
     color: white;
-    font-size: 26px;
+    font-size: 36px;
     text-align: center;
 }
+#no-friends-message {
+    color: white;
+    font-size: 22px;
+    margin: 20px;
+}
+#no-friends-message a {
+    color: rgb(48, 118, 223);
+    text-decoration: underline;
+}
+#no-friends-message a:hover {
+    cursor: pointer;
+    transition: 0.25s;
+}
 .percentageWheel {
-    width: 100%;
-    height: 70%;
-    text-align: center;
-    position: absolute;
-    top: 30%;
     display: flex;
     justify-content: center;
     align-items: center;
+    position: absolute;
+    top: 30%;
+    width: 100%;
+    height: 70%;
+    text-align: center;    
     z-index: 1;
 }
 .percentageWheel .round {
@@ -745,36 +788,36 @@ nav ul li:hover {
 }
 .percentageWheel-text {
     color: white;
+    font-size: 32px;
     position: absolute;
-    text-align: center;
     top: 50%;
     left: 50%;
+    text-align: center;
     transform: translate(-50%, -50%);
-    font-size: 32px;
 }
 .percentageWheel-nums {
     color: rgb(150, 150, 150);
     font-size: 22px;
 }
 #friends-list {
-    width: 99%;
-    height: 98%;
-    position: relative;
-    top: 1%;
-    display: flex;
-    justify-content: center;
-    align-items: flex-start;
-    flex-wrap: wrap;
-    overflow-y: auto;
-}
-.friendsList-div {
-    height: 150px;
-    width: 150px;
-    margin: 5px 10px 0;
     display: flex;
     justify-content: center;
     align-items: center;
     flex-wrap: wrap;
+    position: relative;
+    top: 1%;
+    width: 99%;
+    height: 98%;
+    overflow-y: auto;
+}
+.friendsList-div {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-wrap: wrap;
+    height: 150px;
+    width: 150px;
+    margin: 5px 10px 0;
 }
 .friendsList-div:hover .friendsList-icon-div, .friendsList-div:hover .friendsList-h1 {
     color: white;
@@ -782,18 +825,18 @@ nav ul li:hover {
     transition: 0.25s;
 }
 .friendsList-icon-div {
-    width: 100%;
-    font-size: 72px;
-    color: rgb(150, 150, 150);
     display: flex;
     justify-content: center;
     align-items: center;
+    color: rgb(150, 150, 150);
+    font-size: 72px;
+    width: 100%;
 }
 .friendsList-h1 {
-    width: 100%;
-    font-size: 28px;
-    text-align: center;
     color: rgb(150, 150, 150);
+    font-size: 26px;
+    width: 100%;
+    text-align: center;
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
@@ -807,7 +850,7 @@ nav ul li:hover {
     position: absolute;
 }
 #friends-wheel-text {
-    font-size: 28px;
+    font-size: 25px;
 }
 #innerFriendsPercentageWheel-percent {
     position: relative;
@@ -819,73 +862,53 @@ nav ul li:hover {
     visibility: hidden;
     font-size: 30%;
 }
-
-
-
-
-
-
-
 #friends-key {
-    width: calc(100% - 9px);
-    margin: 0 3px 0 6px;
     display: grid;
-    grid-template-columns: 52px calc((100% - 52px) * 0.33) calc((100% - 52px) * 0.66);
-    font-size: 18px;
-    color: white;
+    grid-template-columns: 52px 80px calc(100% - 52px - 80px);
     position: absolute;
     bottom: 6px;
+    color: white;
+    font-size: 18px;
+    width: calc(100% - 9px);
+    margin: 0 3px 0 6px;
 }
-
 #friends-key section {
     display: flex;
     justify-content: center;
     align-items: center;
 }
-
-#your-color-box, #friend-color-box{
+#your-color-box, #friend-color-box {
+    position: relative;
+    top: -2px;
     width: 17px;
     height: 17px;
     margin: 0 10px;
     background-color: #3b8ad9;
     border: 1px solid white;
-    position: relative;
-    top: -2px;
 }
-
 #friend-color-box {
     background-color: #c4a427;
 }
-
 #friends-key p {
     width: calc(100% - 25px - 19px);
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
 }
-
 #back-btn-div {
     position: absolute;
     top: -31px;
-    z-index: 10;
+    z-index: 9;
 }
-
 #back-btn {
-    font-size: 52px;
     color: rgba(255, 255, 255, 0.2);
+    font-size: 52px;
 }
-
 #back-btn:hover {
     color: white;
     cursor: pointer;
     transition: 0.25s;
 }
-
-
-
-
-
-
 
 /* Mobile Changes */
 @media (max-width: 850px) {
@@ -906,39 +929,39 @@ nav ul li:hover {
         -webkit-background-size: cover;
         -moz-background-size: cover;
         -o-background-size: cover;
-      }
+    }
     .nav-check-btn {
         display: block;
     }
     nav ul {
         position: fixed;
-        width: 100%;
-        height: 100vh;
-        background: rgba(0, 0, 0, 0.95);
         top: 84px;
         left: -100%;
+        width: 100%;
+        height: 100vh;
         text-align: center;
+        background: rgba(0, 0, 0, 0.95);
         transition: all 0.5s;
     }
     nav ul li {
         display: block;
-        border: 2px solid #ccc;
         font-size: 25px;
-        line-height: 50px;
         margin: 50px 25px;
+        line-height: 50px;
+        border: 2px solid #ccc;        
         border-radius: 10px;
     }
     nav ul li:hover {
-        background-color: rgba(150,150,150, 0.4);
         color: white;
+        background-color: rgba(150,150,150, 0.4);
     }
     #logout-btn {
         color: red;
         border-color: red;
     }
     #logout-btn:hover {
-        background-color: rgba(255, 0, 0, 0.75);
         color: white;
+        background-color: rgba(255, 0, 0, 0.75);
     }
     #nav-check:checked ~ ul {
         left: 0;
@@ -947,17 +970,40 @@ nav ul li:hover {
         position: relative;
         top: -21%;
     }
+    .home-option-btn {
+        width: 248px;
+        height: 112px;
+    }
+    #Q1 h3, #Q2 h3 {
+        font-size: 30px;
+    }
+    #newRound-page h2 {
+        position: relative;
+        top: 2.5%;
+        font-size: 29px;
+    }
+    .check-btn, .X-btn {
+        height: 175px;
+        width: 175px;
+    }
     #stats-container, #search-container {
-        width: calc(100% - 50px);
-        height: 65%;
         position: relative;
         top: 5%;
+        width: calc(100% - 50px);
+        height: 65%;
+    }
+    .stat-info {
+        top: 28%;
+    }
+    .stat-info h1 {
+        font-size: 26px;
     }
     .input-div {
         width: calc(100% - 60px);
     }
     #no-results-message {
-        margin: 0 calc(30px + 32px);
+        margin-left: calc(30px + 32px);
+        margin-right: 18px;
     }
     .userlist-div {
         width: calc(100% - 60px - 42px);
@@ -975,6 +1021,12 @@ nav ul li:hover {
         font-size: 13px;
         width: 95px
     }
+    #friends-wheel-text {
+        font-size: 28px;
+    }
+    #friends-key {
+        grid-template-columns: 52px calc((100% - 52px) * 0.33) calc((100% - 52px) * 0.66);
+    }
 }
 
 /* Small device fixs */
@@ -983,53 +1035,58 @@ nav ul li:hover {
         font-size: 36px;
     }
     nav ul li {
-        line-height: 45px;
         margin: 40px 25px;
+        line-height: 45px;
     }
     .home-option-btn {
-        margin: 20px 50px;
+        font-size: 26px;
         width: 200px;
         height: 100px;
-        font-size: 26px;
+        margin: 20px 50px;
         line-height: 30px;
+    }
+    #Q2 h3 {
+        position: relative;
+        bottom: 10px;
     }
     .setting-option h4{
         font-size: 20px;
     }
     .check-btn, .X-btn {
+        position: relative;
+        top: -30px;
         height: 120px;
         width: 120px;
-        position: relative;
-        top: -25px;
+        margin-bottom: 10px;
     }
     #newRound-page h1 {
-        height: 40px;
         font-size: 30px;
+        height: 40px;
     }
     #newRound-page h2 {
-        height: 50px;
-        font-size: 22px;
         position: relative;
         top: -25px;
+        font-size: 22px;
+        height: 50px;
     }
     #Q1 h3 {
         font-size: 24px;
     }
     #Q1 label, .putt-btn {
+        font-size: 23px;
         height: 50px;
         width: 50px;
         margin: 0 22px 5% 22px;
-        font-size: 23px;
     }
     #submit-score-btn {
+        font-size: 24px;
         height: 45px;
         width: 65px;
-        font-size: 24px;
     }
     #stats-container, #search-container {
-        height: 55%;
         position: relative;
-        top: 5%;
+        top: 10%;
+        height: 65%;
     }
     .stats-tab {
         font-size: 13px;
@@ -1049,25 +1106,42 @@ nav ul li:hover {
         font-size: 11px;
         width: 80px;
     }
-    .stat-info {
-        top: 36%;
-    }
     .stat-info h1 {
         font-size: 20px;
     }
     .percentageWheel {
-        height: 70%;
-        top: 40%;
+        top: 30%;
     }
     .percentageWheel-text {
-        font-size: 24px;
+        font-size: 22px;
     }
-    #currentPercentageWheel-text, #lifetimePercentageWheel-text {
+    #friends-wheel-text {
+        line-height: 48%;
+    }
+    #currentPercentageWheel-text, #lifetimePercentageWheel-text, #outerFriendsPercentageWheel-text, #innerFriendsPercentageWheel-text {
         font-size: 16px;
+    }
+    #outerFriendsPercentageWheel-text {
+        position: relative;
+        top: 3px;
+    }
+    #outerFriendsPercentageWheel-percent, #innerFriendsPercentageWheel-percent {
+        font-size: 18px;
+    }
+    #friends-key {
+        grid-template-columns: 40px 75px calc(100% - 40px - 75px);
+        bottom: -5px;
+        font-size: 16px;
+    }
+    #back-btn-div {
+        top: -26px;
+    }
+    #back-btn {
+        font-size: 40px;
     }
 }
 
-/* Initially hide every page, except for login */
+/* Initially hide every page, except login */
 #navbar, #home-page, #friends-page, #settings-page, #newRound-page, #stats-page {
     display: none;
 }
