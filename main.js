@@ -1,3 +1,15 @@
+// checking if on mobile
+function checkMobile() {
+    const screenWidth = $('html').width();
+    if (screenWidth <= 850) {
+        document.getElementById('hide-toolbar-message').style.display = 'flex';
+    }
+}
+
+function hideToolbarContinue() {
+    document.getElementById('hide-toolbar-message').style.display = 'none';
+}
+
 function switchToSignup() {
     // clear error and input
     document.getElementById('login-error-message').style.visibility = "hidden";
@@ -26,7 +38,7 @@ function login() {
     const password = document.getElementById('login-password-input').value;
 
     // check if user exists
-    auth.signInWithEmailAndPassword(email, password).then(cred => {
+    auth.signInWithEmailAndPassword(email, password).then(() => {
         toHomePage();
     }).catch(err => {
         document.getElementById('login-error-message').innerHTML = err.message;
@@ -44,7 +56,7 @@ function signup() {
         displayName = email;
     }
 
-    // create new user 
+    // create a new user 
     auth.createUserWithEmailAndPassword(email, password).then(cred => {
         database.collection('userData').doc(cred.user.uid).set({
             onePutts: 0,
@@ -73,32 +85,29 @@ function signup() {
             totalHolesPlayed_fairwaysInReg: 0,
             totalHolesPlayed_holesWithHazard: 0,
             currentTotalHolesPlayed: 0,
-
             trackScores: true,
             shareBirdiesMINUS: true,
             sharePars: true,
             shareBogeys: true,
             shareDoubleBogeysPLUS: true,
-
             trackPutts: true,
             shareOnePutts: true,
             shareTwoPutts: true,
             shareThreePuttsPLUS: true,
-
             trackHolesWithHazard: true,
             shareHolesWithHazard: true,
-
             trackFairwaysInReg: true,
             shareFairwaysInReg: true,
-
             trackGreensInReg: true,
             shareGreensInReg: true,
         });
+
         database.collection('users').doc(cred.user.uid).set({
             displayName: displayName,
             uid: cred.user.uid,
             friends: []
         });
+
         toHomePage();
     }).catch(err => { // if there is an error, then display message
         document.getElementById('signup-error-message').innerHTML = err.message;
@@ -112,7 +121,7 @@ function logout() {
     });
 }
 
-// sleep for given amount of time
+// sleep for given amount of seconds
 const sleep = (seconds) => {
     return new Promise(resolve => setTimeout(resolve, seconds * 1000))
 }
@@ -129,12 +138,12 @@ function hidePages() {
 }
 
 function toHomePage() {
-    // only home page needs to "hide" the login page 
-    document.getElementById('login-page').style.display = 'none';
-
     hidePages();
 
-    // display new stuff
+    // hide login page - (only appears when first loaded)
+    document.getElementById('login-page').style.display = 'none';
+
+    // display new content
     document.getElementById('navbar').style.display = 'block';
     document.getElementById('home-page').style.display = 'flex';
     document.getElementById('page-label').innerHTML = "Home";
@@ -147,18 +156,18 @@ function toHomePage() {
     document.getElementById('hole-number').innerHTML = 1;
 }
 
-// ****************************************************************************************************************************** \\
-
+/* FRIENDS page Functions */
 function toFriendsPage() {
-    friendPageSetUp();
-
     hidePages();
+
+    // only setup once
+    friendPageSetUp();
 
     // reseting search input
     document.getElementById('displayName-input').value = "";
     $("#displayName-input").keyup();
 
-    // display new stuff
+    // display new content
     document.getElementById('friends-page').style.display = 'flex';
     document.getElementById('page-label').innerHTML = "Friends";
 }
@@ -174,15 +183,16 @@ $(document).ready(function () {
             $(".userlist-div").each(function () {
                 // if they don't math
                 if ($(this).text().search(new RegExp(input, "i")) < 0) {
-                    $(this).fadeOut(600);
+                    $(this).fadeOut(500);
                 }
                 else { // if they do match
                     $(this).css('display', 'grid')
-                    $(this).fadeIn(600);
+                    $(this).fadeIn(500);
                     count++;
                 }
             });
-            // if 0 results, display message
+
+            // if 0 results, then display message
             if (count == 0) {
                 $("#no-results-message-value").text("\"" + input + "\"");
                 document.getElementById('no-results-message').style.display = 'block';
@@ -194,7 +204,7 @@ $(document).ready(function () {
         else { // if empty
             document.getElementById('no-results-message').style.display = 'none';
             $(".userlist-div").each(function () {
-                $(this).fadeOut(600);
+                $(this).fadeOut(500);
             });
         }
     });
@@ -206,10 +216,10 @@ var friendPageSetUp = (function () {
         if (!executed) {
             executed = true;
 
+            // getting all users displayName and uid and creating a new div
             database.collection('users').get().then(snapshot => {
-                // getting all users displayName and uid and adding div
                 snapshot.docs.forEach(doc => {
-                    // not add current user
+                    // don't add the current user
                     if (auth.currentUser.uid != doc.data().uid) {
                         addUser(doc.data().uid, doc.data().displayName);
                     }
@@ -221,15 +231,15 @@ var friendPageSetUp = (function () {
             database.collection('users').doc(currentUserId).get().then(snapshot => {
                 const currentUser = snapshot.data();
 
-                // copying array
+                // copying friends array
                 const myArray = currentUser.friends;
 
-                // check for friends and setting + to -
+                // check for friends and setting the + to a -
                 for (let i in myArray) {
                     database.collection('users').doc(myArray[i]).get().then(snapshot => {
                         const friend = snapshot.data();
-                        const targetID = myArray[i];
                         const target = friend.displayName;
+                        const targetID = myArray[i];
 
                         $(".userlist-div").each(function () {
                             if ($(this).text() == target) {
@@ -241,7 +251,7 @@ var friendPageSetUp = (function () {
                 }
             });
         }
-    };
+    }
 })();
 
 function addUser(uid, displayName) {
@@ -291,10 +301,10 @@ function addFriend(uid) {
     database.collection('users').doc(currentUserId).get().then(snapshot => {
         const currentUser = snapshot.data();
 
-        // copying array
+        // copying friend array
         let myArray = currentUser.friends;
 
-        // adding uid and displayName to arrays
+        // adding uid to array
         myArray.push(uid);
 
         // updating array in firebase
@@ -313,10 +323,10 @@ function removeFriend(uid) {
     database.collection('users').doc(currentUserId).get().then(snapshot => {
         const currentUser = snapshot.data();
 
-        // copying array
+        // copying friend array
         let myArray = currentUser.friends;
 
-        // removing from array
+        // removing uid from array
         let index = myArray.indexOf(uid);
         if (index > -1) {
             myArray.splice(index, 1);
@@ -329,8 +339,7 @@ function removeFriend(uid) {
     });
 }
 
-// ****************************************************************************************************************************** \\
-
+/* SETTINGS page Functions */
 function toSettingsPage() {
     // getting current users info
     const currentUserId = auth.currentUser.uid;
@@ -338,14 +347,11 @@ function toSettingsPage() {
         const currentUser = snapshot.data();
         document.getElementById('displayName-setting-input').value = currentUser.displayName;
     });
+
     database.collection('userData').doc(currentUserId).get().then(snapshot => {
         const currentUser = snapshot.data();
 
         hidePages();
-
-        // display new stuff
-        document.getElementById('settings-page').style.display = 'block';
-        document.getElementById('page-label').innerHTML = "Settings";
 
         // setting values to data from firebase
         document.getElementById('trackScores-toggle').checked = currentUser.trackScores;
@@ -370,15 +376,19 @@ function toSettingsPage() {
         checkTrackFairwaysInReg();
         checkTrackGreensInReg();
         checkTrackHolesWithHazard();
+
+        // display new content
+        document.getElementById('settings-page').style.display = 'block';
+        document.getElementById('page-label').innerHTML = "Settings";
     });
 }
 
 // update user settings in firebase
 function saveSettings() {
-    const currentUserId = auth.currentUser.uid;
-
     // if user leaves setting blank, then don't change it
     const newDisplayName = document.getElementById('displayName-setting-input').value;
+
+    const currentUserId = auth.currentUser.uid;
     if (newDisplayName != "") {
         database.collection('users').doc(currentUserId).update({
             displayName: newDisplayName
@@ -402,103 +412,104 @@ function saveSettings() {
         trackGreensInReg: document.getElementById('trackGreensInReg-toggle').checked,
         shareGreensInReg: document.getElementById('shareGreensInReg-toggle').checked,
     });
+
     toHomePage();
 }
 
-// checking track settings -> if tracking is of, then turn off sharing
+// checking track settings... if tracking is off, then turn off sharing also
 function checkTrackScores() {
-    const labelElements = document.getElementsByClassName('score-setting-label');
     if (!document.getElementById('trackScores-toggle').checked) {
-        const toggleElements = document.getElementsByClassName('score-setting-toggle');
-
         // setting all share score settings to false
-        for (let i = 0; i < toggleElements.length; i++) {
-            toggleElements[i].checked = false;
-        }
+        $(".score-setting-toggle").each(function () {
+            $(this).prop("checked", false);
+        });
 
         // setting all share score settings labels to gray and line through
-        for (let i = 0; i < labelElements.length; i++) {
-            labelElements[i].style.color = 'rgb(225, 225, 225)'
-            labelElements[i].style.textDecoration = 'line-through';
-        }
+        $(".score-setting-label").each(function () {
+            $(this).css("color", "rgb(215, 215, 215)");
+            $(this).css("text-decoration", "line-through");
+        });
     }
     else {
         // setting all share score settings labels to original style
-        for (let i = 0; i < labelElements.length; i++) {
-            labelElements[i].style.color = 'rgb(255, 255, 255)'
-            labelElements[i].style.textDecoration = 'none';
-        }
+        $(".score-setting-label").each(function () {
+            $(this).css("color", "rgb(255, 255, 255)");
+            $(this).css("text-decoration", "none");
+        });
     }
 }
+
 function checkTrackPutts() {
-    const labelElements = document.getElementsByClassName('putt-setting-label');
     if (!document.getElementById('trackPutts-toggle').checked) {
-        const toggleElements = document.getElementsByClassName('putt-setting-toggle');
-
         // setting all share putt settings to false
-        for (let i = 0; i < toggleElements.length; i++) {
-            toggleElements[i].checked = false;
-        }
+        $(".putt-setting-toggle").each(function () {
+            $(this).prop("checked", false);
+        });
 
-        // setting all share putt settings labels to gray and line through
-        for (let i = 0; i < labelElements.length; i++) {
-            labelElements[i].style.color = 'rgb(225, 225, 225)'
-            labelElements[i].style.textDecoration = 'line-through';
-        }
+        // setting all share putts settings labels to gray and line through
+        $(".putt-setting-label").each(function () {
+            $(this).css("color", "rgb(215, 215, 215)");
+            $(this).css("text-decoration", "line-through");
+        });
     }
     else {
         // setting all share putt settings labels to original style
-        for (let i = 0; i < labelElements.length; i++) {
-            labelElements[i].style.color = 'rgb(255, 255, 255)'
-            labelElements[i].style.textDecoration = 'none';
-        }
+        $(".putt-setting-label").each(function () {
+            $(this).css("color", "rgb(255, 255, 255)");
+            $(this).css("text-decoration", "none");
+        });
     }
 }
+
 function checkTrackFairwaysInReg() {
-    const labelElement = document.getElementById('shareFairwaysInReg-label');
     if (!document.getElementById('trackFairwaysInReg-toggle').checked) {
-        const toggleElement = document.getElementById('shareFairwaysInReg-toggle');
-        toggleElement.checked = false;
+        // setting share FIR setting to false
+        $("#shareFairwaysInReg-toggle").prop("checked", false);
 
-        labelElement.style.color = 'rgb(225, 225, 225)'
-        labelElement.style.textDecoration = 'line-through';
+        // setting share FIR setting label to gray and line through
+        $("#shareFairwaysInReg-label").css("color", "rgb(215, 215, 215)");
+        $("#shareFairwaysInReg-label").css("text-decoration", "line-through");
     }
     else {
-        labelElement.style.color = 'rgb(255, 255, 255)'
-        labelElement.style.textDecoration = 'none';
+        // setting share FIR setting label to original style
+        $("#shareFairwaysInReg-label").css("color", "rgb(255, 255, 255)");
+        $("#shareFairwaysInReg-label").css("text-decoration", "none");
     }
 }
+
 function checkTrackGreensInReg() {
-    const labelElement = document.getElementById('shareGreensinReg-label');
     if (!document.getElementById('trackGreensInReg-toggle').checked) {
-        const toggleElement = document.getElementById('shareGreensInReg-toggle');
-        toggleElement.checked = false;
+        // setting share GIR setting to false
+        $("#shareGreensInReg-toggle").prop("checked", false);
 
-        labelElement.style.color = 'rgb(225, 225, 225)'
-        labelElement.style.textDecoration = 'line-through';
+        // setting share GIR setting label to gray and line through
+        $("#shareGreensinReg-label").css("color", "rgb(215, 215, 215)");
+        $("#shareGreensinReg-label").css("text-decoration", "line-through");
     }
     else {
-        labelElement.style.color = 'rgb(255, 255, 255)'
-        labelElement.style.textDecoration = 'none';
+        // setting share GIR setting label to original style
+        $("#shareGreensinReg-label").css("color", "rgb(255, 255, 255)");
+        $("#shareGreensinReg-label").css("text-decoration", "none");
     }
 }
+
 function checkTrackHolesWithHazard() {
-    const labelElement = document.getElementById('shareHolesWithHazard-label');
     if (!document.getElementById('trackHolesWithHazard-toggle').checked) {
-        const toggleElement = document.getElementById('shareHolesWithHazard-toggle');
-        toggleElement.checked = false;
+        // setting share holes with hazard setting to false
+        $("#shareHolesWithHazard-toggle").prop("checked", false);
 
-        labelElement.style.color = 'rgb(225, 225, 225)'
-        labelElement.style.textDecoration = 'line-through';
+        // setting share holes with hazard setting label to gray and line through
+        $("#shareHolesWithHazard-label").css("color", "rgb(215, 215, 215)");
+        $("#shareHolesWithHazard-label").css("text-decoration", "line-through");
     }
     else {
-        labelElement.style.color = 'rgb(255, 255, 255)'
-        labelElement.style.textDecoration = 'none';
+        // setting share holes with hazard setting label to original style
+        $("#shareHolesWithHazard-label").css("color", "rgb(255, 255, 255)");
+        $("#shareHolesWithHazard-label").css("text-decoration", "none");
     }
 }
 
-// ****************************************************************************************************************************** \\
-
+/* NEW ROUND page Functions */
 function toNewRoundPage() {
     // getting current users info
     const currentUserId = auth.currentUser.uid;
@@ -515,10 +526,6 @@ function toNewRoundPage() {
         document.getElementById('Q4').style.display = 'none';
         document.getElementById('Q5').style.display = 'none';
 
-        // display new stuff
-        document.getElementById('newRound-page').style.display = 'flex';
-        document.getElementById('page-label').innerHTML = "New Round";
-
         // reset all current values
         database.collection('userData').doc(currentUserId).update({
             currentOnePutts: 0,
@@ -533,6 +540,10 @@ function toNewRoundPage() {
             currentGreensInReg: 0,
             currentTotalHolesPlayed: 0
         });
+
+        // display new content
+        document.getElementById('newRound-page').style.display = 'flex';
+        document.getElementById('page-label').innerHTML = "New Round";
 
         // display first question
         if (currentUser.trackScores) {
@@ -568,7 +579,7 @@ function nextQuestion(prevQuestion) {
     database.collection('userData').doc(currentUserId).get().then(snapshot => {
         const currentUser = snapshot.data();
 
-        // getting last question
+        // getting number of last question
         var lastQuestion;
         if (currentUser.trackHolesWithHazard) {
             lastQuestion = 5;
@@ -637,7 +648,7 @@ function nextQuestion(prevQuestion) {
                     document.getElementById('Q5').style.display = 'flex';
                 }
 
-                // increase total holes played with tracking scores
+                // increase total holes played with tracking fairways in regulation
                 database.collection('userData').doc(currentUserId).update({
                     totalHolesPlayed_fairwaysInReg: currentUser.totalHolesPlayed_fairwaysInReg + 1
                 });
@@ -656,9 +667,7 @@ function nextQuestion(prevQuestion) {
             }
         }
         else { // if it is the last question
-            const holeNum = document.getElementById('hole-number').innerHTML;
-
-            // hiding last question
+            // hide the last question
             switch (lastQuestion) {
                 case 5:
                     document.getElementById('Q5').style.display = 'none';
@@ -696,6 +705,8 @@ function nextQuestion(prevQuestion) {
             }
 
             // display messages at 9 and 18 holes, instead of going to next hole
+            const holeNum = document.getElementById('hole-number').innerHTML;
+
             if (holeNum == 9) {
                 document.getElementById('hole-number-text').style.display = 'none';
                 document.getElementById('nine-hole-message').style.display = 'flex';
@@ -742,7 +753,7 @@ function makeTheTurn() {
         document.getElementById('nine-hole-message').style.display = 'none';
         document.getElementById('hole-number-text').style.display = 'flex';
 
-        // going back to first question
+        // go back to first question
         if (currentUser.trackScores) {
             document.getElementById('Q1').style.display = 'flex';
         }
@@ -772,6 +783,7 @@ function submitScore() {
     const scoreOptions = document.getElementsByName('score-option');
     var parValue = null;
     var scoreValue = null;
+
     for (var i = 0; i < parOptions.length; i++) {
         if (parOptions[i].checked) {
             parValue = parseInt(parOptions[i].value);
@@ -779,6 +791,7 @@ function submitScore() {
             break;
         }
     }
+
     for (var i = 0; i < scoreOptions.length; i++) {
         if (scoreOptions[i].checked) {
             scoreValue = parseInt(scoreOptions[i].value);
@@ -818,23 +831,20 @@ function submitScore() {
                     currentDoubleBogeysPLUS: currentUser.currentDoubleBogeysPLUS + 1
                 });
             }
+            nextQuestion(1);
+        }
+        else { // display error message
+            document.getElementById("hole-number-text").style.display = 'none';
+            document.getElementById("Q1").style.display = 'none';
+            document.getElementById("newRound-error-full").style.display = 'flex';
+            document.getElementById("newRound-error").innerHTML = 'You must enter a par and score for this hole before moving on.';
+            sleep(3).then(() => {
+                document.getElementById("newRound-error-full").style.display = 'none';
+                document.getElementById("Q1").style.display = 'flex';
+                document.getElementById("hole-number-text").style.display = 'flex';
+            })
         }
     });
-
-    if (parValue != null && scoreValue != null) {
-        nextQuestion(1);
-    }
-    else { // display error message
-        document.getElementById("hole-number-text").style.display = 'none';
-        document.getElementById("Q1").style.display = 'none';
-        document.getElementById("newRound-error-full").style.display = 'flex';
-        document.getElementById("newRound-error").innerHTML = 'You must enter a par and score for this hole before moving on.';
-        sleep(3).then(() => {
-            document.getElementById("newRound-error-full").style.display = 'none';
-            document.getElementById("Q1").style.display = 'flex';
-            document.getElementById("hole-number-text").style.display = 'flex';
-        })
-    }
 }
 
 function submitPutts(puttsNum) {
@@ -897,21 +907,16 @@ function questionYes(questionNum) {
     nextQuestion(questionNum);
 }
 
-// ****************************************************************************************************************************** \\
-
+/* STATS page Functions */
 function toStatsPage() {
     // getting current users info
     const currentUserId = auth.currentUser.uid;
     database.collection('userData').doc(currentUserId).get().then(snapshot => {
         const currentUser = snapshot.data();
 
-        // only accessible from home page
+        // hiding pages - (only accessible from home page and to newRound page)
         document.getElementById('home-page').style.display = 'none';
-
-        hidePages();
-
-        // display container
-        document.getElementById("stats-container").style.display = 'block';
+        document.getElementById('newRound-page').style.display = 'none';
 
         // only show stats that are being tracked
         checkStatTracking('scores-stat-btn', currentUser.trackScores);
@@ -920,7 +925,7 @@ function toStatsPage() {
         checkStatTracking('fairwaysInReg-stat-btn', currentUser.trackFairwaysInReg);
         checkStatTracking('holesWithHazards-stat-btn', currentUser.trackHolesWithHazard);
 
-        // display new stuff
+        // display new content
         document.getElementById('stats-page').style.display = 'flex';
         document.getElementById('page-label').innerHTML = "Stats";
 
@@ -944,7 +949,6 @@ function toStatsPage() {
         else { // not tracking anything
             document.getElementById("stats-container").style.display = 'none';
             document.getElementById("track-error-full").style.display = 'flex';
-            document.getElementById("track-error").innerHTML = 'It looks like you are not tracking any stats. Update your settings to track your stats.'
             sleep(4).then(() => {
                 document.getElementById("track-error-full").style.display = 'none';
                 toSettingsPage();
@@ -958,6 +962,7 @@ function toStatsPage() {
         $('#outerFriendsPercentageWheel').attr('data-size', (0.75 * divHeight));
         $('#innerFriendsPercentageWheel').attr('data-size', ((0.75 * divHeight) - 30));
 
+        // load first stats and friends page
         changePercentCircle('current', firstStat);
         changePercentCircle('lifetime', firstStat);
         loadFriendsTab();
@@ -994,7 +999,7 @@ function newStatsTab(pageName, element) {
         statsTabs[i].style.color = '#ffffff';
     }
 
-    // displaying new tab
+    // displaying new tab content
     document.getElementById(pageName).style.display = 'flex';
 
     // setting tab to active color
@@ -1041,6 +1046,7 @@ function changePercentCircle(tab, stat) {
         // hide drop downs
         hideDropdowns();
 
+        // setting values for wheel and label
         if (tab == 'current') {
             var statName, numerator, percentage;
 
@@ -1088,15 +1094,16 @@ function changePercentCircle(tab, stat) {
             // setting percentage
             percentage = numerator / currentUser.currentTotalHolesPlayed;
 
+            // setting wheel text
             document.getElementById('currentPercentageWheel-text').innerHTML = String(numerator + ' / ' + currentUser.currentTotalHolesPlayed);
 
-            // setting stat name to new value
+            // setting stat name
             document.getElementById("current-stat-name").innerHTML = statName;
 
             // hiding numbers
             document.getElementById('currentPercentageWheel-text').style.visibility = 'hidden';
 
-            // initially set to wheel to 0
+            // initially set wheel to 0 with no animation
             $("#currentPercentageWheel").circleProgress({ value: 0, animation: { duration: 0 } });
 
             if (currentUser.currentTotalHolesPlayed == 0) { // NaN
@@ -1128,6 +1135,7 @@ function changePercentCircle(tab, stat) {
         else if (tab == 'lifetime') {
             var statName, numerator, denominator, percentage;
 
+            // setting values for wheel and label
             if (stat == 'birdies') {
                 statName = "Birdies or lower";
                 numerator = currentUser.birdiesMINUS;
@@ -1184,13 +1192,13 @@ function changePercentCircle(tab, stat) {
 
             document.getElementById('lifetimePercentageWheel-text').innerHTML = String(numerator + ' / ' + denominator);
 
-            // setting stat name to new value
+            // setting stat name
             document.getElementById("lifetime-stat-name").innerHTML = statName;
 
             // hiding numbers
             document.getElementById('lifetimePercentageWheel-text').style.visibility = 'hidden';
 
-            // initially set to wheel to 0
+            // initially set wheel to 0 with no animation
             $("#lifetimePercentageWheel").circleProgress({ value: 0, animation: { duration: 0 } });
 
             if (denominator == 0) { // NaN
@@ -1254,7 +1262,7 @@ function backToFriends() {
 }
 
 function loadFriendsTab() {
-    // clear div
+    // clear div - (solves issue of re-adding divs)
     $('#friends-list').empty();
 
     // getting current users info
@@ -1262,20 +1270,31 @@ function loadFriendsTab() {
     database.collection('users').doc(currentUserId).get().then(snapshot => {
         const currentUser = snapshot.data();
 
+        // copying friends array
         const myArray = currentUser.friends;
 
-        // getting friends info and displaying them
-        for (let i in myArray) {
-            database.collection('users').doc(myArray[i]).get().then(snapshot => {
-                const friend = snapshot.data();
-                showFriend(myArray[i], friend.displayName);
-            });
+        // if no friends
+        if (myArray < 1) {
+            document.getElementById('friends-list').style.display = 'none';
+            document.getElementById('no-friends-message').style.display = 'block';
+        }
+        else {
+            document.getElementById('no-friends-message').style.display = 'none';
+            document.getElementById('friends-list').style.display = 'flex';
+
+            // getting friends info and displaying them
+            for (let i in myArray) {
+                database.collection('users').doc(myArray[i]).get().then(snapshot => {
+                    const friend = snapshot.data();
+                    showFriend(myArray[i], friend.displayName);
+                });
+            }
         }
     });
 }
 
 function compareFriendsInfo(uid, displayName) {
-    // "setting" static variables in other function 
+    // setting static variable to be used in other functions
     staticFriendUid(uid);
 
     // setting key to friends displayName
@@ -1284,16 +1303,16 @@ function compareFriendsInfo(uid, displayName) {
     // load first stat
     changeFriendPercentCircle('pars');
 
-    // hide original tab/page
-    document.getElementById('friends-list').style.display = 'none'
+    // hide original tab
+    document.getElementById('friends-list').style.display = 'none';
 
-    // display new tab/page
+    // display new tab
     document.getElementById('compare-friend-tab').style.display = 'block';
 }
 
 function staticFriendUid(uid) {
     if (uid != null) {
-        // static variable. Unchanged unless user icon is clicked
+        // static variable - (Unchanged unless user icon is clicked)
         staticFriendUid.retVal = uid;
     }
     else {
@@ -1307,7 +1326,7 @@ function changeFriendPercentCircle(stat) {
     // hide all drop downs
     hideDropdowns();
 
-    //hide friend percent and numbers
+    // hide friend percent and numbers
     document.getElementById('outerFriendsPercentageWheel-text').style.visibility = 'hidden';
     document.getElementById('innerFriendsPercentageWheel-percent').style.visibility = 'hidden';
     document.getElementById('innerFriendsPercentageWheel-text').style.visibility = 'hidden';
@@ -1332,7 +1351,7 @@ function changeFriendPercentCircle(stat) {
                 if (friend.shareBirdiesMINUS) {
                     friendNumerator = friend.birdiesMINUS;
                     friendDenominator = friend.totalHolesPlayed_scores;
-                } else { // if not sharing, set to N/A
+                } else { // if not sharing, then set to N/A
                     friendNumerator = 0;
                     friendDenominator = 0;
                 }
@@ -1346,7 +1365,7 @@ function changeFriendPercentCircle(stat) {
                 if (friend.sharePars) {
                     friendNumerator = friend.pars;
                     friendDenominator = friend.totalHolesPlayed_scores;
-                } else { // if not sharing, set to N/A
+                } else { // if not sharing, then set to N/A
                     friendNumerator = 0;
                     friendDenominator = 0;
                 }
@@ -1360,7 +1379,7 @@ function changeFriendPercentCircle(stat) {
                 if (friend.shareBogeys) {
                     friendNumerator = friend.bogeys;
                     friendDenominator = friend.totalHolesPlayed_scores;
-                } else { // if not sharing, set to N/A
+                } else { // if not sharing, then set to N/A
                     friendNumerator = 0;
                     friendDenominator = 0;
                 }
@@ -1374,7 +1393,7 @@ function changeFriendPercentCircle(stat) {
                 if (friend.shareDoubleBogeysPLUS) {
                     friendNumerator = friend.doubleBogeysPLUS;
                     friendDenominator = friend.totalHolesPlayed_scores;
-                } else { // if not sharing, set to N/A
+                } else { // if not sharing, then set to N/A
                     friendNumerator = 0;
                     friendDenominator = 0;
                 }
@@ -1388,7 +1407,7 @@ function changeFriendPercentCircle(stat) {
                 if (friend.shareOnePutts) {
                     friendNumerator = friend.onePutts;
                     friendDenominator = friend.totalHolesPlayed_putts;
-                } else { // if not sharing, set to N/A
+                } else { // if not sharing, then set to N/A
                     friendNumerator = 0;
                     friendDenominator = 0;
                 }
@@ -1402,7 +1421,7 @@ function changeFriendPercentCircle(stat) {
                 if (friend.shareTwoPutts) {
                     friendNumerator = friend.twoPutts;
                     friendDenominator = friend.totalHolesPlayed_putts;
-                } else { // if not sharing, set to N/A
+                } else { // if not sharing, then set to N/A
                     friendNumerator = 0;
                     friendDenominator = 0;
                 }
@@ -1416,7 +1435,7 @@ function changeFriendPercentCircle(stat) {
                 if (friend.shareThreePuttsPLUS) {
                     friendNumerator = friend.threePuttsPLUS;
                     friendDenominator = friend.totalHolesPlayed_putts;
-                } else { // if not sharing, set to N/A
+                } else { // if not sharing, then set to N/A
                     friendNumerator = 0;
                     friendDenominator = 0;
                 }
@@ -1430,7 +1449,7 @@ function changeFriendPercentCircle(stat) {
                 if (friend.shareGreensInReg) {
                     friendNumerator = friend.greensInReg;
                     friendDenominator = friend.totalHolesPlayed_greensInReg;
-                } else { // if not sharing, set to N/A
+                } else { // if not sharing, then set to N/A
                     friendNumerator = 0;
                     friendDenominator = 0;
                 }
@@ -1444,7 +1463,7 @@ function changeFriendPercentCircle(stat) {
                 if (friend.shareFairwaysInReg) {
                     friendNumerator = friend.fairwaysInReg;
                     friendDenominator = friend.totalHolesPlayed_fairwaysInReg;
-                } else { // if not sharing, set to N/A
+                } else { // if not sharing, then set to N/A
                     friendNumerator = 0;
                     friendDenominator = 0;
                 }
@@ -1458,7 +1477,7 @@ function changeFriendPercentCircle(stat) {
                 if (friend.shareHolesWithHazard) {
                     friendNumerator = friend.holesWithHazard;
                     friendDenominator = friend.totalHolesPlayed_holesWithHazard;
-                } else { // if not sharing, set to N/A
+                } else { // if not sharing, then set to N/A
                     friendNumerator = 0;
                     friendDenominator = 0;
                 }
@@ -1468,13 +1487,14 @@ function changeFriendPercentCircle(stat) {
             percentage = numerator / denominator;
             friendPercentage = friendNumerator / friendDenominator;
 
+            // set wheel text
             document.getElementById('outerFriendsPercentageWheel-text').innerHTML = String(numerator + ' / ' + denominator);
             document.getElementById('innerFriendsPercentageWheel-text').innerHTML = String(friendNumerator + ' / ' + friendDenominator);
 
-            // setting stat name to new value
+            // setting stat name
             document.getElementById("friends-stat-name").innerHTML = statName;
 
-            // initially set to wheels to 0
+            // initially set to wheels to 0 with no animation
             $("#outerFriendsPercentageWheel").circleProgress({ value: 0, animation: { duration: 0 } });
             $("#innerFriendsPercentageWheel").circleProgress({ value: 0, animation: { duration: 0 } });
 
