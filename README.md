@@ -3,7 +3,7 @@
 ### [Live Version](https://clabounty.github.io/golfStatsTracker)
 
 ## Summary
-A mobile web application to track your golf stats as you play. Implemented feature to view and compare your lifetime stats with friends. Implemented settings functionality to only track and share the stats that you choose. Developed with HTML5, CSS3, JavaScript, jQuery, and Firebase.
+A mobile web application to track your golf stats as you play. Implemented feature to view and compare your lifetime stats with friends. Implemented settings functionality to allow users to only track and share the stats that they choose. Built with HTML5, CSS3, Javascript, jQuery, and Firebase.
 
 ## What I Learned
 - Responsive Web Design
