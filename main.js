@@ -1,8 +1,16 @@
+$(document).ready(() => {
+    const urlParams = new URLSearchParams(window.location.search)
+    const demoParamStr = urlParams.get("demo")
+    const isDemo = demoParamStr == "true" || demoParamStr == "1"
+    if (isDemo) {
+        document.getElementById('login-email-input').value = "DemoAccount123@gmail.com";
+        document.getElementById('login-password-input').value = "Password123";
+    }
+});
+
 function switchToSignup() {
-    // clear error and input
+    // clear error
     document.getElementById('login-error-message').style.visibility = "hidden";
-    document.getElementById('login-email-input').value = "";
-    document.getElementById('login-password-input').value = "";
 
     // switch forms
     document.getElementById('login-form').style.display = 'none';
@@ -10,11 +18,8 @@ function switchToSignup() {
 }
 
 function switchToLogin() {
-    // clear error and input
+    // clear error
     document.getElementById('signup-error-message').style.visibility = "hidden";
-    document.getElementById('signup-email-input').value = "";
-    document.getElementById('signup-password-input').value = "";
-    document.getElementById('signup-displayName-input').value = "";
 
     // switch forms
     document.getElementById('signup-form').style.display = 'none';
